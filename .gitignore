@@ -1,0 +1,8 @@
+node_modules/
+/yarn.lock
+/package-lock.json
+docs/.vuepress/dist/
+# docs/.vuepress/theme/
+docs/pages/accumulation/.DS_Store
+docs/.DS_Store
+.DS_Store

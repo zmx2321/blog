@@ -1,0 +1,130 @@
+# 2020.3.26
+
+## 今日计划表
+<table>
+    <tr>
+        <th>类型</th>
+        <th>项目</th>
+        <th>开始时间</th>
+        <th>结束时间</th>
+        <th>备注</th>
+        <th>完成情况</th>
+        <th>学习锻炼时间统计</th>
+    </tr>
+    <tr>
+        <td>通用</td>
+        <td>起床</td>
+        <td>6:00</td>
+        <td>6:30</td>
+        <td>包括赖床洗漱时间，可以出门</td>
+        <td>😀</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td rowspan="4">工作日-老婆上班</td>
+    </tr>
+    <tr>
+        <td>送老婆上班</td>
+        <td>6:30</td>
+        <td>7:00</td>
+        <td>送到地铁站</td>
+        <td>😀</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>上班路上</td>
+        <td>7:00</td>
+        <td>7:35</td>
+        <td>下雨天没骑车</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>学习</td>
+        <td>7.35</td>
+        <td>9:30</td>
+        <td>还在整理计划表</td>
+        <td>🥺</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>通用</td>
+        <td>中午吃饭</td>
+        <td>12:00</td>
+        <td>12:40</td>
+        <td>出去吃饭</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>通用</td>
+        <td>学习</td>
+        <td>12:50</td>
+        <td>2:00</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>通用</td>
+        <td>学习</td>
+        <td>22:30</td>
+        <td>23:00</td>
+        <td>睡前看半小时书，下班后到22:00时间灵活安排</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>通用</td>
+        <td>睡觉</td>
+        <td>23:00</td>
+        <td>6:00</td>
+        <td>睡眠7小时</td>
+        <td>-</td>
+        <td>睡眠:7h</td>
+    </tr>
+    <tr>
+        <td colspan="7">##################################</td>
+    <tr>
+    <tr>
+        <td rowspan="11">汇总</td>
+    </tr>
+    <tr>
+        <td rowspan="5">学习时间</td>
+    </tr>
+    <tr>
+        <td>线上学习</td>
+        <td colspan="4">-</td>
+    </tr>
+    <tr>
+        <td>工作知识点梳理</td>
+        <td colspan="4">-</td>
+    </tr>
+    <tr>
+        <td>看书</td>
+        <td colspan="4">-</td>
+    </tr>
+    <tr>
+        <td>总计</td>
+        <td colspan="4">-</td>
+    </tr>
+    <tr>
+        <td rowspan="5">-</td>
+    </tr>
+    <tr>
+        <td>跑步</td>
+        <td colspan="4">-</td>
+    </tr>
+    <tr>
+        <td>跳绳</td>
+        <td colspan="4">-</td>
+    </tr>
+    <tr>
+        <td>健身房</td>
+        <td colspan="4">-</td>
+    </tr>
+    <tr>
+        <td>总计</td>
+        <td colspan="4">-</td>
+    </tr>
+</table>
