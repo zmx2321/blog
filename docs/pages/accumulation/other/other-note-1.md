@@ -145,3 +145,7 @@ git config user.email
   ```
 - 解决方法
   - 执行 `git config pull.rebase false`
+
+## 10. push文件过大
+- `git config --global http.postBuffer 157286400`
+  - 当推送大量数据时（初始推送大型存储库，使用非常大的文件进行更改）可能需要 http.postBuffer 在 git 客户端 （而不是服务器）上设置更高的 设置 ；将 Git 缓冲区大小增加到 repo 的最大单个文件大小
