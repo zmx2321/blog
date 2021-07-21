@@ -224,3 +224,8 @@
 
 ### 9.7. item2配置最终效果
 ![item2](/blog//images/accumulation/other/mac/item2.png)
+
+## 10. mac查看硬盘损耗
+- `brew install smartmontools`
+- `smartctl -s on disk0`
+- `smartctl -a disk0`
