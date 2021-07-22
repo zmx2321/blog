@@ -1,5 +1,5 @@
 module.exports = {
-    title: 'react笔记',
+    title: 'react入门系列',
     collapsable: false,
     children: [
         'react-note-1',

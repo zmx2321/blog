@@ -3,6 +3,8 @@
   <Valine></Valine>
 </ClientOnly>
 
+[系列笔记地址传送带](https://zmx2321.github.io/blog_code/accumulation/front/react-note/react入门系列/index.html)
+
 ## 1. react基本设定
 - 如果要是用react的话(使用src引用)必须引用以下插件:
   - react.js => 核心js

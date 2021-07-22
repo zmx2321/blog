@@ -302,10 +302,12 @@ const algorithmOtherConfig = require("../config/sidebarManage/algorithm/other/al
  *  3-1. elk-note  elk笔记
  *  3-2. other-note  其他笔记
  */
+const reactNoteConfig = require("../config/sidebarManage/accumulation/front/react-note");
+
 const jsNoteConfig = require("../config/sidebarManage/accumulation/front/js-note");
 const vueNoteConfig = require("../config/sidebarManage/accumulation/front/vue-note");
 const vue3ViteNoteConfig = require("../config/sidebarManage/accumulation/front/vue3-vite-note");
-const reactNoteConfig = require("../config/sidebarManage/accumulation/front/react-note");
+
 const flutterNoteConfig = require("../config/sidebarManage/accumulation/front/flutter-note");
 const nodeNoteConfig = require("../config/sidebarManage/accumulation/front/node-note");
 const tsNoteConfig = require("../config/sidebarManage/accumulation/front/ts-note");
@@ -580,10 +582,12 @@ module.exports = {
   // 前端
   '/pages/accumulation/front/': [
     '',
+    reactNoteConfig,  // react笔记
+
     jsNoteConfig,  // js笔记
     vueNoteConfig,  // vue笔记
     vue3ViteNoteConfig,  // vue3笔记
-    reactNoteConfig,  // react笔记
+    
     flutterNoteConfig,  // flutter笔记
     nodeNoteConfig,  // node笔记
     tsNoteConfig,  // ts笔记
