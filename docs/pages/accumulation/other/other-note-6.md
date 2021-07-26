@@ -229,3 +229,9 @@
 - `brew install smartmontools`
 - `smartctl -s on disk0`
 - `smartctl -a disk0`
+
+## 11. mac上安装cnpm
+- `sudo npm install -g cnpm --registry=https://registry.npm.taobao.org --verbose`
+  - `cnpm -v`
+- 使用cnpm淘宝镜像安装webpack
+  - `sudo cnpm install webpack -g`
