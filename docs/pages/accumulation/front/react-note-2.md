@@ -9,16 +9,28 @@
 <script src="../react/react.js"></script>
 <!-- 虚拟dom -->
 <script src="../react/react-dom.js"></script>
-<!--  -->
+<!-- jsx -->
 <script src="../babel/browser.js"></script>
 ...
 <div id="app"></div>
 
 <script type="text/babel">
+  // 第一个参数 - 组件 （内容、元素）
+  // 第二个参数 - 位置 （放到哪）
+  
+  // 必须有一个根元素
+  // 允许加括号
+  // 单标签必须闭合
+  // 必须使用className
+  // 换行无影响
+  // style使用两个大括号，第一个大括号表示jsx
+  // 事件名使用驼峰
+
   // 渲染
   ReactDOM.render(<h1 className="helo">hello</h1>, app);
 </script>
 ```
+- 用最基本的写法，一旦业务复杂就会显得很乱，官方建议用面向对象的方法写
 
 ## 2.面向对象的方式的渲染
 ### 1. js的两种面向对象
