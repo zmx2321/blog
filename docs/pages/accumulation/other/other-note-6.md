@@ -82,13 +82,13 @@
     - 将提示权限改为775，问题即可解决
     ```
     sudo chmod go-w /opt/homebrew/sbin
-    sudo chmod 775 /opt/homebrew
+    sudo chmod R 775 /opt/homebrew
     ```
 
 ## 8. mac终端动画
 - 使输出内容有颜色渐变
   - `brew install lolcat`
-  - `ll | lolcat `
+  - `ll | lolcat`
 - sl 跑火车
   - `brew install sl`
   - `sl | lolcat`
