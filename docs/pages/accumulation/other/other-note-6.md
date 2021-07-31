@@ -38,6 +38,10 @@
 - 设置用户信息 
   - git config --global user.name "zmx2321"
   - git config --global user.email "zmx2321@163.com"
+- 拷贝私钥的时候容易出现权限问题
+  - Permissions 0777 for '/Users/zmx2321/.ssh/id_rsa' are too open
+  - 修改id_rsa权限即可`chmod -R 700 /Users/zmx2321/.ssh/id_rsa`
+  - ssh -T git@github.com
 
 ## 4. 在mac的隐藏文件
 - 显示隐藏文件
@@ -220,9 +224,11 @@
   - `git clone https://github.com/zsh-users/zsh-autosuggestions`
   - `vi ~/.zshrc`
   - 找到 plugins，添加zsh-autosuggestions
-  - `source ~/.zshrc`
 
-### 9.7. item2配置最终效果
+### 9.7. 背景图片
+- Preferences -> Profiles -> window -> 看到backgroundImage -> 勾选enabled
+
+### 9.8. item2配置最终效果
 ![item2](/blog//images/accumulation/other/mac/item2.png)
 
 ## 10. mac查看硬盘损耗
