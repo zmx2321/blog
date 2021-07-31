@@ -235,3 +235,80 @@
   - `cnpm -v`
 - 使用cnpm淘宝镜像安装webpack
   - `sudo cnpm install webpack -g`
+
+## 12. mac切换到root账户
+- sudo -i
+
+## 13. mac上安装mysql
+- 先brew info mysql查看下版本信息
+  - 可以检测是否安装
+- brew install mysql直接安装
+- 启动MYSQL服务
+  - mysql.server start
+- 初始化配置并配置密码
+  - 这一步可以先不做，可以无密码登陆，登陆之后再修改密码
+  - 这种配置密码的方式比较麻烦，简单密码无法设置，个人练习不建议配置
+  - mysql_secure_installation
+    - 附上说明
+    ```
+    # 输入root用户密码
+    Securing the MySQL server deployment.
+    # 使用空白密码连接（这里表示当前的连接状态）
+    Connecting to MySQL using a blank password.
+
+    # 验证密码组件可用于测试密码并提高安全性。它检查密码的强度并允许用户仅设置以下密码足够安全。您想设置“验证密码”组件吗？
+    VALIDATE PASSWORD COMPONENT can be used to test passwords
+    and improve security. It checks the strength of password
+    and allows the users to set only those passwords which are
+    secure enough. Would you like to setup VALIDATE PASSWORD component?
+    
+    Press y|Y for Yes, any other key for No: 这里选y
+    # 密码验证策略分为三个级别
+    There are three levels of password validation policy:
+
+    LOW    Length >= 8
+    MEDIUM Length >= 8, numeric, mixed case, and special characters
+    STRONG Length >= 8, numeric, mixed case, special characters and dictionary                  file
+
+    Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG: 这里选0即可设置简单密码
+
+    # 请在此处设置root密码。
+    Please set the password for root here.
+    New password: 第一次输入密码
+    Re-enter new password: 重输入一次确认
+
+    # 删除匿名用户？
+    Remove anonymous users? (Press y|Y for Yes, any other key for No) : 我选y，其他的我没试过
+
+    # 禁止远程登录
+    Disallow root login remotely? (Press y|Y for Yes, any other key for No) : 我选y，因为我只在笔记本使用
+
+    # 是否删除测试库
+    Remove test database and access to it? (Press y|Y for Yes, any other key for No) : 我选y，其他的我没试过
+
+    # 现在重新加载特权表
+    Reload privilege tables now? (Press y|Y for Yes, any other key for No) : 我选y，其他的我没试过
+    ```
+- 连接
+  - mysql -u root -p => 有密码登陆
+  - mysql -uroot => 无密码登陆
+    - 设置密码
+    - ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';
+- 常用指令
+  - 启动：sudo mysql.server start
+  - 关闭：sudo mysql.server stop
+  - 重启：sudo mysql.server restart
+  - 连接：mysql -u root -p
+  - 开机启动：brew services start mysql
+- 卸载mysql
+  - brew remove mysql
+    - 或者brew uninstall mysql
+  - brew cleanup
+- 关于mysql.sock
+  - 卸载mysql不要听网上说的要删这个文件，删了会后悔
+  - 在默认情况下，Mysql安装以后会在/tmp目录下生成一个mysql.sock文件，如该文件丢失则Mysql将不能够正常启动，解决方法：使用mysqld_safe 启动或许可解决；
+    - 进入mysql的bin目录，如：/usr/local/mysql/bin
+    - 执行./mysqld_safe  --user=mysql --basedir=/usr/local/mysql  --datadir=/usr/local/mysql/data &
+- 安装并破解navicat
+  - sudo xattr -r -d com.apple.quarantine /Applications/Navicat\ Premium.app
+  - /Applications/Navicat\ Premium.app部分是由应用程序拖入终端自动生成的
