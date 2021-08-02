@@ -1,7 +1,7 @@
 module.exports = {
-    title: 'vue面试题',
+    title: 'interview-webpack',
     collapsable: false,
     children: [
-        'interview-vue-1',
+        'interview-webpack-1',
     ]
 };

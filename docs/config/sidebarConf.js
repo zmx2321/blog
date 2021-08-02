@@ -242,16 +242,23 @@ const frontHackerNoteConfig = require("../config/sidebarManage/note/front-hacker
  * interview-base 基础面试题
  * interview-one-side 一面训练
  * interview-write 手写代码集锦
- * interview-classic 经典题库
- * interview-vue vue专题
+ * interview-vue vue面试题
+ * interview-react react面试题
+ * interview-webpack webpack面试题
+ * interview-calc 算法面试题
  * interview-experience 面试经历2022开始
  */
 const interviewBaseConfig = require("../config/sidebarManage/interview/interview-base");
 const interviewOneSideConfig = require("../config/sidebarManage/interview/interview-one-side");
 const interviewWriteConfig = require("../config/sidebarManage/interview/interview-write");
-const interviewClassicConfig = require("../config/sidebarManage/interview/interview-classic");
 const interviewVueConfig = require("../config/sidebarManage/interview/interview-vue");
+const interviewReactConfig = require("../config/sidebarManage/interview/interview-react");
+const interviewWebpackConfig = require("../config/sidebarManage/interview/interview-webpack");
+const interviewCalcConfig = require("../config/sidebarManage/interview/interview-calc");
 const interviewExperienceConfig = require("../config/sidebarManage/interview/interview-experience");
+
+interviewWebpackConfig,
+interviewCalcConfig
 
 /**
  * 算法
@@ -551,12 +558,14 @@ module.exports = {
    * 面试题
    */
   '/pages/interview/': [
-    '',
+    // '',
     interviewBaseConfig,  // 基础面试题
     interviewOneSideConfig,  // 一面训练
     interviewWriteConfig,  // 手写代码集锦
-    interviewClassicConfig,  // 经典题库
-    // interviewVueConfig,  // vue专题
+    interviewVueConfig,  // vue面试题
+    interviewReactConfig,  // react面试题
+    interviewWebpackConfig,  // weboack面试题
+    interviewCalcConfig  // 算法面试题
     // interviewExperienceConfig,  // 面试经历
   ],
 
