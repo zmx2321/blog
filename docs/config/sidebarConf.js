@@ -581,7 +581,7 @@ module.exports = {
   '/pages/algorithm/other/': [
     '',
     algorithmBaseConfig,  // 基础算法
-    algorithmOtherConfig,  // 其他渠道get到的算法
+    // algorithmOtherConfig,  // 其他渠道get到的算法
   ],
 
   /**
