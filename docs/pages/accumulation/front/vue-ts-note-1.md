@@ -627,27 +627,28 @@
     //挂载（使其可以在各个组件使用）
     Vue.prototype.$http = axios;
     ```
-  ```js
-  // HelloWorld.vue
-  created() {
-    // 如果不做扩展，编译器⽆法识别$http
-    this.$http.get<Hero[]>('/api/heros').then(res=> {
-      this.heros = res.data
-    })
-  }
-
-  // 新建一个扩展文件 kuozhan-vue.d.ts
-  import { AxiosInstance } from 'axios'
-
-  // 在vue/types/vue文件中声明一个接口
-  // 这个接口中规定了所有vue实例中的所有成员属性
-  // 很多插件都对vue的构造函数有扩展
-  declare module 'vue/types/vue' {
-    interface Vue {
-      axios: AxiosInstance
+  - 在组件中使用
+    ```js
+    // HelloWorld.vue
+    created() {
+      // 如果不做扩展，编译器⽆法识别$http
+      this.$http.get<Hero[]>('/api/heros').then(res=> {
+        this.heros = res.data
+      })
     }
-  }
-  ```
+
+    // 新建一个扩展文件 kuozhan-vue.d.ts
+    import { AxiosInstance } from 'axios'
+
+    // 在vue/types/vue文件中声明一个接口
+    // 这个接口中规定了所有vue实例中的所有成员属性
+    // 很多插件都对vue的构造函数有扩展
+    declare module 'vue/types/vue' {
+      interface Vue {
+        axios: AxiosInstance
+      }
+    }
+    ```
 
 ### 2.7. 第三⽅模块
 - 以element-ui为例
