@@ -233,7 +233,7 @@
 
 ## 10. mac查看硬盘损耗
 - 安装以及查看
-  - `brew install smartmontools`
+  - `brew install smartmontools` 
   - `smartctl -s on disk0`
   - `smartctl -a disk0`
 - 说明

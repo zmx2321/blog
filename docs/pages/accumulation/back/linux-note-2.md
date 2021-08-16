@@ -141,15 +141,18 @@
 ### 3.1. 防火墙
 - 有时候防火墙开启无法访问nginx服务
 - 查看防火墙的状态
-  - systemctl status firewalld.service
+  - `systemctl status firewalld.service`
+  - 或者 `systemctl status firewalld`
   - active(running)表示防火墙开启
 - 关闭防火墙
-  - systemctl stop firewalld service
+  - `systemctl stop firewalld.service`
+  - 或者 `systemctl stop firewalld`
 - 开启防火墙
-  - systemctl start firewalld service
+  - `systemctl start firewalld.service`
+  - 或者 `systemctl status firewalld`
 - 前面的方法，一旦重启操作系统，防火墙就自动开启了
-  - systemctl disable firewalld.service，开机禁止防火墙服务器
-  - systemctl enable firewalld.service，开机启动防火墙服务器
+  - `systemctl disable firewalld.service`，开机禁止防火墙服务器
+  - `systemctl enable firewalld.service`，开机启动防火墙服务器
 
 ---
 <br />

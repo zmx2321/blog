@@ -291,6 +291,7 @@ const algorithmOtherConfig = require("../config/sidebarManage/algorithm/other/al
  *  react-note react笔记
  *  flutter-note flutter笔记
  *  node-note node笔记
+ *  ts-note ts笔记
  *  node-ts-note node+ts笔记
  *  vue-ts-note vue+ts笔记
  *  webpack-note webpack笔记
@@ -315,6 +316,7 @@ const vue3ViteNoteConfig = require("../config/sidebarManage/accumulation/front/v
 const reactNoteConfig = require("../config/sidebarManage/accumulation/front/react-note");
 const flutterNoteConfig = require("../config/sidebarManage/accumulation/front/flutter-note");
 const nodeNoteConfig = require("../config/sidebarManage/accumulation/front/node-note");
+const tsNoteConfig = require("../config/sidebarManage/accumulation/front/ts-note");
 const nodeTsNoteConfig = require("../config/sidebarManage/accumulation/front/node-ts-note");
 const vueTsNoteConfig = require("../config/sidebarManage/accumulation/front/vue-ts-note");
 const webpackNoteConfig = require("../config/sidebarManage/accumulation/front/webpack-note");
@@ -596,6 +598,7 @@ module.exports = {
     reactNoteConfig,  // react笔记
     // flutterNoteConfig,  // flutter笔记
     nodeNoteConfig,  // node笔记
+    tsNoteConfig,  // ts笔记
     nodeTsNoteConfig,  // node+ts笔记
     vueTsNoteConfig,  // vue+ts笔记
     // webpackNoteConfig,  // webpack笔记

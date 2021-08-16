@@ -57,3 +57,17 @@
 ## 4. vscode中小技巧
 - mac跳转到某行
   - `cmd + p`
+
+## 5. vetur忽略绝对路径报错
+- 设置，在setting.js里面编辑
+```json
+"vetur.grammar.customBlocks": {
+  "docs": "md",
+  "i18n": "json"
+},
+"vetur.ignoreProjectWarning": true,
+"vetur.validation.template": false,
+"vetur.experimental.templateInterpolationService": false,
+"vetur.validation.style": false,
+"vetur.validation.script": false
+```
