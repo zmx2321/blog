@@ -246,6 +246,7 @@ const frontHackerNoteConfig = require("../config/sidebarManage/note/front-hacker
  * interview-react react面试题
  * interview-webpack webpack面试题
  * interview-calc 算法面试题
+ * interview-ready 面试前准备
  * interview-experience 面试经历2022开始
  */
 const interviewBaseConfig = require("../config/sidebarManage/interview/interview-base");
@@ -255,6 +256,7 @@ const interviewVueConfig = require("../config/sidebarManage/interview/interview-
 const interviewReactConfig = require("../config/sidebarManage/interview/interview-react");
 const interviewWebpackConfig = require("../config/sidebarManage/interview/interview-webpack");
 const interviewCalcConfig = require("../config/sidebarManage/interview/interview-calc");
+const interviewReaady = require("../config/sidebarManage/interview/interview-ready");
 const interviewExperienceConfig = require("../config/sidebarManage/interview/interview-experience");
 
 interviewWebpackConfig,
@@ -567,7 +569,8 @@ module.exports = {
     interviewVueConfig,  // vue面试题
     interviewReactConfig,  // react面试题
     interviewWebpackConfig,  // weboack面试题
-    interviewCalcConfig  // 算法面试题
+    interviewCalcConfig,  // 算法面试题
+    interviewReaady,  // 面试前准备
     // interviewExperienceConfig,  // 面试经历
   ],
 

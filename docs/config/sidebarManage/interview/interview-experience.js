@@ -4,5 +4,6 @@ module.exports = {
     children: [
         'interview-experience-1',
         'interview-experience-2',
+        'interview-experience-3',
     ]
 };
