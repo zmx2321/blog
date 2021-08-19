@@ -1,6 +1,6 @@
 module.exports = {
     title: '面试前准备',
-    collapsable: false,
+    collapsable: true,
     children: [
         'interview-ready-1',
         'interview-ready-2',

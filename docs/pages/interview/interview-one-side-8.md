@@ -17,6 +17,7 @@
   - event loop在异步中起到什么作用，和异步有什么关系
 - 什么是宏任务和微任务，两者有什么区别
 - Promise有哪三种状态？如何变化
+
 ### 2.2. 场景题
 - promise then和catch的连接(经常考)
   - 经常考到，业务中可能会用，答不出来会减分很多
@@ -202,6 +203,7 @@
   - 轮询查找回调函数队列，如果有则移动到执行栈执行
   - 然后继续轮询查找(永动机一样)
     - 这样异步就可以永远执行下去
+
 #### 3.1.2. DOM事件和event loop
 - 示例：
 ```html
@@ -850,7 +852,7 @@ console.log('Bye');
 ## 4. 回顾面试题
 - 回顾event loop的过程
 - 和DOM渲染的关系
-- 微任务和宏任务在event loop过程中的不同处理
+  - 微任务和宏任务在event loop过程中的不同处理
 - 什么是宏任务和微任务，两者区别
   - 宏任务：setTimeout、setInterval、Ajax、DOM
   - 微任务：Promise、async/await
@@ -902,7 +904,7 @@ console.log('Bye');
 - promise和setTimeout的顺序
   - setTimeout属于宏任务，promise属于微任务
   - 微任务先于宏任务执行
-- 外加async/await的顺序问题
+- async/await的顺序问题
   ```js
   // script start
   // async1 start

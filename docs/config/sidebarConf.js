@@ -565,13 +565,13 @@ module.exports = {
     // '',
     interviewBaseConfig,  // 基础面试题
     interviewOneSideConfig,  // 一面训练
-    interviewWriteConfig,  // 手写代码集锦
-    interviewVueConfig,  // vue面试题
-    interviewReactConfig,  // react面试题
-    interviewWebpackConfig,  // weboack面试题
-    interviewCalcConfig,  // 算法面试题
+    // interviewWriteConfig,  // 手写代码集锦
+    // interviewVueConfig,  // vue面试题
+    // interviewReactConfig,  // react面试题
+    // interviewWebpackConfig,  // weboack面试题
+    // interviewCalcConfig,  // 算法面试题
     interviewReaady,  // 面试前准备
-    // interviewExperienceConfig,  // 面试经历
+    interviewExperienceConfig,  // 面试经历
   ],
 
   /**

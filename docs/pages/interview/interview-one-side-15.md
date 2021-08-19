@@ -24,7 +24,7 @@
   - git服务端常见的有 GitHub、GitLab、coding.net等
   - 大公司会搭建自己的内网git服务 => gitlab => gitlab是github上的一个项目
 - 常用git命令
-  - git add.
+  - git add .
     - 把修改的所有文件都加上，.表示所有
   - git checkout xxx
     - checkout会把文件都还原成以前的状态

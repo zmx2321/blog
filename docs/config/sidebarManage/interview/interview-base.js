@@ -1,6 +1,6 @@
 module.exports = {
     title: '基础面试题',
-    collapsable: false,
+    collapsable: true,
     children: [
         'interview-base-1',
         'interview-base-2',
