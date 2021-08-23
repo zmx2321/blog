@@ -571,7 +571,7 @@ module.exports = {
     // interviewWebpackConfig,  // weboack面试题
     // interviewCalcConfig,  // 算法面试题
     interviewReaady,  // 面试前准备
-    interviewExperienceConfig,  // 面试经历
+    // interviewExperienceConfig,  // 面试经历
   ],
 
   /**

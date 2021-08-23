@@ -310,8 +310,6 @@ Function.prototype.bind1 = ()=> {
 }
 ```
 
-
-
 ### 2.6. 用闭包做一个简单的cache(缓存)工具
 - 即get、set方法
 ```js
