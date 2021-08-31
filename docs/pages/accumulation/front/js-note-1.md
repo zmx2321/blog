@@ -1775,3 +1775,213 @@ var graphData2 = [
 ```js
 console.log(Array.from(new Set(monthArr)));
 ```
+
+## 68. echarts警告
+> There is a chart instance already initialized on the dom
+```js
+// 资金下拉框
+changeMoney(val) {
+    // 初始化数据
+    this.nameList = []
+    this.moneyYearAvgList = []
+    this.moneyNowSimList = []
+
+    // 数据
+    let hyzj = ()=> {
+        this.resdata.industry_money_cnt_list.forEach(item=> {
+            this.nameList.push(item.name)
+            this.moneyYearAvgList.push(item.l_money)
+            this.moneyNowSimList.push(item.money)
+        })
+
+        // 主要是这个
+        let myChart = this.$echarts.getInstanceByDom(this.moneyChartDom);
+
+        // 渲染图表
+        this.moneyOption && myChart.setOption(this.moneyOption);
+    }
+
+    // 数据
+    let hyfg = ()=> {
+        this.resdata.industry_money_cnt_list.forEach(item=> {
+            this.nameList.push(item.name)
+            this.moneyYearAvgList.push(item.l_ent_count)
+            this.moneyNowSimList.push(item.ent_count)
+        })
+
+        // 主要是这个
+        let myChart = this.$echarts.getInstanceByDom(this.moneyChartDom);
+
+        // 渲染图表
+        this.moneyOption && myChart.setOption(this.moneyOption);
+    }
+
+    switch(val) {
+        case "0":
+            hyzj();
+            break;
+        case "1":
+            hyfg();
+            break;
+    }
+},
+```
+
+## 69. 在计算属性中获取echarts
+```js
+// 地区柱状图配置
+areaOption() {
+    return {
+     xAxis: {
+          type: 'category',
+          data: this.areaList,  // 地区
+          splitLine: {
+            show: false
+          },
+          axisLine: {
+            show: true
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        legend: {
+          data: ['年度平均值', '本次模拟值'],
+        left:'right',
+        top: 10,
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: {
+            show: false
+          },
+          axisLine: {
+            show: true
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        grid: {
+          bottom: 100,
+        top: 100
+        },
+        series: [{
+          name: '年度平均值',
+          data: this.areaYearAvgList,
+          type: 'bar',
+          barWidth: 50,
+          color: '#ff0000',
+        itemStyle: {
+        normal: {
+        label: {
+            show: true,
+            position: "top",
+        },
+        }}
+        },
+        {
+          name: '本次模拟值',
+          barWidth: 50,
+          data: this.areaNowSimList,
+          type: 'bar',
+          color: '#ffc000',
+        itemStyle: {
+        normal: {
+        label: {
+            show: true,
+            position: "top",
+        },
+        }}
+        }]
+    }
+},
+
+// 地区dom
+areaChartDom() {
+    return document.querySelector('#areaChart');
+},
+```
+
+## 70. class绑定
+- `<li :class="[resdata.budget<resdata.l_budget ? 'jt_top' : 'jt_down']"><b>预计投入资金：</b><span>{{ resdata.budget }}万元</span></li>`
+
+## 71. 柱状图配置
+```js
+// 地区柱状图配置
+areaOption() {
+    return {
+     xAxis: {
+          type: 'category',
+          data: this.areaList,  // 地区
+          splitLine: {
+            show: false
+          },
+          axisLine: {
+            show: true
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        legend: {
+          data: ['年度平均值', '本次模拟值'],
+        left:'right',
+        top: 10,
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: {
+            show: false
+          },
+          axisLine: {
+            show: true
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        grid: {
+          bottom: 100,
+        top: 100
+        },
+        dataZoom: [
+          {
+            id: 'dataZoomX',
+            type: 'slider',
+            xAxisIndex: [0],
+            filterMode: 'filter'
+          },
+        {
+        type: 'inside'
+        }
+        ],
+        series: [{
+          name: '年度平均值',
+          data: this.areaYearAvgList,
+          type: 'bar',
+          color: '#3675FF',
+        itemStyle: {
+        normal: {
+        label: {
+            show: true,
+            position: "top",
+        },
+        }}
+        },
+        {
+          name: '本次模拟值',
+          data: this.areaNowSimList,
+          type: 'bar',
+          color: '#FFA025',
+        itemStyle: {
+        normal: {
+        label: {
+            show: true,
+            position: "top",
+        },
+        }}
+        }]
+    }
+},
+```
