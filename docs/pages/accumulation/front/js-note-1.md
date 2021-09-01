@@ -1904,7 +1904,9 @@ areaChartDom() {
 ```
 
 ## 70. class绑定
-- `<li :class="[resdata.budget<resdata.l_budget ? 'jt_top' : 'jt_down']"><b>预计投入资金：</b><span>{{ resdata.budget }}万元</span></li>`
+```html
+<li :class="[resdata.budget<resdata.l_budget ? 'jt_top' : 'jt_down']"><b>预计投入资金：</b><span>{{ resdata.budget }}万元</span></li>
+```
 
 ## 71. 柱状图配置
 ```js
