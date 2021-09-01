@@ -1910,59 +1910,76 @@ areaChartDom() {
 
 ## 71. 柱状图配置
 ```js
+data() {
+    return {
+        // 柱状图配置
+        barWid: 25,  // 柱子宽
+        legTop: 10,  // 图例距离
+        legRight: 100,  // 图例距离
+        gridBottom: 120, // 图距离
+        gridTop: 100,  // 图距离
+        xroute: -15,  // x轴文字倾斜
+    }
+}
+
+// 在计算属性computed中
 // 地区柱状图配置
 areaOption() {
     return {
-     xAxis: {
-          type: 'category',
-          data: this.areaList,  // 地区
-          splitLine: {
-            show: false
-          },
-          axisLine: {
-            show: true
-          },
-          axisTick: {
-            show: false
-          }
-        },
-        legend: {
-          data: ['年度平均值', '本次模拟值'],
-        left:'right',
-        top: 10,
-        },
-        yAxis: {
-          type: 'value',
-          splitLine: {
-            show: false
-          },
-          axisLine: {
-            show: true
-          },
-          axisTick: {
-            show: false
-          }
-        },
-        grid: {
-          bottom: 100,
-        top: 100
-        },
-        dataZoom: [
-          {
-            id: 'dataZoomX',
-            type: 'slider',
-            xAxisIndex: [0],
-            filterMode: 'filter'
-          },
-        {
-        type: 'inside'
+    grid: {      
+        bottom: this.gridBottom,
+        top: this.gridTop,
+        y2: 150  // 增加柱形图纵向的高度
+    },
+    xAxis: [{
+        type: 'category', 
+        splitLine: {
+        show: false
+        },
+        axisLine: {
+        show: true
+        },
+        axisTick: {
+        show: false
+        },
+        data: this.areaList,  // 地区
+        axisLabel:{ 
+        interval: 0, // 横轴信息全部显示    
+        rotate: this.xroute, // 角倾斜显示     
+        },
+    }],
+    legend: {
+        data: ['年度平均值', '本次模拟值'],
+        top: this.legTop,
+        right: this.legRight
+    },
+    yAxis: {
+        type: 'value',
+        splitLine: {
+        show: false
+        },
+        axisLine: {
+        show: true
+        },
+        axisTick: {
+         show: false
         }
-        ],
-        series: [{
-          name: '年度平均值',
-          data: this.areaYearAvgList,
-          type: 'bar',
-          color: '#3675FF',
+    },
+    dataZoom: [{
+        id: 'dataZoomX',
+        type: 'slider',
+        xAxisIndex: [0],
+        filterMode: 'filter'
+    },
+    {
+        type: 'inside'
+    }],
+    series: [{
+        name: '年度平均值',
+        data: this.areaYearAvgList,
+        type: 'bar',
+        barWidth: this.barWid,
+        color: '#3675FF',
         itemStyle: {
         normal: {
         label: {
@@ -1970,12 +1987,13 @@ areaOption() {
             position: "top",
         },
         }}
-        },
-        {
-          name: '本次模拟值',
-          data: this.areaNowSimList,
-          type: 'bar',
-          color: '#FFA025',
+    },
+    {
+        name: '本次模拟值',
+        barWidth: this.barWid,
+        data: this.areaNowSimList,
+        type: 'bar',
+        color: '#FFA025',
         itemStyle: {
         normal: {
         label: {
@@ -1983,7 +2001,7 @@ areaOption() {
             position: "top",
         },
         }}
-        }]
+      }]
     }
 },
 ```
