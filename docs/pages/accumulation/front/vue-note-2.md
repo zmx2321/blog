@@ -4,7 +4,7 @@
 </ClientOnly>
 
 ## 1. 配置全局less
-    - `npm i sass-resources-loader -S`
+    - `npm i style-resources-loader -S`
     - 创建less文件
     - 在vue.config.js中进行配置
     ```js
@@ -767,4 +767,15 @@ Router.prototype.push = function push (location) {
 
 // 引用
 router.push('/path')
+```
+
+## scss全局使用
+```js
+css: {
+    loaderOptions: {
+        sass: {
+            prependData: `@import "./src/assets/css/global.scss";`,
+        },
+    },
+},
 ```

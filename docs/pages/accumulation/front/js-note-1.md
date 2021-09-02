@@ -1832,104 +1832,12 @@ changeMoney(val) {
 // 地区柱状图配置
 areaOption() {
     return {
-     xAxis: {
-          type: 'category',
-          data: this.areaList,  // 地区
-          splitLine: {
-            show: false
-          },
-          axisLine: {
-            show: true
-          },
-          axisTick: {
-            show: false
-          }
-        },
-        legend: {
-          data: ['年度平均值', '本次模拟值'],
-        left:'right',
-        top: 10,
-        },
-        yAxis: {
-          type: 'value',
-          splitLine: {
-            show: false
-          },
-          axisLine: {
-            show: true
-          },
-          axisTick: {
-            show: false
-          }
-        },
-        grid: {
-          bottom: 100,
-        top: 100
-        },
-        series: [{
-          name: '年度平均值',
-          data: this.areaYearAvgList,
-          type: 'bar',
-          barWidth: 50,
-          color: '#ff0000',
-        itemStyle: {
-        normal: {
-        label: {
-            show: true,
-            position: "top",
-        },
-        }}
-        },
-        {
-          name: '本次模拟值',
-          barWidth: 50,
-          data: this.areaNowSimList,
-          type: 'bar',
-          color: '#ffc000',
-        itemStyle: {
-        normal: {
-        label: {
-            show: true,
-            position: "top",
-        },
-        }}
-        }]
-    }
-},
-
-// 地区dom
-areaChartDom() {
-    return document.querySelector('#areaChart');
-},
-```
-
-## 70. class绑定
-```html
-<li :class="[resdata.budget<resdata.l_budget ? 'jt_top' : 'jt_down']"><b>预计投入资金：</b><span>{{ resdata.budget }}万元</span></li>
-```
-
-## 71. 柱状图配置
-```js
-data() {
-    return {
-        // 柱状图配置
-        barWid: 25,  // 柱子宽
-        legTop: 10,  // 图例距离
-        legRight: 100,  // 图例距离
-        gridBottom: 120, // 图距离
-        gridTop: 100,  // 图距离
-        xroute: -15,  // x轴文字倾斜
-    }
-}
-
-// 在计算属性computed中
-// 地区柱状图配置
-areaOption() {
-    return {
     grid: {      
         bottom: this.gridBottom,
         top: this.gridTop,
-        y2: 150  // 增加柱形图纵向的高度
+        y2: 150,  // 增加柱形图纵向的高度
+        left: this.gridLeft,
+        height: this.gridHeight
     },
     xAxis: [{
         type: 'category', 
@@ -1945,7 +1853,16 @@ areaOption() {
         data: this.areaList,  // 地区
         axisLabel:{ 
         interval: 0, // 横轴信息全部显示    
-        rotate: this.xroute, // 角倾斜显示     
+        // rotate: this.xroute, // 角倾斜显示  
+        formatter(val) {
+            var strs = val.split(''); //字符串数组
+            var str = ''
+            for(var i = 0, s; s = strs[i++];) { //遍历字符串数组
+                str += s;
+                if(!(i % 6)) str += '\n'; //按需要求余
+            }
+            return str
+        }   
         },
     }],
     legend: {
@@ -1965,7 +1882,7 @@ areaOption() {
          show: false
         }
     },
-    dataZoom: [{
+    /* dataZoom: [{
         id: 'dataZoomX',
         type: 'slider',
         xAxisIndex: [0],
@@ -1973,7 +1890,128 @@ areaOption() {
     },
     {
         type: 'inside'
+    }], */
+    series: [{
+        name: '年度平均值',
+        data: this.areaYearAvgList,
+        type: 'bar',
+        barWidth: this.barWid,
+        color: '#3675FF',
+        itemStyle: {
+        normal: {
+        label: {
+            show: true,
+            position: "top",
+        },
+        }}
+    },
+    {
+        name: '本次模拟值',
+        barWidth: this.barWid,
+        data: this.areaNowSimList,
+        type: 'bar',
+        color: '#FFA025',
+        itemStyle: {
+        normal: {
+        label: {
+            show: true,
+            position: "top",
+        },
+        }}
+      }]
+    }
+},
+
+// 地区dom
+areaChartDom() {
+    return document.querySelector('#areaChart');
+},
+```
+
+## 70. class绑定
+```html
+<li :class="[resdata.budget<resdata.l_budget ? 'jt_top' : 'jt_down']"><b>预计投入资金：</b><span>{{ resdata.budget }}万元</span></li>
+```
+
+## 71. 柱状图配置
+```js
+data() {
+    return {
+      // 柱状图配置
+      barWid: 25,  // 柱子宽
+      legTop: 14,  // 图例距离
+      legRight: 120,  // 图例距离
+      gridHeight: 400, // 图大小
+      gridBottom: 120, // 图距离
+      gridTop: 50,  // 图距离
+      gridLeft: 100,  // 图距离
+      xroute: -8,  // x轴文字倾斜
+    }
+}
+
+// 在计算属性computed中
+// 地区柱状图配置
+areaOption() {
+    return {
+    grid: {      
+        bottom: this.gridBottom,
+        top: this.gridTop,
+        y2: 150,  // 增加柱形图纵向的高度
+        left: this.gridLeft,
+        height: this.gridHeight
+    },
+    xAxis: [{
+        type: 'category', 
+        splitLine: {
+        show: false
+        },
+        axisLine: {
+        show: true
+        },
+        axisTick: {
+        show: false
+        },
+        data: this.areaList,  // 地区
+        axisLabel:{ 
+        interval: 0, // 横轴信息全部显示    
+        // rotate: this.xroute, // 角倾斜显示  
+        formatter(val) {
+            var strs = val.split(''); //字符串数组
+            var str = ''
+            for(var i = 0, s; s = strs[i++];) { //遍历字符串数组
+                str += s;
+                if(!(i % 6)) str += '\n'; //按需要求余
+            }
+            return str
+        }   
+        },
     }],
+    legend: {
+        data: ['年度平均值', '本次模拟值'],
+        top: this.legTop,
+        right: this.legRight
+    },
+    yAxis: {
+        type: 'value',
+        splitLine: {
+        show: false
+        },
+        axisLine: {
+        show: true
+        },
+        axisTick: {
+         show: false
+        }
+    },
+    /* dataZoom: [{
+        id: 'dataZoomX',
+        type: 'slider',
+        xAxisIndex: [0],
+        filterMode: 'filter'
+    },
+    {
+        type: 'inside'
+    }], */
     series: [{
         name: '年度平均值',
         data: this.areaYearAvgList,
