@@ -4,6 +4,7 @@
 </ClientOnly>
 
 ## 1. 配置全局less
+- 方法一
     - `npm i style-resources-loader -S`
     - 创建less文件
     - 在vue.config.js中进行配置
@@ -20,6 +21,18 @@
         ......
     }
     ```
+- 方法二
+    - vuecli3x+
+    - vue add style-resources-loader
+    - 安装完之后vue.config.js里面会自动出现以下内容
+        ```js
+        pluginOptions: {
+            'style-resources-loader': {
+                preProcessor: 'less',
+                patterns: []
+            }
+        }
+        ```
 
 ## 2. vue引入图片无法加载问题
 在vue的js引入图片，就需要使用require（“路径”）进来
