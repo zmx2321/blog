@@ -74,3 +74,23 @@
   - sh -c "$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)"
   - 配置文件在~/.zshrc，但配置文件只要一改变保存就会出问题，目前还没找到原因
     - 具体问题在无法改变主题，还有vscode除了shell其他从文件到终端打开路径错乱，目前除了重装系统没有找到其他解决办法
+
+## 7. 在linux子系统里面安装
+- 彩虹特效
+  - sudo apt-get install lolcat
+- 跑火车
+  - sudo apt-get install sl
+- 屏幕特效
+  - sudo apt-get install cmatrix
+- 会说话的 ascii 奶牛
+  - sudo apt-get install cowsay
+    - cowsay worlds | lolcat
+- 鸡汤
+  - sudo apt-get install fortune
+    - fortune
+    - fortune | cowsay | lolcat
+
+## 8. 关于ssh
+- window下ssh在 C:\Users\zmx2321
+- mac下ssh在 ~/.ssh
+- linux下ssh在 ~/.ssh

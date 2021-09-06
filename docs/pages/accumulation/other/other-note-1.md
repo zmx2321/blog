@@ -42,6 +42,7 @@
 - 完成以上操作之后，就可以进行提交代码了，但是在提交代码之前，你要确定你当前所在的分支
 - `git push origin branchName`（提交代码到远程服务器上命名为branchName的分支上）
 - `git pull origin branchName` （从远程分支上拉取代码）
+
 ### 6.2. 创建并使用一个新的分支流程
 1. 创建一个分支
   - `git branch 分支名`
