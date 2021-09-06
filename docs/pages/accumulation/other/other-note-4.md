@@ -50,3 +50,27 @@
 - 打开path
   - 输入%k%
   - 注意不要漏加分号
+
+## 6. 在Windows环境下安装linux子系统
+- 在控制面板-卸载里面打开 适用于Windows的linux系统 功能
+- 在应用中心安装ubuntu
+- 安装cmder，并在设置中启动wsl
+- 在cmder中执行命令安装
+- 更新ubuntu软件包
+  - sudo apt-get update
+- 直接使用apt-get来安装
+  - sudo apt-get install nodejs
+  - sudo apt-get install npm
+  - 这里npm并没有初始安装所以需要单独安装，安装完你会发现版本比较低
+- 更新nodejs和npm版本
+  - sudo npm install n -g 安装n模块（n模块是用于管理nodejs版本的）
+  - sudo n stable（更新到最新版的nodejs  sudo n xxx可更新到指定版本的nodejs）
+  - sudo npm install npm -g （更新最新版的npm 同样可指定版本）
+- 安装zsh
+  - sudo apt-get install zsh 安装zsh
+  - zsh --version 确认是否安装成功
+  - sudo chsh -s $(which zsh) 设置zsh为默认shell
+- 安装oh my zsh
+  - sh -c "$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)"
+  - 配置文件在~/.zshrc，但配置文件只要一改变保存就会出问题，目前还没找到原因
+    - 具体问题在无法改变主题，还有vscode除了shell其他从文件到终端打开路径错乱，目前除了重装系统没有找到其他解决办法

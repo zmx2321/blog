@@ -143,6 +143,7 @@
   - `wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh`
   - 或 `curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh`
   - 也可以使用国内地址 `sh -c "$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)"`
+    - 在windows环境下得linux子系统
 - 接下来的配置全在oh my zsh中
   - 查看oh my zsh所有的主题 => `ll ~/.oh-my-zsh/themes`
 - 修改主题
