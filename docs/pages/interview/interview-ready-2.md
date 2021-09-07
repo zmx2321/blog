@@ -125,8 +125,6 @@
 }
 ```
 
-
-
 ## 2. Javascript相关概念
 ### 2.1. typeof能判断哪些类型
 - 识别所有值类型 => undefind、number、string、symbol、boolean
