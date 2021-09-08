@@ -2043,3 +2043,21 @@ areaOption() {
     }
 },
 ```
+
+## 72. 去重
+```js
+unique(arr) {
+    return Array.from(new Set(arr))
+},
+```
+
+## 72. 数组根据值删除
+```js
+Array.prototype.remove = function(val) {
+    var index = this.indexOf(val);
+    if (index > -1) {
+        this.splice(index, 1);
+    }
+};
+this.checkids.remove(row.ent_code)
+```
