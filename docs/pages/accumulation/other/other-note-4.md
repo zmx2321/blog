@@ -74,6 +74,9 @@
   - sh -c "$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)"
   - 配置文件在~/.zshrc，但配置文件只要一改变保存就会出问题，目前还没找到原因
     - 具体问题在无法改变主题，还有vscode除了shell其他从文件到终端打开路径错乱，目前除了重装系统没有找到其他解决办法
+- 在zsh里面配置格言
+  - `fortune | cowsay | lolcat`
+  - 保存之后每次运行就会出现一头彩色的牛，上面有一段格言
 
 ## 7. 在linux子系统里面安装
 - 彩虹特效

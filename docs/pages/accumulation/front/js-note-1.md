@@ -2061,3 +2061,164 @@ Array.prototype.remove = function(val) {
 };
 this.checkids.remove(row.ent_code)
 ```
+
+## 73. input框只能输入纯数字
+```html
+<!-- onafterpaste防止用户从其它地方copy内容粘贴到输入框  -->
+<input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " name="f_order" value="1"/> 
+
+ <!--输入框只能输入字母和下横线的正则表达式  -->
+<input onkeyup="this.value=this.value.replace(/[^_a-zA-Z]/g,'')" onpaste="this.value=this.value.replace(/[^_a-zA-Z]/g,'')"> 
+
+ <!-- 输入框只能输入字母数字和下横线的正则表达式 -->
+<input onkeyup="this.value=this.value.replace(/[^\w]/g,'')" onpaste="this.value=this.value.replace(/[^\w]/g,'')"> 
+ <!-- 或 -->
+<input onkeyup="this.value=this.value.replace(/[\W]/g,'')" onpaste="this.value=this.value.replace(/[\W]/g,'')">
+```
+
+## 74. 正则匹配整数或小数
+```js
+/^[+-]?[0-9]+(\.[0-9]{1,4})?$/.test("aaa")
+```
+
+## 75. echarts柱状图（滚动条）
+```js
+// 柱状图配置
+barWid: 25, // 柱子宽
+legTop: 0, // 图例距离
+ledPosition: "center",
+gridHeight: 360, // 图大小
+gridTop: 80, // 图距离
+gridLeft: 150, // 图距离
+xroute: -8, // x轴文字倾斜
+zoomLeft: '9%', // 滚动条左边的距离
+zoomRight: '10%', // 滚动条右边的距离
+zoomBottom: 15, // 滚动条下边的距离
+zoomEnd: 50,
+
+areaOption() {
+    return {
+    grid: {
+        top: this.gridTop,
+        left: this.gridLeft,
+        height: this.gridHeight,
+    },
+    xAxis: [
+        {
+        type: "category",
+        splitLine: {
+            show: false,
+        },
+        axisLine: {
+            show: true,
+        },
+        axisTick: {
+            show: false,
+        },
+        data: this.areaList, // 地区
+        axisLabel: {
+            interval: 0, // 横轴信息全部显示
+            // rotate: this.xroute, // 角倾斜显示
+            formatter(val) {
+            var strs = val.split(""); //字符串数组
+            var str = "";
+            for (var i = 0, s; (s = strs[i++]); ) {
+                //遍历字符串数组
+                str += s;
+                if (!(i % 6)) str += "\n"; //按需要求余
+            }
+            return str;
+            },
+        },
+        },
+    ],
+    legend: {
+        left: this.ledPosition,
+        data: ["上年度单个条款平均值", "上年度同类政策平均值", "本次模拟值"],
+        top: this.legTop,
+    },
+    yAxis: {
+        type: "value",
+        splitLine: {
+        show: false,
+        },
+        axisLine: {
+        show: true,
+        },
+        axisTick: {
+        show: false,
+        },
+    },
+    dataZoom: [
+        {
+        end: this.zoomEnd,  
+        show: true,
+        xAxisIndex: [0],
+        handleSize: 0, // 滑动条的 左右2个滑动条的大小
+        height: 8, //组件高度
+        left: this.zoomLeft, //左边的距离
+        right: this.zoomRight, //右边的距离
+        bottom: this.zoomBottom, //右边的距离
+        borderColor: "#fff",
+        fillerColor: '#ccc',
+        borderRadius:5,
+        backgroundColor: '#fff', //两边未选中的滑动条区域的颜色
+        showDataShadow: false, //是否显示数据阴影 默认auto
+        showDetail: false, //即拖拽时候是否显示详细数值信息 默认true
+        realtime:true, //是否实时更新
+        filterMode: 'filter',
+        },
+        {
+        type: 'inside',
+        },
+    ],
+    series: [
+        {
+        name: "上年度单个条款平均值",
+        data: this.areaYearAvgList,
+        type: "bar",
+        barWidth: this.barWid,
+        color: "#3675FF",
+        itemStyle: {
+            normal: {
+            label: {
+                show: true,
+                position: "top",
+            },
+            },
+        },
+        },
+        {
+        name: "上年度同类政策平均值",
+        data: this.areaPolicyYearAvgList,
+        type: "bar",
+        barWidth: this.barWid,
+        color: "#f00",
+        itemStyle: {
+            normal: {
+            label: {
+                show: true,
+                position: "top",
+            },
+            },
+        },
+        },
+        {
+        name: "本次模拟值",
+        barWidth: this.barWid,
+        data: this.areaNowSimList,
+        type: "bar",
+        color: "#FFA025",
+        itemStyle: {
+            normal: {
+            label: {
+                show: true,
+                position: "top",
+            },
+            },
+        },
+        },
+    ],
+    };
+},
+```
