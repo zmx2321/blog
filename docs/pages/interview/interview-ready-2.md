@@ -741,8 +741,10 @@
   - 所有通信都是单向的
 - mvvm
   - view model viewmodel
-  - 各部分之间的通信，都是双向的
-  - 采用双向绑定：View 的变动，自动反映在 ViewModel，反之亦然
+  - Model 层代表数据模型
+  - View 代表UI 组件
+  - ViewModel 是一个同步View 和 Model的对象（桥梁）
+- mvvm主要解决了mvc中大量的DOM 操作使页面渲染性能降低，加载速度变慢，影响用户体验
 
 ### 3.10. NextTick 是做什么的
 - $nextTick 是在下次 DOM 更新循环结束之后执行延迟回调，在修改数据之后使用 $nextTick，则可以在回调中获取更新后的 DOM
@@ -756,6 +758,7 @@
 ### 3.12. 对 keep-alive 的了解
 - keep-alive 是 Vue 内置的一个组件，可以使被包含的组件保留状态，或避免重新渲染
   - 即就是把一些经常使用的页面缓存起来，避免重复做加载渲染
+- keep-alive 运用了 LRU 算法，选择最近最久未使用的组件予以淘汰。
 
 ### 3.13. 计算属性和 watch 的区别
 - 计算属性是自动监听依赖值的变化，从而动态返回内容，监听是一个过程，在监听的值变化时，可以触发一个回调，并做一些事情。
@@ -889,6 +892,51 @@ mounted:在模板渲染成html后调用，通常是初始化页面完成后，�
 ### 3.38. $route 和 $router 的区别
 - $router是VueRouter的实例，在script标签中想要导航到不同的URL,使用$router.push方法。返回上一个历史history用$router.to(-1)
 - $route为当前router跳转对象。里面可以获取当前路由的name,path,query,parmas等。
+
+### 3.39. Vue 2.0 响应式数据的原理
+- 整体思路是数据劫持 + 观察者模式
+- 对象内部通过 defineReactive 方法，使用 Object.defineProperty 将属性进行劫持（只会劫持已存在的属性），数组则是通过重写数组来实现。当页面使用对应属性时，每个属性都拥有自己的 dep 属性，存在它所依赖的 watcher （依赖收集）get，当属性变化后会通知自己对应的 watcher 去更新（派发更新）set。
+- Object.defineProperty 数据劫持
+- 使用 getter 收集依赖 ，setter 通知 watcher派发更新。
+- watcher 发布订阅模式。
+
+### 3.40. Vue3.0 用过吗？了解多少？
+- 响应式原理的改变 Vue3.x 使用 Proxy 取代 Vue2.x 版本的 Object.defineProperty。
+- 组件选项声明方式 Vue3.x 使用 Composition API setup是Vue3.x新增的一个选项，他是组件内使用Composition API 的入口。
+- 模板语法变化 slot 具名插槽语法，自定义指令v-model升级。
+- 其他方面的更改 Suspense支持Fragment（多个根节点）和 Protal（在dom其他部分渲染组件内容）组件，针对一些特殊的场景做了处理。基于 treeShaking 优化，提供了更多的内置功能。
+
+### 3.41. Vue3.0 和 2.0 的响应式原理区别
+- Vue3.x 改用 Proxy 替代 Object.defineProperty。因为 Proxy 可以直接监听对象和数组的变化，并且有多达13种拦截方法。
+
+### 3.42. vue 中使用了哪些设计模式？
+- 工厂模式 - 传入参数即可创建实例
+  - 虚拟 DOM 根据参数的不同返回基础标签的 Vnode 和组件 Vnode。
+- 单例模式 - 整个程序有且仅有一个实例
+  - vuex 和 vue-router 的插件注册方法 install 判断如果系统存在实例就直接返回掉。
+- 发布-订阅模式。（vue 事件机制）
+- 观察者模式。（响应式数据原理）
+- 装饰器模式（@装饰器的用法）
+- 策略模式，策略模式指对象有某个行为，但是在不同的场景中，该行为有不同的实现方案 - 比如选项的合并策略
+
+### 3.43. 你都做过哪些 Vue 的性能优化？
+- 对象层级不要过深，否则性能就会差。
+- 不需要响应式的数据不要放在 data 中（可以使用 Object.freeze() 冻结数据）
+- v-if 和 v-show 区分使用场景
+- computed 和 watch 区分场景使用
+- v-for 遍历必须加 key，key最好是id值，且避免同时使用 v-if
+- 大数据列表和表格性能优化 - 虚拟列表 / 虚拟表格
+- 防止内部泄露，组件销毁后把全局变量和时间销毁
+- 图片懒加载
+- 路由懒加载
+- 异步路由
+- 第三方插件的按需加载
+- 适当采用 keep-alive 缓存组件
+- 防抖、节流的运用
+- 服务端渲染 SSR or 预渲染
+
+### 3.44. nextTick 使用场景和原理
+- nextTick 中的回调是在下次 DOM 更新循环结束之后执行的延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。主要思路就是采用微任务优先的方式调用异步方法去执行 nextTick 包装的方法。
 
 ## 4. react相关概念
 ### 4.1. react 生命周期函数
