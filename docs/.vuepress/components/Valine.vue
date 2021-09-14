@@ -4,7 +4,7 @@
       <!-- id 将作为查询条件 -->
       <span class="leancloud-visitors"
             data-flag-title="Your Article Title">
-        <em class="post-meta-item-text">阅读量： </em>
+        <em class="post-meta-item-text">访问量： </em>
         <i class="leancloud-visitors-count"></i>
       </span>
     </div>
