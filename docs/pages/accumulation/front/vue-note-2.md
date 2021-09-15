@@ -746,7 +746,7 @@ celledit(row, column, cell, event){
 ```
 
 ## 13. 在vue中compute的值改变，iframe无法渲染
-```
+```html
 <iframe :src="url" frameborder="0" :key="index"></iframe>
 
 computed: {
@@ -791,4 +791,19 @@ css: {
         },
     },
 },
+```
+
+## el-date-picker
+```html
+<el-date-picker
+    v-model="time"
+    type="datetimerange"
+    range-separator="至"
+    start-placeholder="开始日期"
+    end-placeholder="结束日期"
+    value-format="yyyy-MM-dd HH:mm"
+    format="yyyy-MM-dd HH:mm" 
+    @change="changeTime"
+>
+</el-date-picker>
 ```
