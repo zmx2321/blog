@@ -782,7 +782,7 @@ Router.prototype.push = function push (location) {
 router.push('/path')
 ```
 
-## scss全局使用
+## 15.scss全局使用
 ```js
 css: {
     loaderOptions: {
@@ -793,7 +793,7 @@ css: {
 },
 ```
 
-## el-date-picker
+## 16.el-date-picker
 ```html
 <el-date-picker
     v-model="time"
@@ -806,4 +806,86 @@ css: {
     @change="changeTime"
 >
 </el-date-picker>
+```
+
+## 17.选项卡异步切换
+```js
+// 选项卡异步切换
+switchTab(tab) {
+    // console.log(tab)
+
+    for (let [key] of Object.entries(this.tabRefresh)) {
+    if (key == tab) {
+        this.tabRefresh[key] = true;
+    } else {
+        this.tabRefresh[key] = false;
+    }
+    }
+},
+
+// 刷新节点
+refreshNodes(tab) {
+    // console.log(tab.label)
+
+    this.tableData = []
+
+    switch (tab.label) {
+    case "aa":
+        this.switchTab('jsgzVisible');
+        break;
+    case "bb":
+        this.switchTab('znzzVisible');
+        break;
+    case "cc":
+        this.switchTab('xxcyxmVisible');
+        break;
+    case "dd":
+        this.switchTab('gcwlxmVisible');
+        break;
+    case "ee":
+        this.switchTab('gyhlwptVisible');
+        break;
+    case "ff":
+        this.switchTab('czfcxmVisible');
+        break;
+    }
+
+    this.getTable()
+},
+
+// 刷新所有列表 - 判断当前tab项刷新
+refreshList() {
+    // console.log(this.librarybActive)
+
+    this.tableData = []
+
+    switch(this.librarybActive) {
+    // 技术改造库
+    case "jsgz":
+        this.aa()
+        break;
+    // 智能制造库
+    case "znzz":
+        this.bb()
+        break;
+    // 新兴产业项目库
+    case "xxcyxm":
+        this.cc()
+        break;
+    // 工厂物联网项目库
+    case "gcwlxm":
+        this.dd()
+        break;
+    // 工业互联网平台项目库
+    case "gyhlwpt":
+        this.ee()
+        break;
+    // 财政扶持项目库
+    case "czfcxm":
+        this.ff()
+        break;
+    }
+
+    this.getTable()
+},
 ```
