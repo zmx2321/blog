@@ -889,3 +889,53 @@ refreshList() {
     this.getTable()
 },
 ```
+
+## 18. upload不直接上传
+```html
+<el-upload
+    class="upload_wrap"
+    ref="upload"
+    action="#"
+    :limit="1"
+    :show-file-list="true"
+    :file-list="fileList"
+    :on-exceed="handleExceed"
+    :on-remove="handleRemove"
+    :before-remove="beforeRemove"
+    :on-change="uploadChange"
+    :auto-upload="false">
+    <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
+    <div slot="tip" class="el-upload__tip">支持扩展名：.doc .docx .pdf，文件小于5MB</div>
+</el-upload>
+
+<script>
+data() {
+    return {
+        // 上传图片参数
+        rawFile: {},  // 传值
+        fileList: [],  // 页面显示
+    }
+}
+
+/**
+ * el-upload common
+ */
+// 删除文件之前的钩子
+beforeRemove(file) {
+    return this.$confirm(`确定移除 ${ file.name }？`);
+},
+handleExceed() {
+    this.$message.warning(`文件超出上限`);
+},
+// 删除之后触发
+handleRemove() {
+    this.rawFile = []
+},
+// 上传文件时触发
+uploadChange(file) {
+    // console.log(file)
+
+    this.rawFile = file.raw
+},
+</script>
+```
