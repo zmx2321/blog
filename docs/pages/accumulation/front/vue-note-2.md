@@ -3,43 +3,12 @@
   <Valine></Valine>
 </ClientOnly>
 
-## 1. 配置全局less
-- 方法一
-    - `npm i style-resources-loader -S`
-    - 创建less文件
-    - 在vue.config.js中进行配置
-    ```js
-    module.exports = {
-        ......
-        // 引入公共less
-        pluginOptions: {
-            'style-resources-loader': {
-                preProcessor: 'less',
-                patterns:  ['src/assets/less/demo.less', 'src/assets/less/global.less']
-            }
-        },
-        ......
-    }
-    ```
-- 方法二
-    - vuecli3x+
-    - vue add style-resources-loader
-    - 安装完之后vue.config.js里面会自动出现以下内容
-        ```js
-        pluginOptions: {
-            'style-resources-loader': {
-                preProcessor: 'less',
-                patterns: []
-            }
-        }
-        ```
-
-## 2. vue引入图片无法加载问题
+## 1. vue引入图片无法加载问题
 在vue的js引入图片，就需要使用require（“路径”）进来
     - `<img :src=" require('../../assets/images/url/icon' + (index+1) + '.png') " alt="">`
 
-## 3. vue中拖拽
-### 1. 自定义指令 - 拖拽
+## 2. vue中拖拽
+### 2.1. 自定义指令 - 拖拽
 ```html
 <!-- 自定义指令绑定元素 -->
 <button v-drag>拖拽</button>
@@ -67,7 +36,7 @@ export default {
 }
 ```
 
-### 2. 通过事件触发 - 拖拽
+### 2.2. 通过事件触发 - 拖拽
 ```html
 <div class="xxclass" ref="xxref" @mousedown="mouseDownHandleelse($event)" @mouseup="mouseUpHandleelse($event)"></div>
 ```
@@ -120,268 +89,13 @@ export default {
 }
 ```
 
-## 4. vue中echarts图表
-- `yarn add echarts`
-- main.js
-```js
-import echarts from 'echarts'
-
-Vue.prototype.echarts = echarts;
-```
-- 父组件
-```js
-<ZhuZhuangTu ref="zzt" :zzt='zzt' />
-
-data() {
-  return {
-    // 柱状图信息
-    zzt: {
-        area: [],  // 柱状图省份
-        cityNum: [],  // 柱状图数据
-    },
-  }
-}
-
-methods: {
-  // 人员进出省份统计
-  getTrackCountByProList() {
-      this.listLoading = true;
-
-      let params = {
-          stime: new DateTime().getTheDate() + " 00:00:00",
-          etime: new DateTime().getTheDate() + " 23:59:59"
-      }
-
-      getTrackCountByPros(params).then(res=> {
-          this.listLoading = false;
-
-          let trackCountByProsList = res.data.data.data;
-
-          // console.log(trackCountByProsList);
-
-          for(let item in trackCountByProsList) {
-              if(typeof trackCountByProsList[item] !== 'function') {
-                  // console.log(trackCountByProsList[item]);
-
-                  // 获取城市名称数组
-                  this.province_name.push({
-                      name: trackCountByProsList[item].name
-                  });
-
-                  // 获取城市人流量
-                  this.zzt.cityNum.push({
-                      num: trackCountByProsList[item].num
-                  });
-              }
-          }
-
-          // 柱状图
-          this.zzt.area = this.province_name;
-
-          this.$refs.zzt.getChartData();
-      }).catch({});
-  },
-}
-
-mouteds: {
-  this.getTrackCountByProList();
-}
-```
-- 子组件
-```js
-// 接受父组件的值
-props: {
-  zzt: Object,
-},
-
-// 柱状图数据
-methods: {
-  province_name:[],
-  cityNum: [],
-}
-
-methods: {
-  // 获取柱状图数据
-  getChartData(){
-      // console.log(this.zzt);
-
-      // 获取省份
-      for(let item in this.zzt.area) {
-          if(this.zzt.area[item].name != "") {
-              this.province_name.push(this.zzt.area[item].name);
-          }
-      }
-      // console.log("获取省份", this.province_name);
-
-      // 获取城市数据
-      for(let item in this.zzt.cityNum) {
-          if(this.zzt.cityNum[item].num !== undefined) {
-              this.cityNum.push(this.zzt.cityNum[item].num);
-          }
-      }
-      // console.log("获取城市数据", this.cityNum);
-
-      // 渲染柱状图
-      this.drawCal();
-  },
-
-  // 渲染柱状图
-  drawCal() {
-      var myChart = this.echarts.init(document.getElementById('echarts'))
-
-      let option = {
-          xAxis: {
-              type: 'category',
-              data: this.province_name,
-              axisLabel: {
-                  inside: false,
-                  textStyle: {
-                      color: '#b9b7b7',
-                  },
-                  interval: 0,  // 加上这个强制显示
-                  rotate: 63
-              },
-              axisTick: {
-                  show: false
-              },
-              axisLine: {
-                  show: false
-              },
-              z: 10
-          },
-          yAxis: {
-              name: "单位/人",
-              nameTextStyle: {
-                  color: '#9FA9BC',
-                  padding : [0, 0, 0, -50],
-              },
-              axisLine: {
-                  show: false
-              },
-              axisTick: {
-                  show: false
-              },
-              axisLabel: {
-                  textStyle: {
-                      color: '#b9b7b7'
-                  }
-              }
-          },
-          dataZoom: [
-              {
-                  type: 'inside'
-              }
-          ],
-          series: [
-              {
-                  type: 'bar',
-                  itemStyle: {
-                      color: 'rgba(0,0,0,0.05)',
-                  },
-                  barGap: '-100%',
-                  barCategoryGap: '40%',
-                  data: this.dataShadow,
-                  animation: false,
-              },
-              {
-                  type: 'bar',
-                  itemStyle: {
-                      barBorderRadius: [4.6, 4.6, 0, 0],
-
-                      color: {
-                          type: "linear",
-                          x: 0,
-                          y: 0,
-                          x2: 0,
-                          y2: 1,
-                          colorStops: [
-                              {
-                                  offset: 0,
-                                  color: "#03C2AC" // 0% 处的颜色
-                              },
-                              {
-                                  offset: 1,
-                                  color: "#000" // 100% 处的颜色
-                              }
-                          ],
-                          globalCoord: false // 缺省为 false
-                      },
-                  },
-                  emphasis: {
-                      itemStyle: {
-                          color: {
-                              type: "linear",
-                              x: 0,
-                              y: 0,
-                              x2: 0,
-                              y2: 1,
-                              colorStops: [
-                                  {
-                                  offset: 0,
-                                  color: "#000" // 0% 处的颜色
-                                  },
-                                  {
-                                  offset: 1,
-                                  color: "#03C2AC" // 100% 处的颜色
-                                  }
-                              ],
-                              globalCoord: false // 缺省为 false
-                          },
-                      },
-                  },
-                  data: this.cityNum,
-                  label: {
-                      show: true, //开启显示
-                      position: 'top', //在上方显示
-                      textStyle: { //数值样式
-                          color: '#9FA9BC',
-                          fontSize: 12
-                      }
-                  },
-              }
-          ]
-      };
-
-      /* var zoomSize = 6;
-      myChart.on('click', function (params) {
-          console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
-          myChart.dispatchAction({
-              type: 'dataZoom',
-              startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
-              endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
-          });
-      }); */
-
-      myChart.setOption(option);
-  },
-}
-```
-
-## 5. vue中将简体转成繁体
-```js
-// 引入包
-yarn add language-tw-loader
-
-// vue.config.js
-configureWebpack: {
-    module: {
-        rules: [ // 可在package.json 配置顶层 sideEffects: false
-        {
-            test: /\.(js|vue)$/,
-            loader: 'language-tw-loader',
-        }
-        ]
-    },
-},
-```
-
-## 6. 在eslint模式下，全局变量报错
+## 3. 在eslint模式下，全局变量报错
 ```js
 /* global qs */
 console.log(qs.stringify(this.loginForm));
 ```
 
-## 7. vuex存储对象基本用法
+## 4. vuex存储对象基本用法
 ```js
 // 主入口文件/index.js
 import Vue from 'vue'
@@ -422,7 +136,7 @@ this.$store.commit('SET_USER_RES', userInfo);
 console.log(this.$store.state.user.userRes);
 ```
 
-## 8. element 有搜索框input筛选的树形菜单
+## 5. element 有搜索框input筛选的树形菜单
 ```js
 //this.$refs.tree.getCheckedNodes()   //树选中的值
 //this.$refs.tree.getCheckedKeys()  //树选中的id
@@ -527,7 +241,7 @@ watch: {
 }
 ```
 
-## 9. 路由跳转，参数在url
+## 6. 路由跳转，参数在url
 ```js
 // 跳转页面
 jumpPage() {
@@ -545,59 +259,7 @@ if(this.$route.query.jumpCurr !== undefined) {
 }
 ```
 
-## 10. vue2x使用proxy做代理解决跨域问题 
-```js
-//开发模式反向代理配置，生产模式请使用Nginx部署并配置反向代理
-devServer: {
-    port: 9527,
-    proxy: {
-        '/api': {
-        changeOrigin:true,//允许跨域
-        
-        //本地服务接口地址
-        target: 'http://xxx/',
-        ws: true,  //如果要代理 websockets，配置这个参数
-        secure: false,  // 如果是https接口，需要配置这个参数
-        pathRewrite: {
-            '^/api': '/'
-        }
-        },
-        '/elasticApi': {
-        changeOrigin:true,//允许跨域
-        target: 'http://192.168.2.240:9200/',
-        ws: true,
-        pathRewrite: {
-            '^/elasticApi': '/'
-        }
-        }
-    }
-}
-
-export const getImgURI = params => {
-    return  axios({
-        url: `api/upload/uploadImage`,  // 这里api指代本地服务
-        method: 'post',
-        data: params
-    });
-};
-
-location ^~/api {
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_buffering off;
-        rewrite ^/api/(.*)$ /$1 break;
-        proxy_pass http://192.168.2.245:8031/;
-    }
-
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   html;
-    }
-}
-```
-
-## 11. 在element配置上传文件
+## 7. 在element配置上传文件
 ```html
 <el-upload
         class="upload_wrap"
@@ -655,7 +317,7 @@ changeFile(file, fileList) {
 </script>
 ```
 
-## 12. 在element表格编辑
+## 8. 在element表格编辑
 ```html
 <el-table :data="tableData" border @cell-dblclick="celledit">
 <el-table-column type="index" ></el-table-column>
@@ -745,7 +407,7 @@ celledit(row, column, cell, event){
 </script>
 ```
 
-## 13. 在vue中compute的值改变，iframe无法渲染
+## 9. 在vue中compute的值改变，iframe无法渲染
 ```html
 <iframe :src="url" frameborder="0" :key="index"></iframe>
 
@@ -762,7 +424,7 @@ check() {
 },
 ```
 
-## 14. 在js中使用vue router
+## 10. 在js中使用vue router
 ```js
 /*
 vue封装的公共方法js中使用router，页面可能报错
@@ -782,7 +444,7 @@ Router.prototype.push = function push (location) {
 router.push('/path')
 ```
 
-## 15.scss全局使用
+## 11. scss全局使用
 ```js
 css: {
     loaderOptions: {
@@ -793,7 +455,7 @@ css: {
 },
 ```
 
-## 16.el-date-picker
+## 12. el-date-picker
 ```html
 <el-date-picker
     v-model="time"
@@ -806,136 +468,4 @@ css: {
     @change="changeTime"
 >
 </el-date-picker>
-```
-
-## 17.选项卡异步切换
-```js
-// 选项卡异步切换
-switchTab(tab) {
-    // console.log(tab)
-
-    for (let [key] of Object.entries(this.tabRefresh)) {
-    if (key == tab) {
-        this.tabRefresh[key] = true;
-    } else {
-        this.tabRefresh[key] = false;
-    }
-    }
-},
-
-// 刷新节点
-refreshNodes(tab) {
-    // console.log(tab.label)
-
-    this.tableData = []
-
-    switch (tab.label) {
-    case "aa":
-        this.switchTab('jsgzVisible');
-        break;
-    case "bb":
-        this.switchTab('znzzVisible');
-        break;
-    case "cc":
-        this.switchTab('xxcyxmVisible');
-        break;
-    case "dd":
-        this.switchTab('gcwlxmVisible');
-        break;
-    case "ee":
-        this.switchTab('gyhlwptVisible');
-        break;
-    case "ff":
-        this.switchTab('czfcxmVisible');
-        break;
-    }
-
-    this.getTable()
-},
-
-// 刷新所有列表 - 判断当前tab项刷新
-refreshList() {
-    // console.log(this.librarybActive)
-
-    this.tableData = []
-
-    switch(this.librarybActive) {
-    // 技术改造库
-    case "jsgz":
-        this.aa()
-        break;
-    // 智能制造库
-    case "znzz":
-        this.bb()
-        break;
-    // 新兴产业项目库
-    case "xxcyxm":
-        this.cc()
-        break;
-    // 工厂物联网项目库
-    case "gcwlxm":
-        this.dd()
-        break;
-    // 工业互联网平台项目库
-    case "gyhlwpt":
-        this.ee()
-        break;
-    // 财政扶持项目库
-    case "czfcxm":
-        this.ff()
-        break;
-    }
-
-    this.getTable()
-},
-```
-
-## 18. upload不直接上传
-```html
-<el-upload
-    class="upload_wrap"
-    ref="upload"
-    action="#"
-    :limit="1"
-    :show-file-list="true"
-    :file-list="fileList"
-    :on-exceed="handleExceed"
-    :on-remove="handleRemove"
-    :before-remove="beforeRemove"
-    :on-change="uploadChange"
-    :auto-upload="false">
-    <el-button slot="trigger" size="small" type="primary">点击上传</el-button>
-    <div slot="tip" class="el-upload__tip">支持扩展名：.doc .docx .pdf，文件小于5MB</div>
-</el-upload>
-
-<script>
-data() {
-    return {
-        // 上传图片参数
-        rawFile: {},  // 传值
-        fileList: [],  // 页面显示
-    }
-}
-
-/**
- * el-upload common
- */
-// 删除文件之前的钩子
-beforeRemove(file) {
-    return this.$confirm(`确定移除 ${ file.name }？`);
-},
-handleExceed() {
-    this.$message.warning(`文件超出上限`);
-},
-// 删除之后触发
-handleRemove() {
-    this.rawFile = []
-},
-// 上传文件时触发
-uploadChange(file) {
-    // console.log(file)
-
-    this.rawFile = file.raw
-},
-</script>
 ```

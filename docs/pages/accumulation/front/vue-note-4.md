@@ -1,0 +1,217 @@
+# vue配置
+<ClientOnly>
+  <Valine></Valine>
+</ClientOnly>
+
+## 1. 在vue脚手架配置接口
+- vue.config.js
+```js
+const bodyParser = require('body-parser');
+const jsmd5 = require('js-md5')
+
+module.exports = {
+  devServer: {
+    // open: true,
+    host: 'localhost',
+    port: 8088,
+    https: false,
+    hotOnly: false,
+    /* proxy: { // 配置跨域
+        '/api': {
+            target: 'http://10.10.10.199:8080',
+            ws: true,  // 是否启用websockets
+            changOrigin: true,  // 开启代理，在本地创建一个虚拟服务端
+            pathRewrite: {
+                '^/api': ''
+            }
+        }
+    }, */
+    before: app => {
+      // post请求必须使用中间件才能接收参数
+      // 需要载入body-parser中间件才可以使用req.body
+      // 2021年body-parser已经被弃用，原因是express框架已经内置
+      // 但原生node还是需要中间件来做请求
+      app.use(bodyParser.json());
+      app.use(bodyParser.urlencoded({ extended: false }));
+
+      app.post('/api/admin/login', (req, res)=> {
+        // console.log(req.body)
+
+        let username = req.body.username;
+        let password = req.body.password;
+
+        // console.log(jsmd5("admin"))
+
+        if(username == "admin" && password == jsmd5("admin")) {
+          res.send({
+            msg: '恭喜你登录成功',
+            info: { id:1, name: "zhangsan", username: "admin", password: "admin" },
+            isOk: true
+          })
+        } else {
+          res.send({
+            msg: '登录失败，请检查账号密码',
+            isOk: false
+          })
+        }
+      }).get('/api/user/get', res=> {
+        res.json([
+          { username: "zhangsan" },
+          { username: "王五" },
+        ])
+      })
+    }
+  },
+}
+```
+
+## 2. vue.config.js里面的基本配置项
+```js
+module.exports = {
+    lintOnSave: false,  // 关闭eslint
+    publicPath: './', // 部署应用时的根路径(默认'/'),也可用相对路径(存在使用限制)
+    outputDir: 'dist', // 运行时生成的生产环境构建文件的目录(默认''dist''，构建之前会被清除)
+    assetsDir: 'assets', //放置生成的静态资源(s、css、img、fonts)的(相对于 outputDir 的)目录(默认'')
+    indexPath: 'index.html', //指定生成的 index.html 的输出路径(相对于 outputDir)也可以是一个绝对路径。
+    
+    pages: {
+      //pages 里配置的路径和文件名在你的文档目录必须存在 否则启动服务会报错
+      index: {
+        //除了 entry 之外都是可选的
+        entry: 'src/main.js', // page 的入口,每个“page”应该有一个对应的 JavaScript 入口文件
+        template: 'public/index.html', // 模板来源
+        filename: 'index.html', // 在 dist/index.html 的输出
+        title: 'Index Page', // 当使用 title 选项时,在 template 中使用：<title><%= htmlWebpackPlugin.options.title %></title>
+        chunks: ['chunk-vendors', 'chunk-common', 'index'] // 在这个页面中包含的块，默认情况下会包含,提取出来的通用 chunk 和 vendor chunk
+      }
+    },
+
+    productionSourceMap: false, // 是否在构建生产包时生成 sourceMap 文件，false将提高构建速度
+
+    pluginOptions: {
+      'style-resources-loader': {
+        preProcessor: 'less',
+        patterns: ['src/assets/less/demo.less', 'src/assets/less/global.less']
+      }
+    }
+    // devServer: {
+    //     open: true,
+    //     host: 'localhost',
+    //     port: 80,
+    //     https: false,
+    //     hotOnly: false,
+    //     proxy: { // 配置跨域
+    //         '/api': {
+    //             target: 'http://10.10.10.199:8080',
+    //             ws: true,
+    //             changOrigin: true,
+    //             pathRewrite: {
+    //                 '^/api': ''
+    //             }
+    //         }
+    //     },
+    //     before: app => { }
+    // }
+};
+```
+
+## 3. vue2x使用proxy做代理解决跨域问题 
+```js
+//开发模式反向代理配置，生产模式请使用Nginx部署并配置反向代理
+devServer: {
+    port: 9527,
+    proxy: {
+        '/api': {
+        changeOrigin:true,//允许跨域
+        
+        //本地服务接口地址
+        target: 'http://xxx/',
+        ws: true,  //如果要代理 websockets，配置这个参数
+        secure: false,  // 如果是https接口，需要配置这个参数
+        pathRewrite: {
+            '^/api': '/'
+        }
+        },
+        '/elasticApi': {
+        changeOrigin:true,//允许跨域
+        target: 'http://192.168.2.240:9200/',
+        ws: true,
+        pathRewrite: {
+            '^/elasticApi': '/'
+        }
+        }
+    }
+}
+
+export const getImgURI = params => {
+    return  axios({
+        url: `api/upload/uploadImage`,  // 这里api指代本地服务
+        method: 'post',
+        data: params
+    });
+};
+
+location ^~/api {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_buffering off;
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass http://192.168.2.245:8031/;
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   html;
+    }
+}
+```
+
+## 4. 配置全局less
+- 方法一
+    - `npm i style-resources-loader -S`
+    - 创建less文件
+    - 在vue.config.js中进行配置
+    ```js
+    module.exports = {
+        ......
+        // 引入公共less
+        pluginOptions: {
+            'style-resources-loader': {
+                preProcessor: 'less',
+                patterns:  ['src/assets/less/demo.less', 'src/assets/less/global.less']
+            }
+        },
+        ......
+    }
+    ```
+- 方法二
+    - vuecli3x+
+    - vue add style-resources-loader
+    - 安装完之后vue.config.js里面会自动出现以下内容
+        ```js
+        pluginOptions: {
+            'style-resources-loader': {
+                preProcessor: 'less',
+                patterns: []
+            }
+        }
+        ```
+
+## 5. vue中将简体转成繁体
+```js
+// 引入包
+yarn add language-tw-loader
+
+// vue.config.js
+configureWebpack: {
+    module: {
+        rules: [ // 可在package.json 配置顶层 sideEffects: false
+        {
+            test: /\.(js|vue)$/,
+            loader: 'language-tw-loader',
+        }
+        ]
+    },
+},
+```
