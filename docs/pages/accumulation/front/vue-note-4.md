@@ -215,3 +215,113 @@ configureWebpack: {
     },
 },
 ```
+
+## 6. 配置全局axios服务
+- 安装axios
+  ```js
+  import axios from "axios"
+  Vue.prototype.axios = axios;
+  ```
+- 配置开发环境和打包环境
+  - .env.development和.env.production是全局文件，vue会根据环境自动识别
+  - .env.development
+    ```js
+    # 开发环境
+    VUE_APP_BASE_API = 'http://localhost:8088/'
+    ```
+  - .env.production
+    ```js
+    # 线上环境
+    VUE_APP_BASE_API = 'http://localhost:80881/'
+    ```
+- 封装axios
+  ```js
+  import axios from 'axios'
+  import { Message } from 'element-ui'
+
+  import router from '../router'
+
+  console.log(process.env.VUE_APP_BASE_API)
+
+  const Axios = axios.create({
+      baseURL: process.env.VUE_APP_BASE_API, // api
+      timeout: 100000,
+      responseType: "json",
+      withCredentials: true, // 是否允许带cookie这些
+      // headers: {
+      //     "Content-Type": "application/json;charset=utf-8"
+      // }
+  });
+
+  //请求拦截  设置统一header
+  Axios.interceptors.request.use(config => {
+      // console.log(config);
+
+      return config
+  }, error => {
+      return Promise.reject(error)
+  });
+
+  //响应拦截  401 过期处理
+  Axios.interceptors.response.use(response => {
+      // console.log(response.data.msg);
+
+      const { code } = response.data;  //响应登录状态码
+
+      // console.log(code);
+
+      // 如果响应请求未登录，则返回登录页面
+      if (code == -1){
+          Message.error(response.data.msg);
+          router.push('/login')
+      }
+
+      return response
+  }, error => {
+      // console.log(error.response);
+
+      const { status } = error.response;  //响应错误状态
+      const { data } = error.response;  //响应错误详情
+
+      // 错误提醒
+      Message.error(data.message);
+
+      if (status === 401) {
+          Message.error('登录失效，请重新登录');
+
+          localStorage.removeItem('code');
+      }
+
+      return Promise.reject(error)
+  });
+
+  export default Axios;
+  ```
+- 配置文件vue.config.js
+  - 注意：使用配置文件请求要注释掉 axios里面的url
+    - `baseURL: process.env.VUE_APP_BASE_API, // api`
+  ```js
+  const serverPath = process.env.VUE_APP_BASE_API;  // 配置文件也可以获取.env变量
+  console.log("env", serverPath)
+
+  module.exports: {
+    devServer: {
+      // open: true,
+      host: 'localhost',
+      port: 8088,
+      https: false,
+      hotOnly: false,
+      proxy: { // 配置跨域
+          '/api': {
+              // 用.env变量配置跨越
+              target: serverPath,
+              ws: true,  // 是否启用websockets
+              changOrigin: true,  // 开启代理，在本地创建一个虚拟服务端
+              pathRewrite: {
+                  '^/api': ''
+              }
+          }
+      },
+    }
+  }
+  ```
