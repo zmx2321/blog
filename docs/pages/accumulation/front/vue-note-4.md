@@ -325,3 +325,60 @@ configureWebpack: {
     }
   }
   ```
+
+## 7. 大屏配置
+> 将全局px转换成rem
+- 安装插件
+  - yarn add @njleonzhang/postcss-px-to-rem
+  - yarn add lib-flexible-for-dashboard
+- 创建配置文件 => .postcssrc.js
+  ```js
+  module.exports = {
+    plugins: {
+      autoprefixer: {},
+      "@njleonzhang/postcss-px-to-rem": {
+        unitToConvert: 'px',
+        widthOfDesignLayout:  1920, // 设计稿的宽度 ，就是设计的UI宽度
+        unitPrecision: 3, // 十进制的单位
+        selectorBlackList: ['.ignore', '.hairlines', '.el-', '.zmx_'], // (Array) 过滤那些不用转换的class
+        // selectorBlackList: ['.ignore', '.hairlines'], // (Array) 过滤那些不用转换的class
+        minPixelValue: 1, // 设置要替换的最小像素值
+        mediaQuery: false, // 允许在媒体查询中转换px
+      }
+    }
+  }
+  ```
+- 在main.js里面做配置
+  ```js
+  const dashboardFlexible = require('lib-flexible-for-dashboard');
+  dashboardFlexible.init(16/9)
+  ```
+- less公共文件
+  ```js
+  module.exports = {
+    pluginOptions: {
+    'style-resources-loader': {
+        preProcessor: 'less',
+        patterns: ['src/assets/less/tools.less', 'src/assets/less/global.less', 'src/assets/less/layerpx.less']
+      }
+    }
+  }
+  ```
+  - tools.less
+    - 全局工具样式 - 公共按钮、弹出框 。。。
+  - global.less
+    - 规定全局样式变量及框架整体布局
+  - layerpx.less
+    - 不转换成rem，基本用于框架整体布局
+    - 以zmx_为前缀
+    ```less
+    .container {
+      header {}
+
+      .zmx_aside {
+        min-width: 160px;
+      }
+
+      .main {}
+    }
+    ```

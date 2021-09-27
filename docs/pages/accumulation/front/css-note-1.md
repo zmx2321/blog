@@ -137,3 +137,159 @@ p {
     color: transparent;
 }
 ```
+
+## 8. css初始化
+- reset.css
+    ```css
+    /* http://meyerweb.com/eric/tools/css/reset/
+    v2.0 | 20110126
+    License: none (public domain)
+    */
+
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed,
+    figure, figcaption, footer, header, hgroup,
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+    }
+
+    /* HTML5 display-role reset for older browsers */
+    article, aside, details, figcaption, figure,
+    footer, header, hgroup, menu, nav, section {
+        display: block;
+    }
+
+    body {
+        line-height: 1;
+    }
+    ol, ul {
+        list-style: none;
+    }
+
+    blockquote, q {
+        quotes: none;
+    }
+
+    blockquote:before, blockquote:after,
+    q:before, q:after {
+        content: '';
+        content: none;
+    }
+
+    a, button{
+        cursor:pointer;
+    }
+    h1, h2, h3, h4, h5, h6, em, strong, b{
+        font-weight:bold;
+    }
+
+    del, ins, u, s, a, a:hover{
+        text-decoration:none;
+    }
+
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .el-loading{
+    position: absolute;
+    z-index: 2000;
+    background-color: rgba(255,255,255,.7);
+    margin: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    -webkit-transition: opacity .3s;
+    transition: opacity .3s;
+    }
+    .el-loading-spinner{
+    top: 50%;
+    margin-top: -21px;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    }
+
+    ```
+- common.css
+    ```css
+    /**
+     *  common css
+     */
+    /* ==========================================================================
+    function
+    ============================================================================ */
+    /* 清除浮动 */
+    .f-cb:after,.f-cbli li:after{display:block;clear:both;visibility:hidden;height:0;overflow:hidden;content:".";}
+    /* inline-block */
+    .f-ib li{display:inline-block;*display:inline;*zoom:1;}
+    /* 浮动 */
+    .f-fl{float:left;}
+    .f-fr{float:right;}
+    /* 显示/隐藏 */
+    .f-dn{display:none;}
+    .f-db{display:block;}
+    /* relative */
+    .f-pr{position:relative;}
+    /* 溢出隐藏 */
+    .f-oh{overflow:hidden;}
+    /* font-size */
+    .f-fs1{font-size:12px;}
+    .f-fs2{font-size:14px;}
+    /* font-weight */
+    .f-fwn{font-weight:normal;}
+    .f-fwb{font-weight:bold;}
+    /* text-align */
+    .f-tal{text-align:left;}
+    .f-tac{text-align:center;}
+    .f-tar{text-align:right;}
+    /* justify */
+    .f-taj{text-align:justify;text-justify:inter-ideograph;}
+    /* 垂直居中 */
+    .f-vam,.f-vama *{vertical-align:middle;}
+    /* 字间距 */
+    .f-ti2{text-indent:2em;}
+    /* 行高 */
+    .f-lhn{line-height:normal;}
+    /* 下划线 */
+    .f-tdu,.f-tdu:hover{text-decoration:underline;}
+    .f-tdn,.f-tdn:hover{text-decoration:none;}
+    /* 超出部分省略号 */
+    .f-toe{overflow:hidden;word-wrap:normal;white-space:nowrap;text-overflow:ellipsis;}
+    /* 鼠标样式 */
+    .f-csp{cursor:pointer;}
+    .f-csd{cursor:default;}
+    .f-csh{cursor:help;}
+    .f-csm{cursor:move;}
+    /* 文本不能被选择 */
+    .f-usn{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
+    /* 边框圆角 */
+    .bdr_radiu{border-radius: 4px;}
+
+    /* ===============================================
+        layout -- 不转换成rem - 主要修改第三方ui组件库
+    ================================================= */
+    .main_cont{
+    padding: 8px 20px 0 20px;
+    }
+
+    [class*=" el-icon-"], [class^=el-icon-] {
+    font-size: 16px;
+    }
+    ```

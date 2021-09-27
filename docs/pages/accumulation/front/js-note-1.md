@@ -2222,3 +2222,14 @@ areaOption() {
     };
 },
 ```
+
+## 76. 判断ie
+```js
+// 判断ie
+let isIe = ()=> {
+if(!!window.ActiveXObject || "ActiveXObject" in window)  
+    return true;  
+else  
+    return false; 
+}
+```
