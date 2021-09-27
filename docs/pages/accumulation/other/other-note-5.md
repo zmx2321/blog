@@ -32,7 +32,7 @@ rimraf node_modules
   yarn build
 
   # 进入生成的文件夹
-  cd vue_empty
+  cd vue_empty_auto
 
   git pull
   git init
