@@ -39,7 +39,8 @@
   - 里面每个文件夹表示一个页面
   - 里面都是vue文件
   - 可以把pages里面的vue文件提出来，但pages.json文件里面要做对应修改，而且编译后，小程序里面的pages文件就不是用文件夹包着的了
-    - 安装原生的写法是一个页面一个文件夹，文件夹里面有wxml、json、wxss、js四个文件，如果uniapp里面不区分文件夹，那编译后的小程序pages目录里面就没有文件夹，会显得比较零散
+    - 按照原生小程序的写法是一个页面一个文件夹，文件夹里面有wxml、json、wxss、js四个文件，如果uniapp里面不区分文件夹，那编译后的小程序pages目录里面就没有文件夹，会显得比较零乱
+  - 每次新建页面，都会在pages里面生成一个文件夹，并且在pages.json里面也会生成相应配置，新建页面下面有在pages.json中注册的复选框，下面的文本可以进行编辑
 - static => 静态资源
   - 图片、视屏
 - unpackage => 编译后页面存放路径
@@ -76,6 +77,45 @@
   - 外部导入 => `improt "../xx.css"`
 
 ## 4. 配置文件pages.json
+- 通用
+  - pages数组中第一项表示应用启动页
+  - globalStyle优先级比独立页面的style低，他是通用样式
+  - [globalStyle配置参考](https://uniapp.dcloud.io/collocation/pages?id=globalstyle)
+- 常用配置
+  - navigationBarBackgroundColor => 导航栏颜色
+  - navigationBarTitleText => 导航栏标题内容
+  - navigationBarTextStyle => 导航栏标题字体颜色
+    - 只有黑白：black/white
+  - tabBar
+    - 可以添加2~5项
+    - 和globalStyle同级
+    - color => 字体颜色
+    - color => 字体选中颜色
+    - borderStyle => 目前只支持黑白
+    - list => 内容
+      - pagePath => 页面地址
+      - iconPath => 图标地址
+      - selectedIconPath => 选择时改变图标
+      - text => 标题
+    - condition => 启动模式配置，仅开发时生效
+      - 是一个非常实用的工具
+      ```js
+      "condition": { //模式配置，仅开发期间生效
+          "current": 0, //当前激活的模式（list 的索引项）
+          "list": [{
+                  "name": "swiper", //模式名称
+                  "path": "pages/component/swiper/swiper", //启动页面，必选
+                  "query": "interval=4000&autoplay=false" //启动参数，在页面的onLoad函数里面得到。
+              },
+              {
+                  "name": "test",
+                  "path": "pages/component/switch/switch"
+              }
+          ]
+      }
+      ```
+
+## 5. uni-app的生命周期
 
 
 ---
