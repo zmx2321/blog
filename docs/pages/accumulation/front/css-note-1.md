@@ -293,3 +293,25 @@ p {
     font-size: 16px;
     }
     ```
+
+## 9. flex两边对齐，中间有间隙
+```css
+.wrap {
+    width: 370px;
+    height: 40px;
+    bottom: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+li {
+    width: 47%;
+    height: 100%;
+    background: #000;
+}
+```
