@@ -119,8 +119,32 @@
 
 ## 5. uni-app的生命周期
 - 应用生命周期
+  - 简介
+    - 打开应用 => 开始
+    - 关闭应用 => 结束
+  - 常用钩子
+    - onLaunch => 初始化完成时触发(只触发一次)
+    - onShow => 启动，后台进入前台
+    - onHide => 前台进入后台
+    - onError => 报错时触发
+    - onUniNViewMessage => 对 nvue 页面发送的数据进行监听
+  - 注意事项
+    - 应用生命周期仅可在App.vue中监听，在其它页面监听无效
 - 页面生命周期
-
+  - 简介
+    - 打开页面 => 开始
+    - 关闭页面 => 结束
+  - 常用钩子
+    - onInit => 触发时机早于 onLoad
+    - onLoad => 监听页面加载，其参数为上个页面传递的数据
+    - onShow => 页面每次出现在屏幕上都触发，包括从下级页面点返回露出当前页面
+    - onReady => 注意如果渲染速度快，会在页面进入动画完成前触发
+    - onResize => 监听窗口尺寸变化
+    - onReachBottom => 页面滚动到底部的事件
+    - onTabItemTap => 点击 tab 时触发
+    - onShareAppMessage => 点击右上角分享
+    - onShareTimeline => 点击右上角转发到朋友圈
+    - onAddToFavorites => 点击右上角收藏
 
 ---
 <br />
