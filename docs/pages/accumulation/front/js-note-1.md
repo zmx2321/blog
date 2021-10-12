@@ -2247,3 +2247,81 @@ setArr(arr) {
     return str
 },
 ```
+
+## 78. 多个echart
+```js
+// 
+computed: {
+    // dom1
+    chartDom1() {
+      return document.querySelector("#mnbdr_chart1");
+    },
+    ......
+}
+
+// 旧写法
+getChart1() {
+    let myChart = this.$echarts.init(this.chartDom1);
+
+    this.dom1Option && myChart.setOption(this.dom1Option);
+},
+getChart2() {
+    let myChart = this.$echarts.init(this.chartDom2);
+
+    this.dom2Option && myChart.setOption(this.dom2Option);
+},
+getChart3() {
+    let myChart = this.$echarts.init(this.chartDom3);
+
+    this.dom3Option && myChart.setOption(this.dom3Option);
+},
+getBoard() {
+    this.getChart1()
+    this.getChart2()
+    this.getChart3()
+},
+
+// 封装
+getChart() {
+    for(let i=1; i<=3; i++) {
+        let domItem = eval(`this.chartDom${i}`)
+        let optionItem = eval(`this.dom${i}Option`)
+
+        let myChart = this.$echarts.init(domItem);
+        optionItem && myChart.setOption(optionItem);
+    }
+},
+getBoard() {
+    this.getChart()
+},
+```
+
+## 79. 解决echarts报There is a chart instance already initialized on the dom.错误
+```js
+ echarts.init(document.getElementById("echartsTest5")).dispose();//解决echarts dom已经加载的报错
+ myChart = echarts.init(document.getElementById("echartsTest5"));
+```
+
+## 80. 动态echart示例
+```js
+for(let i=1; i<=3; i++) {
+    let myChart = null;
+
+    let domItem = eval(`this.chartDom${i}`)
+    let optionItem = eval(`this.dom${i}Option`)
+    // console.log(optionItem.series)
+    // console.log(optionItem.series.slice(0, this.mnbdData.length))
+
+    let nowOptionSeriesItem = optionItem.series.slice(0, this.mnbdData.length)
+    // console.log(nowOptionItem)
+
+    optionItem.series = []
+    optionItem.series = nowOptionSeriesItem
+
+    // 解决echarts dom已经加载的报错
+    this.$echarts.init(domItem).dispose();
+    myChart = this.$echarts.init(domItem);
+
+    optionItem && myChart.setOption(optionItem);
+}
+```
