@@ -2233,3 +2233,17 @@ else
     return false; 
 }
 ```
+
+## 77. 数组转字符串
+```js
+setArr(arr) {
+    let str = ""
+    arr.forEach(item=> {
+    str += item + "、"
+    })
+
+    str = str.substring(0, str.length - 1);
+
+    return str
+},
+```
