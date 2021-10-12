@@ -2325,3 +2325,27 @@ for(let i=1; i<=3; i++) {
     optionItem && myChart.setOption(optionItem);
 }
 ```
+
+## 81. utc转北京
+```js
+formatDateTime(time) {
+    let timeStamp = new Date(time);
+    let year = timeStamp.getFullYear(); // 年
+    let month = timeStamp.getMonth() + 1;  // 月
+    let date = timeStamp.getDate();  // 日
+    let hour = timeStamp.getHours();  // 时
+    let minute = timeStamp.getMinutes();  // 分
+    let second = timeStamp.getSeconds();  // 秒
+
+    // 加上0
+    month < 10 ? month=`0${month}` : month;  // 月
+    date < 10 ? date=`0${date}` : date;  // 日
+    hour < 10 ? hour=`0${hour}` : hour;  // 时
+    minute < 10 ? minute=`0${minute}` : minute;  // 分
+    second < 10 ? second=`0${second}` : second;  // 秒
+
+    return `${year}-${month}-${date} ${hour}:${minute}:${second}`
+},
+
+this.mnbdData[i].createtime = this.formatDateTime(this.mnbdData[i].createtime)
+```
