@@ -37,4 +37,5 @@
 ## 6. 删除非空文件夹
 - `rm -d -r xxx`
 
-## #. xxx
+## 7. 要将所有 jpeg的后缀名图片文件修改为 jpg文件
+- `rename .jpeg .jpg *.jpeg`
