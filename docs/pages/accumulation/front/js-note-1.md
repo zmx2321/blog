@@ -2349,3 +2349,29 @@ formatDateTime(time) {
 
 this.mnbdData[i].createtime = this.formatDateTime(this.mnbdData[i].createtime)
 ```
+
+## 82. 根据某个位置截取字符串
+```js
+getPointData() {
+    return new Promise((resolve, reject)=> {
+    axios.get('http://a.amap.com/jsapi_demos/static/china.js').then(res=> {
+        let dataStr = res.data;
+        let ipos = dataStr.indexOf('[')
+        let str = dataStr.substring(ipos,dataStr.length)
+        let points = JSON.parse(str)
+
+        resolve(points)
+    }).catch(err=> {
+        reject(err)
+    })
+    })
+},
+
+// 聚合
+async initMap(map) {
+    let markers = [], cluster
+
+    let points = await this.getPointData()
+    ......
+}
+```
