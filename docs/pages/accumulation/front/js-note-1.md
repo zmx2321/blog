@@ -2375,3 +2375,40 @@ async initMap(map) {
     ......
 }
 ```
+
+## 83. await和axios结合
+````js
+getPointData() {
+    return axios.get('http://a.amap.com/jsapi_demos/static/china.js').then(res=> {
+        let dataStr = res.data;
+        let ipos = dataStr.indexOf('[')
+        let str = dataStr.substring(ipos,dataStr.length)
+        let points = JSON.parse(str)
+        console.log("111", points)
+
+        return points
+    })
+
+    /* return axios({
+        method: 'GET',
+        dataType: 'json',
+        url: 'http://a.amap.com/jsapi_demos/static/china.js',
+    }).then(res=> {
+        let dataStr = res.data;
+        let ipos = dataStr.indexOf('[')
+        let str = dataStr.substring(ipos,dataStr.length)
+        let points = JSON.parse(str)
+        console.log("111", points)
+
+        return points
+    }) */
+},
+
+// 聚合
+async initMap(map) {
+    let markers = [], cluster
+
+    let points = await this.getPointData()
+    ......
+}
+```
