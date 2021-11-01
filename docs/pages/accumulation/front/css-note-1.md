@@ -310,6 +310,7 @@ ul {
 }
 
 li {
+    margin-right: 1%;
     width: 47%;
     height: 100%;
     background: #000;
