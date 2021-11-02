@@ -2377,7 +2377,7 @@ async initMap(map) {
 ```
 
 ## 83. await和axios结合
-````js
+```js
 getPointData() {
     return axios.get('http://a.amap.com/jsapi_demos/static/china.js').then(res=> {
         let dataStr = res.data;
@@ -2410,5 +2410,136 @@ async initMap(map) {
 
     let points = await this.getPointData()
     ......
+}
+```
+
+## 84. echarts饼状图进度条
+```js
+dom0Option() {
+      return {
+          title: {
+            show: true,
+            text: '完成度',
+            x: 'center',
+            textStyle: {
+              fontWeight: 'normal',
+              fontSize: 16
+            }
+          },
+          animation: true,
+          tooltip: {
+            show: false
+          },
+          series: [
+            {
+              name: '完成度',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              hoverAnimation: false,
+              silent: true,
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data: [
+                {
+                  value: 20,
+                  name: '完成度',
+                  selected: false,
+                  label: {
+                    normal: {
+                      show: true,
+                      position: 'center',
+                      fontSize: 20,
+                      formatter: '{b}\n{d}%'
+                    }
+                  },
+                  itemStyle: {
+                    color: '#91c7ae'
+                  }
+                },
+                {
+                  value: 80,
+                  label: {
+                    normal: {
+                      show: false
+                    }
+                  },
+                  itemStyle: {
+                    color: '#eee'
+                  }
+                }
+              ]
+            },
+            {
+              name: '完成度',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              hoverAnimation: false,
+              silent: true,
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              left: '20%',
+            right: '100%',
+            top: 0,
+            bottom: 0,
+              data: [
+                {
+                  value: 20,
+                  name: '完成度',
+                  selected: false,
+                  label: {
+                    normal: {
+                      show: true,
+                      position: 'center',
+                      fontSize: 20,
+                      formatter: '{b}\n{d}%'
+                    }
+                  },
+                  itemStyle: {
+                    color: '#91c7ae'
+                  }
+                },
+                {
+                  value: 80,
+                  label: {
+                    normal: {
+                      show: false
+                    }
+                  },
+                  itemStyle: {
+                    color: '#eee'
+                  }
+                }
+              ]
+            }
+          ]
+        }
+    },
+```
+
+## 85. 遍历对象
+```js
+for(let item in this.chart1Data.data) {
+    let j = parseInt(this.getNum(item))-1
+
+    this.chart1Data.data[item] = {
+        value: mbd.industry_ratio[j] === undefined ? 0 : mbd.industry_ratio[j].val*100,
+        label: mbd.industry_ratio[j] === undefined ? "" : mbd.industry_ratio[j].name
+    }
+}
+
+this.chart1Data.data = {
+    data1: {},
+    data2: {},
+    data3: {},
+    data4: {},
+    data5: {},
 }
 ```
