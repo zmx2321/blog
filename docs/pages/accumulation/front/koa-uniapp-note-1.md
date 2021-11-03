@@ -7,6 +7,7 @@
 ### 1.1. 运行uniapp到小程序
 - 下载
   - [下载hbuilderx开发版](https://www.dcloud.io/hbuilderx.html)
+    - 下载app开发版
   - [下载微信小程序工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
 - 启动hbuilderx
 - 使用hbuilderx创建uniapp应用
