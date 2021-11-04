@@ -376,6 +376,7 @@
     this.subNVue.hide()
   }
   ```
+- 具体详情看官方api
 
 ---
 <br />
