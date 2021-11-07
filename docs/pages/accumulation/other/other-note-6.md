@@ -280,8 +280,9 @@
 - 先brew info mysql查看下版本信息
   - 可以检测是否安装
 - brew install mysql直接安装
+- brew reinstall mysql 重新安装
 - 启动MYSQL服务
-  - mysql.server start
+  - sudo mysql.server start
 - 初始化配置并配置密码
   - 这一步可以先不做，可以无密码登陆，登陆之后再修改密码
   - 这种配置密码的方式比较麻烦，简单密码无法设置，个人练习不建议配置
