@@ -328,9 +328,10 @@
     ```
 - 连接
   - mysql -u root -p => 有密码登陆
+    - 默认123456
   - mysql -uroot => 无密码登陆
     - 设置密码
-    - ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';
+    - ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
 - 常用指令
   - 启动：sudo mysql.server start
   - 关闭：sudo mysql.server stop
@@ -349,3 +350,24 @@
 - 安装并破解navicat
   - sudo xattr -r -d com.apple.quarantine /Applications/Navicat\ Premium.app
   - /Applications/Navicat\ Premium.app部分是由应用程序拖入终端自动生成的
+
+## 14. mac下安装redis
+- 官网下载
+  - redis-6.2.6.tar.gz
+- 解压
+  - tar -zxvf redis-6.2.6.tar.gz
+- 编译测试
+  - 进入到radis路径
+  - sudo make test
+- 编译安装
+  - sudo make install
+- 启动服务器
+  - src/redis-server
+- 启动测试端
+  - 客户端
+  - src/redis-cli
+  - 启动了服务端才能启动客户端
+  - 测试
+    - set name abc
+    - get name
+    - quit => 退出
