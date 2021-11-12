@@ -2543,3 +2543,26 @@ this.chart1Data.data = {
     data5: {},
 }
 ```
+
+## 86. 判断字符串/数量
+```js
+let { path } = this.$route
+
+let res = path.match(/\//g)
+let count = !res ? 0 : res.length;
+console.log(count)
+```
+
+## 87. 删除数组中null
+```js
+Array.prototype.remove = function(val) {
+var index = this.indexOf(val);
+if (index > -1) {
+this.splice(index, 1);
+}
+};
+
+var emp = ['abs','dsf','sdf','fd']
+
+emp.remove('fd');
+```
