@@ -469,3 +469,27 @@ css: {
 >
 </el-date-picker>
 ```
+
+## 13. 带参跳转
+```js
+// 使用params必须使用name
+// 跳转之后页面 url后面不会拼接参数 , 但是刷新页面id 会消失
+this.$router.push({
+    // path: '/shop/contract/viewContract',
+    name: 'viewContract',
+    params: {
+        handleStatus: '查看'
+    }
+})
+console.log("123", this.$route.params.handleStatus)
+
+// 使用query
+// query类似 get, 跳转之后页面 url后面会拼接参数,类似?id=1, 非重要性的可以这样传
+this.$router.push({
+    path: '/shop/contract/viewContract',
+    query: {
+        handleStatus: '查看'
+    }
+})
+console.log("123", this.$route.query.handleStatus)
+```
