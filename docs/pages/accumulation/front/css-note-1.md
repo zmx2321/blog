@@ -316,3 +316,10 @@ li {
     background: #000;
 }
 ```
+
+## 10. scss中做变量计算
+```css
+min-height: calc(100vh - #{$navbar} - #{$tagHeight});
+
+calc(100% - #{$a})
+```
