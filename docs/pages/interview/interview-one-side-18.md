@@ -1147,7 +1147,7 @@
       - 传入一个对象，就是告诉他去指定原型
   - Object.create()传参之后，对象中没有值，只是将参数的对象全部将放在空对象的原型中，这是和{}最大的区别
   - Object.create()是创建一个空对象，然后把空对象的原型指向了传入的对象
-  - [手写demo传送门](https://zmx2321.github.io/blog_code/interview/interview-one-side/example/questions/new Object()和Object.create()的区别.html)
+  - [手写demo传送门](https://zmx2321.github.io/blog_code/interview/interview-one-side/example/questions/new%20Object()%E5%92%8CObject.create()%E7%9A%84%E5%8C%BA%E5%88%AB.html)
   ```js
   const obj1 = {
     a: 10,
