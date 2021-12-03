@@ -372,3 +372,27 @@
     - set name abc
     - get name
     - quit => 退出
+
+## 16. mac下安装nginx
+- 打开终端，习惯性命令
+  - brew update
+- 查询要安装的软件是否存在
+  - brew search nginx
+- 查看
+  - brew info nginx
+- 正式开始安装
+  - brew install nginx
+- 进入/bin 目录
+  - cd /opt/homebrew/opt/nginx/bin
+  - ./nginx
+  - 原先的root
+    - /opt/homebrew/opt/nginx/html
+  - 启动和root地址在同一级目录，和配置文件不同级
+- nginx的配置文件
+  - cat /opt/homebrew/etc/nginx/nginx.conf
+- 配置
+  - 进入配置文件目录
+  - open /opt/homebrew/etc/nginx/nginx.conf
+  - 修改后的root
+    - listen: 6080
+    - /Users/zmx2321/Documents/code/_poj
