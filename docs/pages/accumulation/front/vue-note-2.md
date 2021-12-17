@@ -493,3 +493,22 @@ this.$router.push({
 })
 console.log("123", this.$route.query.handleStatus)
 ```
+
+## 14. el-tree单选
+```js
+@check="handleCheckChange"
+
+// 单选
+handleCheckChange(data) {
+console.log(data)
+var labvalojb = data; //暂存选中节点
+// console.log(data);
+this.$refs.sendTree.setCheckedKeys([]); //删除所有选中节点
+this.$refs.sendTree.setCheckedNodes([labvalojb]); //选中已选中节点
+
+if(this.subStatus === "single") {}
+},
+
+.el-tree .el-tree-node .is-leaf + .el-checkbox .el-checkbox__inner{display: inline-block;}
+.el-tree .el-tree-node .el-checkbox .el-checkbox__inner{display: none;}
+```

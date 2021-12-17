@@ -65,3 +65,52 @@ export function download(url, filename) {
 
 this.download(url, 555)
 ```
+
+## 3. 对象数组根据对象属性删除
+```js
+// 对象数组根据对象属性删除
+removeByValue(arr, value) {
+  for(var i in arr){
+    if(arr[i].attrs.label === value) {
+      arr.splice(i,1);
+    }
+  }
+},
+```
+
+## 6. 判断是否为图片
+```js
+// 获取路径扩展名
+getFileprefix(url) {
+  // 获取最后一个.的位置
+  var index= url.lastIndexOf(".");
+  // 获取后缀
+  var ext = url.substr(index+1);
+
+  return ext
+},
+// 判断是否为图片
+isAssetTypeAnImage(ext) {
+  return ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff'].indexOf(ext.toLowerCase()) !== -1;
+},
+// 读取路径
+getFileValue(row, item) {
+  let url = row[item['prop']]
+  let tp = ""
+
+  // 如果有地址
+  if(url) {
+    if(this.isAssetTypeAnImage(this.getFileprefix(url))) {
+      // 图片
+      // console.log(url)
+      tp = `<img src='${url}' />`
+    } else {
+      // 文件
+      // console.log(url)
+      tp = `<a href='${url}'>点击下载</a>`
+    }
+  }
+
+  return tp
+},
+```
