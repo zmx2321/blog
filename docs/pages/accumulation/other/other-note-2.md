@@ -71,3 +71,6 @@
 "vetur.validation.style": false,
 "vetur.validation.script": false
 ```
+
+## 6. vscode终端不为下拉框
+- 设置里面搜索terminal.integrated.tabs.enabled，改成false即可
