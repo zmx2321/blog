@@ -1,4 +1,4 @@
-# 算法-人间模式-1
+# 算法-普通-1
 <ClientOnly>
   <Valine></Valine>
 </ClientOnly>

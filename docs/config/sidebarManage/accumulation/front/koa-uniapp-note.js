@@ -12,5 +12,8 @@ module.exports = {
         'koa-uniapp-note-8',
         'koa-uniapp-note-9',
         'koa-uniapp-note-10',
+        'koa-uniapp-note-13',
+        'koa-uniapp-note-14',
+        'koa-uniapp-note-15',
     ]
 };

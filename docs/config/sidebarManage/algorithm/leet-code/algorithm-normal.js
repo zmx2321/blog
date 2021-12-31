@@ -1,5 +1,5 @@
 module.exports = {
-    title: '人间模式',
+    title: '普通',
     collapsable: false,
     children: [
         'algorithm-normal-1',

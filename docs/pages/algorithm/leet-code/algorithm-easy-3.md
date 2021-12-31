@@ -1,4 +1,4 @@
-# 算法-天堂模式-3
+# 算法-简单-3
 <ClientOnly>
   <Valine></Valine>
 </ClientOnly>

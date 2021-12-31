@@ -1,5 +1,5 @@
 module.exports = {
-    title: '天堂模式',
+    title: '简单',
     collapsable: false,
     children: [
         'algorithm-easy-1',

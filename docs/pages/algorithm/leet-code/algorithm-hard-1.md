@@ -1,4 +1,4 @@
-# 算法-地狱模式-1
+# 算法-困难-1
 <ClientOnly>
   <Valine></Valine>
 </ClientOnly>

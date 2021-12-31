@@ -581,9 +581,9 @@ module.exports = {
    */
   '/pages/algorithm/leet-code/': [
     '',
-    algorithmEasyConfig,  // 算法天堂模式
-    algorithmNormalConfig,  // 算法人间模式
-    algorithmHardlConfig,  // 算法地狱模式
+    algorithmEasyConfig,  // 算法 - 简单
+    algorithmNormalConfig,  // 算法 - 普通
+    algorithmHardlConfig,  // 算法 - 困难
   ],
   '/pages/algorithm/other/': [
     '',
