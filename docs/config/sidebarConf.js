@@ -259,9 +259,6 @@ const interviewCalcConfig = require("../config/sidebarManage/interview/interview
 const interviewReaady = require("../config/sidebarManage/interview/interview-ready");
 const interviewExperienceConfig = require("../config/sidebarManage/interview/interview-experience");
 
-interviewWebpackConfig,
-interviewCalcConfig
-
 /**
  * 算法
  * leet-code
@@ -283,25 +280,28 @@ const scriptOjOtherConfig = require("../config/sidebarManage/algorithm/script-oj
 const algorithmBaseConfig = require("../config/sidebarManage/algorithm/other/algorithm-base");
 const algorithmOtherConfig = require("../config/sidebarManage/algorithm/other/algorithm-other");
 
-
 /**
  * 积累
  * front 前端
  *  js-note js笔记
- *  vue-note vue笔记
- *  vue3-vite-note
- *  react-note react笔记
- *  koa-uniapp-note koa+nuiapp笔记
- *  flutter-note flutter笔记
  *  node-note node笔记
+ *  vue-note vue笔记
+ *  css-note css笔记
  *  ts-note ts笔记
- *  node-ts-note node+ts笔记
- *  vue-ts-note vue+ts笔记
+ * 
+ *  cour-vue3-note vue3 + ts系列笔记
+ *  cour-react-note react系列笔记
+ *  cour-koa-uniapp-note koa+nuiapp笔记
+ *  cour-node-ts-note node+ts系列笔记
+ *  cour-vue-ts-note node+ts系列笔记
+ *  
+ *  flutter-note flutter笔记
  *  webpack-note webpack笔记
  *  gis-note gis笔记
  *  cesium-note gis笔记
- *  css-note css笔记
+ * 
  *  other-note 其他
+ * 
  * back 后端
  *  linux-note  linux笔记
  *  mysql-note  数据库
@@ -312,24 +312,27 @@ const algorithmOtherConfig = require("../config/sidebarManage/algorithm/other/al
  *  elk-note  elk笔记
  *  other-note  其他笔记
  */
-
+// 积
 const jsNoteConfig = require("../config/sidebarManage/accumulation/front/js-note");
-const vueNoteConfig = require("../config/sidebarManage/accumulation/front/vue-note");
-const vue3ViteNoteConfig = require("../config/sidebarManage/accumulation/front/vue3-vite-note");
-const reactNoteConfig = require("../config/sidebarManage/accumulation/front/react-note");
-const koaUniNote = require("../config/sidebarManage/accumulation/front/koa-uniapp-note");
-const flutterNoteConfig = require("../config/sidebarManage/accumulation/front/flutter-note");
 const nodeNoteConfig = require("../config/sidebarManage/accumulation/front/node-note");
+const vueNoteConfig = require("../config/sidebarManage/accumulation/front/vue-note");
+const cssNoteConfig = require("../config/sidebarManage/accumulation/front/css-note");
 const tsNoteConfig = require("../config/sidebarManage/accumulation/front/ts-note");
-const nodeTsNoteConfig = require("../config/sidebarManage/accumulation/front/node-ts-note");
-const vueTsNoteConfig = require("../config/sidebarManage/accumulation/front/vue-ts-note");
+//  课
+const courVue3TsNoteConfig = require("../config/sidebarManage/accumulation/front/cour-vue3-ts-note");
+const courReactNoteConfig = require("../config/sidebarManage/accumulation/front/cour-react-note");
+const courKoaUniNote = require("../config/sidebarManage/accumulation/front/cour-koa-uniapp-note");
+const courNodeTsNoteConfig = require("../config/sidebarManage/accumulation/front/cour-node-ts-note");
+const courVueTsNoteConfig = require("../config/sidebarManage/accumulation/front/cour-vue-ts-note");
+// 未
+const flutterNoteConfig = require("../config/sidebarManage/accumulation/front/flutter-note");
 const webpackNoteConfig = require("../config/sidebarManage/accumulation/front/webpack-note");
 const gisNoteConfig = require("../config/sidebarManage/accumulation/front/gis-note");
 const cesiumNoteConfig = require("../config/sidebarManage/accumulation/front/cesium-note");
-const cssNoteConfig = require("../config/sidebarManage/accumulation/front/css-note");
-
+// 
 const otherNoteConfig = require("../config/sidebarManage/accumulation/front/other-note");
 
+// 后端
 const linuxNoteConfig = require("../config/sidebarManage/accumulation/back/linux-note");
 const mysqlNoteConfig = require("../config/sidebarManage/accumulation/back/mysql-note");
 const javaNoteConfig = require("../config/sidebarManage/accumulation/back/java-note");
@@ -598,19 +601,20 @@ module.exports = {
   '/pages/accumulation/front/': [
     '',
     jsNoteConfig,  // js笔记
-    vueNoteConfig,  // vue笔记
-    vue3ViteNoteConfig,  // vue3笔记
-    reactNoteConfig,  // react笔记
-    koaUniNote,  // koa+nuiapp笔记
-    // flutterNoteConfig,  // flutter笔记
     nodeNoteConfig,  // node笔记
+    vueNoteConfig,  // vue笔记
+    cssNoteConfig,  // css笔记
     tsNoteConfig,  // ts笔记
-    nodeTsNoteConfig,  // node+ts笔记
-    vueTsNoteConfig,  // vue+ts笔记
+    
+    courVue3TsNoteConfig,  // vue3+ts系列笔记
+    courReactNoteConfig,  // react系列笔记
+    courKoaUniNote,  // koa+nuiapp系列笔记
+    courNodeTsNoteConfig,  // node+ts系列笔记
+    courVueTsNoteConfig,  // vue+ts系列笔记
+    // flutterNoteConfig,  // flutter笔记
     // webpackNoteConfig,  // webpack笔记
     // gisNoteConfig,  // gis笔记
     // cesiumNoteConfig,  // cesium笔记
-    cssNoteConfig,  // css笔记
     otherNoteConfig,  // 其他笔记
   ],
   // 后端

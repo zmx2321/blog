@@ -1,6 +1,6 @@
 module.exports = {
     title: 'webpack-note',
-    collapsable: false,
+    collapsable: true,
     children: [
         'webpack-note-1',
         // 'webpack-note-2',

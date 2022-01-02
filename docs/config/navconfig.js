@@ -119,8 +119,8 @@ module.exports = [
   {
     text: '积累',
     items: [
-      // { text: '前端', link: '/pages/accumulation/front/' },
-      { text: '前端', link: '/pages/accumulation/front/react-note-1' },
+      { text: '前端', link: '/pages/accumulation/front/' },
+      // { text: '前端', link: '/pages/accumulation/front/cour-vue3-ts-note-1' },
       { text: '后端', link: '/pages/accumulation/back/' },
       { text: '其他', link: '/pages/accumulation/other/' },
     ]

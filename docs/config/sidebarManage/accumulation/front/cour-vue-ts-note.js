@@ -1,7 +1,7 @@
 module.exports = {
-    title: 'ts笔记',
+    title: 'vue+ts系列笔记',
     collapsable: true,
     children: [
-        'ts-note-1',
+        'cour-vue-ts-note-1',
     ]
 };

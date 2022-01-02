@@ -1,0 +1,26 @@
+module.exports = {
+    title: 'react系列笔记',
+    collapsable: true,
+    children: [
+        'cour-react-note-1',
+        'cour-react-note-2',
+        'cour-react-note-3',
+        'cour-react-note-4',
+        'cour-react-note-5',
+        'cour-react-note-6',
+        'cour-react-note-7',
+        'cour-react-note-8',
+        'cour-react-note-9',
+        'cour-react-note-10',
+        'cour-react-note-11',
+        'cour-react-note-12',
+        'cour-react-note-13',
+        'cour-react-note-14',
+        'cour-react-note-15',
+        'cour-react-note-16',
+        'cour-react-note-17',
+        'cour-react-note-18',
+        'cour-react-note-19',
+        'cour-react-note-20',
+    ]
+};

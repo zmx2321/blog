@@ -6,5 +6,8 @@ module.exports = {
         'vue-note-2',
         'vue-note-3',
         'vue-note-4',
+        'vue3-note-1',
+        'vue3-note-2',
+        'vue3-note-3',
     ]
 };
