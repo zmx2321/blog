@@ -182,6 +182,8 @@
         - git add .
         - git commit -m 'vue3'
     - packages中为vue的源码
+        - dev后添加 --sourcemap文件
+        - 代码映射
 
 ---
 <br />
