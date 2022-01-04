@@ -163,7 +163,25 @@
 - 具体原因就涉及到响应式原理
 
 ## 8. vue中的methods
+- methods属性是一个对象，通常我们会在这个对象中定义很多方法
+    - 这些方法可以被绑定到template中
+    - 在该方法中，我们可以使用this关键字来直接访问到data中返回的对象的属性
+    - 不能用箭头函数，因为箭头函数this没有上下文
+    - methods里面的this实际上是调用了 bind(proxy)
 
+## 9. vue中的其他属性
+- props、computed、watch、emit、setup等
+- 还包括生命周期
+
+## 10. 如何看vue源码
+- github搜索vue-next,建议使用git下载
+- vue的源代码是用yarn管理的
+- 使用压缩的方式下载的，可能运行不起来
+    - 打开终端，输入 
+        - git init
+        - git add .
+        - git commit -m 'vue3'
+    - packages中为vue的源码
 
 ---
 <br />
