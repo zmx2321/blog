@@ -166,8 +166,10 @@
 - methods属性是一个对象，通常我们会在这个对象中定义很多方法
     - 这些方法可以被绑定到template中
     - 在该方法中，我们可以使用this关键字来直接访问到data中返回的对象的属性
-    - 不能用箭头函数，因为箭头函数this没有上下文
+    - 不能用箭头函数，因为箭头函数不绑定this，会向上层作用域中去找，而定义对象时的方法块里面不算是作用域，此时this指向window
+        - `Vue.createApp({})` => 里面实际上只是一个对象，而不是函数，所以不是作用域
     - methods里面的this实际上是调用了 bind(proxy)
+![cache-control](/blog/images/accumulation/front/cour-vue3-ts-note/vueym1.png)
 
 ## 9. vue中的其他属性
 - props、computed、watch、emit、setup等
@@ -183,6 +185,8 @@
 - 在package.json中修改
     - `"dev": "node scripts/dev.js --sourcemap",` 可以定位到具体的ts文件，否则只能定位到打包的js文件
     - 会生成一个`vue.global.js.map`文件
+    - 代码映射
+    - `yarn dev` 打包
 - 可以通过`packages/vue/dist/vue.global.js`中调试代码
 
 ---
