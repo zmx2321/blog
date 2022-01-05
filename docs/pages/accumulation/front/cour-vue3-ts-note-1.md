@@ -175,15 +175,15 @@
 
 ## 10. 如何看vue源码
 - github搜索vue-next,建议使用git下载
+    - 使用压缩的方式下载的，可能运行不起来
 - vue的源代码是用yarn管理的
-- 使用压缩的方式下载的，可能运行不起来
-    - 打开终端，输入 
-        - git init
-        - git add .
-        - git commit -m 'vue3'
-    - packages中为vue的源码
-        - dev后添加 --sourcemap文件
-        - 代码映射
+    - 下载下来需要安装依赖
+        - yarn install
+- 其中的packages为源码
+- 在package.json中修改
+    - `"dev": "node scripts/dev.js --sourcemap",` 可以定位到具体的ts文件，否则只能定位到打包的js文件
+    - 会生成一个`vue.global.js.map`文件
+- 可以通过`packages/vue/dist/vue.global.js`中调试代码
 
 ---
 <br />
