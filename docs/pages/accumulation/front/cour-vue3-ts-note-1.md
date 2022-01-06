@@ -110,8 +110,9 @@
 
 ## 6. vue中的template
 ### 简述
-    - 要使用vue钩子里面的数据，必须要在template模板里面写，vue会帮助我们渲染的模板信息
-    - 官方文档中已经说明，template中如果字符串是以 # 开头，，将被用作querySelector,并且匹配元素的innerHtml作为模板字符串
+- 要使用vue钩子里面的数据，必须要在template模板里面写，vue会帮助我们渲染的模板信息
+- 官方文档中已经说明，template中如果字符串是以 # 开头，，将被用作querySelector,并且匹配元素的innerHtml作为模板字符串
+
 ### 写法
 #### 写法一
 ```html
