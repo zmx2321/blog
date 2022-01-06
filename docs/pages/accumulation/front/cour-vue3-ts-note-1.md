@@ -169,7 +169,7 @@
     - 不能用箭头函数，因为箭头函数不绑定this，会向上层作用域中去找，而定义对象时的方法块里面不算是作用域，此时this指向window
         - `Vue.createApp({})` => 里面实际上只是一个对象，而不是函数，所以不是作用域
     - methods里面的this实际上是调用了 bind(proxy)
-![cache-control](/blog/images/accumulation/front/cour-vue3-ts-note/vueym1.png)
+![vueym1](/blog/images/accumulation/front/cour-vue3-ts-note/vueym1.png)
 
 ## 9. vue中的其他属性
 - props、computed、watch、emit、setup等
