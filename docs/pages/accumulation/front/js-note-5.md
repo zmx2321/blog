@@ -5,28 +5,33 @@
 
 ## 1. 获取文件类型
 ```js
-// 获取文件类型
-getFileType(fileName) {
-  let spl = fileName.split(".");
-
-  return spl[spl.length-1]
-},
-// this.getFileType(file.name)
-```
-
-## 2. 带请求头下载
-```js
 // 重写通用下载方法 - 原生
-export function download(url, filename) {
+export function download (url, params, filename, status) {
+  // console.log(url, params, filename)
+
   // 下载附件公共方法
-  let createObjectURL = (object)=> {
+  let createObjectURL = (object) => {
     return (window.URL) ? window.URL.createObjectURL(object) : window.webkitURL.createObjectURL(object);
   }
 
   // 使用原生xhr并添加请求头
   let xhr = new XMLHttpRequest();
   let formData = new FormData();
-  xhr.open('get', url);
+
+  // 添加formdata
+  for(let item in params) {
+    formData.append(item, params[item]);
+  }
+
+  /* for (let keys of formData.entries()) {
+    console.log(keys);
+  } */
+
+  if(!status) {
+    xhr.open('get', url);
+  } else {
+    xhr.open('post', url);
+  }
 
   // 请求头
   let token = 'Bearer ' + getToken()
@@ -39,11 +44,18 @@ export function download(url, filename) {
       let blob = this.response;
       // console.log(blob)
 
-      if(filename === undefined) {
-        console.log("213")
+      if (filename === undefined) {
+        console.log("文件名为空")
       }
 
-      filename === undefined ? filename = "code.zip" : filename = `${filename.toString()}.zip`
+      // 如果文件名不存在
+      if(!filename) {
+        filename = "code.zip"
+      } else {
+        if(filename.toString().indexOf('.') === -1) {
+          filename = `${filename.toString()}.zip`
+        }
+      }
       console.log(filename)
 
       if (window.navigator.msSaveOrOpenBlob) {
@@ -56,8 +68,8 @@ export function download(url, filename) {
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
-        }
       }
+    }
   };
 
   xhr.send(formData);  // 发送formdata到xhr
