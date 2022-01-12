@@ -142,7 +142,65 @@ const urlToObj = str=> {
 }
 ```
 
-## 8. 待整理
+## 8. 时间戳
+```js
+// 设置时间戳
+getNowFormate(time) {
+    time = new Date();
+    let year = time.getFullYear(); // 年
+    let month = time.getMonth() + 1;  // 月
+    let date = time.getDate();  // 日
+    let hour = time.getHours();  // 时
+    let minute = time.getMinutes();  // 分
+    let second = time.getSeconds();  // 秒
+
+    // 加上0
+    month < 10 ? month=`0${month}` : month;  // 月
+    date < 10 ? date=`0${date}` : date;  // 日
+    hour < 10 ? hour=`0${hour}` : hour;  // 时
+    minute < 10 ? minute=`0${minute}` : minute;  // 分
+    second < 10 ? second=`0${second}` : second;  // 秒
+
+    return `${year}-${month}-${date} ${hour}:${minute}:${second}`
+}
+
+getNowFormate();  // 默认当前时间
+```
+
+## 10. 获取上月
+```js
+// 设置时间戳
+export const getNowFormate = time=> {
+  time = new Date();
+  let year = time.getFullYear(); // 年
+  let month = time.getMonth() + 1;  // 月
+  let date = time.getDate();  // 日
+
+  return `${year}-${month}-${date}`
+}
+
+// 获取上月
+export const getLastMonthArr = ()=> {
+  let currentDate = getNowFormate()
+  let currentDateArr = currentDate.split('-')
+  let lastMonth = ''
+
+  // 判断临界值
+  if(currentDateArr[1] === '1') {
+    currentDateArr[0] = (parseInt(currentDateArr[0]) - 1).toString()
+    currentDateArr[1] = '12'
+  } else {
+    currentDateArr[1] = (parseInt(currentDateArr[1]) - 1).toString()
+    currentDateArr[1] < 10 ? currentDateArr[1] = `0${currentDateArr[1]}` : currentDateArr[1]
+  }
+
+  lastMonth = currentDateArr.join('-')
+
+  return [lastMonth, currentDate]
+}
+```
+
+## 9. 待整理
 ```js
 /**
  * utils
