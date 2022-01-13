@@ -74,3 +74,12 @@
 
 ## 6. vscode终端不为下拉框
 - 设置里面搜索terminal.integrated.tabs.enabled，改成false即可
+
+## 7. 常用插件推荐
+- Remote - Containers => 链接远程服务器
+- bookmarks => 在代码上打标记，读源码时使用最佳
+  - 可以鼠标右键，选择书签，点击打开书签开关
+  - 也可以使用键盘快捷键ctrl + alt + k
+  - 也可以自定义设置 ctrl + alt + a
+- Project Manager => 把经常打开的项目做一下保存
+  - 比如保存一个vue3的源码
