@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/zmx2321/blog#readme",
   "dependencies": {
+    "@antv/g6": "^4.5.3",
     "cross-env": "^7.0.2",
     "insert-css": "^2.0.0",
     "vuepress": "^1.6.0",
