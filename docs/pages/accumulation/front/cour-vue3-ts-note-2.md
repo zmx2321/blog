@@ -343,3 +343,112 @@ methods: {
 - 另外一种办法就是使用计算属性 computed
   - 对于任何包含响应式数据的复杂逻辑，都应该使用计算属性
   - 计算属性将被混入组件实例中，所有getter和setter的this上下文自动地绑定为组件实例
+### 6.2. 三种方法实现案例
+- 插值语法
+  - 模板中存在大量复杂逻辑，不便于维护（模板中表达式初衷是简单的计算）
+  - 当有多次一样的逻辑时，存在重复代码
+  - 多次使用的时候，很多运算也需要多次执行，没有缓存
+```html
+<div id="app"></div>
+
+<template id="my-app">
+  <h2>{{firstName + " " + lastName}}</h2>
+  <h2>{{score >= 60 ? '及格': '不及格'}}</h2>
+  <h2>{{message.split(" ").reverse().join(" ")}}</h2>
+</template>
+
+<script>
+  const App = {
+    template: '#my-app',
+    data() {
+      return {
+        firstName: "Kobe",
+        lastName: "Bryant",
+        score: 80,
+        message: "Hello World"
+      }
+    }
+  }
+
+  Vue.createApp(App).mount('#app');
+</script>
+```
+- 方法
+```html
+<div id="app"></div>
+
+<template id="my-app">
+  <h2>{{getFullName()}}</h2>
+  <h2>{{getResult()}}</h2>
+  <h2>{{getReverseMessage()}}</h2>
+</template>
+
+<script>
+  const App = {
+    template: '#my-app',
+    data() {
+      return {
+        firstName: "Kobe",
+        lastName: "Bryant",
+        score: 80,
+        message: "Hello World"
+      }
+    },
+    methods: {
+      getFullName() {
+        return this.firstName + " " + this.lastName;
+      },
+      getResult() {
+        return this.score >= 60 ? "及格": "不及格";
+      },
+      getReverseMessage() {
+        return this.message.split(" ").reverse().join(" ");
+      }
+    }
+  }
+
+  Vue.createApp(App).mount('#app');
+</script>
+```
+- 计算属性
+  - 看起来是函数，但实际上是对象中getter的一个属性
+```html
+<div id="app"></div>
+
+<template id="my-app">
+  <h2>{{fullName}}</h2>
+  <h2>{{result}}</h2>
+  <h2>{{reverseMessage}}</h2>
+</template>
+
+<script>
+  const App = {
+    template: '#my-app',
+    data() {
+      return {
+        firstName: "Kobe",
+        lastName: "Bryant",
+        score: 80,
+        message: "Hello World"
+      }
+    },
+    computed: {
+      // 定义了一个计算属性叫fullname
+      fullName() {
+        return this.firstName + " " + this.lastName;
+      },
+      result() {
+        return this.score >= 60 ? "及格": "不及格";
+      },
+      reverseMessage() {
+        return this.message.split(" ").reverse().join(" ");
+      }
+    }
+  }
+
+  Vue.createApp(App).mount('#app');
+</script>
+```
+
+
+## 7. 
