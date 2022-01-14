@@ -1,4 +1,5 @@
 <template>
+  <!-- 使用插件后，不能使用 ## -->
   <section id="g6Tree" class="g6_tree_wrap"></section>
 </template>
  
