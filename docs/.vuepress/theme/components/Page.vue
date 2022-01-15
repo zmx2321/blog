@@ -27,5 +27,11 @@ export default {
 .page
   padding-bottom 2rem
   display block
+  overflow: hidden;
 
+  .theme-default-content:not(.custom) {
+    max-width: 960px;
+    overflow hidden
+    padding: 2rem 0
+  }
 </style>

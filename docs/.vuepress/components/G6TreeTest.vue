@@ -1,5 +1,6 @@
 <template>
   <!-- 使用插件后，不能使用 ##, 且只能放上面 -->
+  <!-- 脑图数据在这里测试过之后再放上去 -->
   <section id="g6Tree" class="tree_wrap"></section>
 </template>
  
