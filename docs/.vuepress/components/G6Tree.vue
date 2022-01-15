@@ -1,11 +1,13 @@
 <template>
   <!-- 使用插件后，不能使用 ##, 且只能放上面 -->
+  <!-- 脑图数据在这里测试过之后再放上去 -->
   <section id="g6Tree" class="tree_wrap"></section>
 </template>
  
 <script>
 import G6 from '@antv/g6'
-import { brainMapData } from '../utils/brainMap/brainMap1'
+// import { brainMapData } from '../utils/brainMap/brainMapTest'
+// import { brainMapData } from '../utils/brainMap/brainMap1'
 
 export default {
   name: 'optimized',
@@ -38,7 +40,16 @@ export default {
         width: window.innerWidth,
         height: window.innerHeight,
         modes: {
-          default: [ "drag-canvas", "zoom-canvas", "drag-node", "click-select", "brush-select"],
+          default: [{
+            type: 'tooltip',
+            formatText(model) {
+              // console.log("鼠标移入", model)
+
+              let text = `${model.name}：掌握${(model.rate*100).toFixed(2)}%`;
+
+              return text;
+            },
+          }, "drag-canvas", "zoom-canvas", "drag-node", "click-select", "brush-select"],
         },
         fitView: true,
         animate: true,
@@ -94,6 +105,8 @@ export default {
 
     // tree相关点击事件
     clickNodeEvent() {
+      let _this = this
+
       const getNodeModel = e=> {
         let node = e.item;
         let model = node._cfg.model
@@ -113,6 +126,16 @@ export default {
         if(text !== '+'  && text !== '-') {
           let nodeModel = getNodeModel(e)
           console.log("点击节点", nodeModel)
+
+          if(nodeModel.link) {
+            console.log(nodeModel.link)
+            _this.$router.push(nodeModel.link)
+
+            /* let timer = setTimeout(()=>{
+              console.clear()
+              clearTimeout(timer)
+            }, 0) */
+          }
         }
       })
       /* this.graph.on('collapse-back:click', e => {
@@ -134,12 +157,12 @@ export default {
           draw(cfg, group) {
             const {
               name = '',
-              variableName,
-              variableValue,
-              variableUp,
+              // variableName,
+              // variableValue,
+              // variableUp,
               label,
               collapsed,
-              currency,
+              // currency,
               status,
               rate,
             } = cfg;
@@ -205,7 +228,7 @@ export default {
             });
 
             // label currency
-            group.addShape('text', {
+            /* group.addShape('text', {
               attrs: {
                 ...textConfig,
                 x: price.getBBox().maxX + 5,
@@ -215,10 +238,10 @@ export default {
                 fill: '#000',
                 opacity: 0.75,
               },
-            });
+            }); */
 
             // percentage
-            const percentText = group.addShape('text', {
+            /* const percentText = group.addShape('text', {
               attrs: {
                 ...textConfig,
                 x: rectBBox.maxX - 8,
@@ -228,10 +251,10 @@ export default {
                 textAlign: 'right',
                 fill: _this.colors[status],
               },
-            });
+            }); */
 
             // percentage triangle
-            const symbol = variableUp ? 'triangle' : 'triangle-down';
+            /* const symbol = variableUp ? 'triangle' : 'triangle-down';
             const triangle = group.addShape('marker', {
               attrs: {
                 ...textConfig,
@@ -241,10 +264,10 @@ export default {
                 r: 6,
                 fill: _this.colors[status],
               },
-            });
+            }); */
 
             // variable name
-            group.addShape('text', {
+            /* group.addShape('text', {
               attrs: {
                 ...textConfig,
                 x: triangle.getBBox().minX - 4,
@@ -255,7 +278,7 @@ export default {
                 fill: '#000',
                 opacity: 0.45,
               },
-            });
+            }); */
 
             // bottom line background
             const bottomBackRect = group.addShape('rect', {
@@ -400,6 +423,7 @@ export default {
 
       return new Promise((resolve, reject)=> {
         resolve(this.queryData)
+        // resolve(brainMapData)
       })
     },
 
@@ -435,6 +459,14 @@ export default {
 
 <style scoped lang='stylus'>
 .tree_wrap
+  position: relative;
   width: 100%
   height: 150%
+  .g6-tooltip.g6-node-tooltip
+      font-size: 12px;
+      border: dashed 1px #b7b7b7;
+      border-radius: 6px;
+      padding: 10px;
+      color: #6791df;
+      font-weight: 400;
 </style>
