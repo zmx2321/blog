@@ -512,3 +512,56 @@ if(this.subStatus === "single") {}
 .el-tree .el-tree-node .is-leaf + .el-checkbox .el-checkbox__inner{display: inline-block;}
 .el-tree .el-tree-node .el-checkbox .el-checkbox__inner{display: none;}
 ```
+
+## 15. 根据某个字段合并单元格
+```js
+export default {
+    data() {
+        return {
+            spanArr: [],//用于存放每一行记录的合并数
+        }
+    },
+    create() {
+        // 请求之后
+        this.getSpanArr(this.tableData)
+    },
+    methods: {
+        // 表格操作
+        getSpanArr(data) {
+        // console.log(data)
+
+        // data就是我们从后台拿到的数据
+        for (var i = 0; i < data.length; i++) {
+            if (i === 0) {
+            this.spanArr.push(1);
+            this.pos = 0;
+            } else {
+            // 判断当前元素与上一个元素是否相同
+            if (data[i].businessId === data[i - 1].businessId) {
+                this.spanArr[this.pos] += 1;
+                this.spanArr.push(0);
+            } else {
+                this.spanArr.push(1);
+                this.pos = i;
+            }
+            }
+            // console.log(this.spanArr);
+        }
+        },
+        // 合并 label
+        fixTable({ rowIndex, columnIndex }) {
+        if (columnIndex === 0 || columnIndex === 1) {
+            const _row = this.spanArr[rowIndex];
+            const _col = _row > 0 ? 1 : 0;
+            // console.log(`rowspan:${_row} colspan:${_col}`);
+            return {
+                // [0,0] 表示这一行不显示， [2,1]表示行的合并数
+                rowspan: _row,
+                colspan: _col
+            };
+        }
+        },
+    }
+}
+
+```
