@@ -37,7 +37,7 @@ export default {
     // 树配置
     treeConfig() {
       return {
-        width: window.innerWidth,
+        width: 1400,
         height: window.innerHeight,
         modes: {
           default: [{

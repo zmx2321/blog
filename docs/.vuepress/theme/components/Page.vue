@@ -34,4 +34,8 @@ export default {
     overflow hidden
     padding: 2rem 0
   }
+
+  @media (min-width: $MQMobile)
+    .theme-default-content:not(.custom)
+      max-width: 1400px;
 </style>
