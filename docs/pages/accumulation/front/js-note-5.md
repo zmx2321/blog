@@ -142,7 +142,8 @@ const urlToObj = str=> {
 }
 ```
 
-## 8. 时间戳
+## 8. 时间相关
+### 8.1. 时间戳
 ```js
 // 设置时间戳
 getNowFormate(time) {
@@ -167,7 +168,7 @@ getNowFormate(time) {
 getNowFormate();  // 默认当前时间
 ```
 
-## 10. 获取上月
+### 8.2. 获取上月
 ```js
 // 设置时间戳
 export const getNowFormate = time=> {
@@ -200,12 +201,36 @@ export const getLastMonthArr = ()=> {
 }
 ```
 
-## 9. 待整理
+### 8.3. 完整显示时间
 ```js
-/**
- * utils
- */
+// 设置时间戳 - 显示
+export const getDateTimeNowFormate = time=> {
+  time = new Date();
+  let year = time.getFullYear(); // 年
+  let month = time.getMonth() + 1;  // 月
+  let date = time.getDate();  // 日
+  let hour = time.getHours();  // 时
+  let minute = time.getMinutes();  // 分
+  let second = time.getSeconds();  // 秒
 
+  let day = time.getDay();  // 获取当前星期几
+  let weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+  // console.log(weekday[day])
+
+
+  // 加上0
+  month < 10 ? month=`0${month}` : month;  // 月
+  date < 10 ? date=`0${date}` : date;  // 日
+  hour < 10 ? hour=`0${hour}` : hour;  // 时
+  minute < 10 ? minute=`0${minute}` : minute;  // 分
+  second < 10 ? second=`0${second}` : second;  // 秒
+
+  return `${year}-${month}-${date} ${hour}:${minute}:${second} ${weekday[day]}`
+}
+```
+
+## 9. 深拷贝
+```js
 // 深拷贝
 export const deepClone = (obj = {}) => {
     // obj是null，或者不是对象或数组，直接返回
@@ -239,7 +264,11 @@ export const deepClone = (obj = {}) => {
     // 返回结果
     return result
 }
+```
 
+## 10. 防抖和节流
+### 10.1. 防抖
+```js
 // 防抖
 export const debounce = (fn, delay = 500) => {
     // timer是在闭包中的 => 下面的if(timer)
@@ -272,7 +301,9 @@ export const debounce = (fn, delay = 500) => {
         }, delay)
     }
 }
-
+```
+### 10.2. 节流
+```js
 // 节流
 export const throttle = (fn, delay = 100) => {
     let timer = null  // 这个timer是在闭包里面的
@@ -301,7 +332,10 @@ export const objIsEmpty = obj => {
 
   return false;
 }
+```
 
+## 11. 获取路径扩展名
+```js
 // 获取路径扩展名
 export const getFileprefix = url => {
   // 获取最后一个.的位置
@@ -311,12 +345,10 @@ export const getFileprefix = url => {
 
   return ext
 }
+```
 
-// 判断是否为图片
-export const isAssetTypeAnImage = ext => {
-  return ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff'].indexOf(ext.toLowerCase()) !== -1;
-}
-
+## 12. 去重
+```js
 // 去重
 export const uniqueArr = arr => {
   return Array.from(new Set(arr));
