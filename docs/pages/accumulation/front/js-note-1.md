@@ -2566,3 +2566,51 @@ var emp = ['abs','dsf','sdf','fd']
 
 emp.remove('fd');
 ```
+
+## 87. 根据事件对象获取dom
+```js
+// 跳转表格 - 使用事件代理
+linkTable(e) {
+    let { target } = e
+    let { textContent } = target
+    let { nodeName } = target
+
+    // console.log(target)
+    // console.log("dom名", target.nodeName)
+
+    let levelTxt1 = ''
+    let leve1Txt2 = ''
+
+    /**
+     * 提取值
+     * 点击不同位置做区分
+     */
+    // 点击li - 区分左右
+    if(nodeName === 'LI') {
+    levelTxt1 = target.parentNode.parentNode.parentNode.parentNode.previousSibling.getElementsByTagName('ul')[0].getElementsByClassName('font_bold')[0].textContent
+
+    // 如果没有类
+    if(target.classList.length !== 0) {
+        leve1Txt2 = textContent
+    } else {
+        leve1Txt2 = target.parentNode.getElementsByTagName('li')[0].textContent
+    }
+    } else {
+    // 点击外层
+    leve1Txt2 = target.getElementsByTagName('li')[0].textContent
+    }
+
+    // 点击ul
+    if(nodeName === 'UL') {
+    levelTxt1 = target.parentNode.parentNode.parentNode.previousSibling.getElementsByTagName('ul')[0].getElementsByClassName('font_bold')[0].textContent
+    }
+
+    // 点击dd
+    if(nodeName === 'DD') {
+    levelTxt1 = target.parentNode.parentNode.previousSibling.getElementsByTagName('ul')[0].getElementsByClassName('font_bold')[0].textContent
+    }
+
+    // 处理跳转数据
+    this.resolveLinkData(levelTxt1, leve1Txt2)
+},
+```
