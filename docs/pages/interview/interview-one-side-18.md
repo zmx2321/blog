@@ -910,7 +910,8 @@
   - ajax是通过XMLHttpRequest这个api实现的，而jsonp是通过script标签实现的
   - jsonp的原理就是，定义一个全局函数，去访问一段js
   - 通过这个就可以明白，他不是一个ajax，他没有去使用XMLHttpRequest这个api
-  - [手写demo传送门](https://zmx2321.github.io/blog_code/interview/interview-one-side/example/questions/JSONP跨域原理.html)
+  - [手写demo传送门](https://zmx2321.github.io/blog_code/interview/interview-one-side/example/questions/解释jsonp原理.html)
+  
   ```html
   <script>
     // JSONP的callback是cbt，见下面src的cb
