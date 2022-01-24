@@ -30,7 +30,7 @@ export default {
   overflow: hidden;
 
   .theme-default-content:not(.custom) {
-    max-width: 960px;
+    max-width: 1920px;
     overflow hidden
     padding: 2rem 0
   }
