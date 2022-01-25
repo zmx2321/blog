@@ -639,11 +639,11 @@ module.exports = {
   // 菜谱
   '/pages/hodgepodge/food-menu/': [
     '',
-    foodMenuConfig
+    // foodMenuConfig
   ],
   // 计划
   '/pages/hodgepodge/plan/': [
     '',
-    plan2021Config
+    // plan2021Config
   ],
 };
