@@ -2614,3 +2614,29 @@ linkTable(e) {
     this.resolveLinkData(levelTxt1, leve1Txt2)
 },
 ```
+
+## 88. dom节点操作
+```js
+getButtonList(next) {
+    this.$nextTick(()=> {
+    let buttonList = document.querySelector('.el-tabs__content').getElementsByTagName('button')
+
+    buttonList.forEach(item=> {
+        // console.log(item.innerText)
+
+        next(item)
+    })
+    })
+},
+
+this.getButtonList(item=> {
+    if(item.innerText === '草稿') {
+        item.classList.add('factivity')
+    }
+})
+
+// 移除所有指定class
+this.getButtonList(item=> {
+    item.classList.remove('factivity')
+})
+```
