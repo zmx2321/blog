@@ -411,6 +411,10 @@ methods: {
 </script>
 ```
 - 计算属性
+  - 计算属性是有缓存的, 当我们多次使用计算属性时, 计算属性中的运算只会执行一次
+  - 计算属性会随着依赖的数据（data中的数据）的改变, 而进行重新计算.
+    - 依赖的值不变，不计算，改变，重新计算，即执行
+    - 面试会考计算属性的实现原理
   - 看起来是函数，但实际上是对象中getter的一个属性
 ```html
 <div id="app"></div>
@@ -449,7 +453,87 @@ methods: {
   Vue.createApp(App).mount('#app');
 </script>
 ```
+### 6.3. 计算属性的缓存
+- 计算属性会基于他们的依赖关系进行缓存
+- 数据不发生变化时，计算属性不需要重新计算
+- 如果依赖的数据发生变化，在使用时，计算属性会重新进行计算
+- 而方法时每次都会执行
+### 6.4. 计算属性的setter和getter
+- 计算属性大多数情况下，只需要一个getter方法即可，所以我们会将计算属性直接写成一个函数
+```js
+const App = {
+  // 计算属性
+  computed: {
+    // 写一个方法实际上就是计算属性的get方法
+    fullName() {
+      return this.firstName + " " + this.lastName;
+    },
 
+    // 比较少见 - 完整写法
+    // get和set写法
+    fullName: {
+      get() {},
 
-## 7. 
+      // 给计算属性赋值，就会调用set方法
+      set(newVal) {
+
+      }
+    }
+  }
+}
+```
+- 源码
+  - 在`/packages/runtime-core/src/componentOptions.ts`中的`if(computedOptions){}`
+    - 在源码中computedOptions是computed的别名
+    ```js
+    if (computedOptions) {
+      for (const key in computedOptions) {
+        const opt = (computedOptions as ComputedOptions)[key]
+        // 根据我们写的是函数还是对象来决定到底在哪里取
+        // get方法
+        const get = isFunction(opt)
+          ? opt.bind(publicThis, publicThis)
+          : isFunction(opt.get)
+            ? opt.get.bind(publicThis, publicThis)
+            : NOOP
+        if (__DEV__ && get === NOOP) {
+          warn(`Computed property "${key}" has no getter.`)
+        }
+
+        // set方法
+        const set =
+          !isFunction(opt) && isFunction(opt.set)
+            ? opt.set.bind(publicThis)
+            : __DEV__
+              ? () => {
+                  warn(
+                    `Write operation failed: computed property "${key}" is readonly.`
+                  )
+                }
+              : NOOP  // export const NOOP = () => {} ，NOOP表示一个空函数，具体看源码 
+        // 拿到get和set之后
+        // 计算属性的响应式和缓存都是在这里实现的
+        const c = computed({
+          get,
+          set
+        })
+        Object.defineProperty(ctx, key, {
+          enumerable: true,
+          configurable: true,
+          get: () => c.value,
+          set: v => (c.value = v)
+        })
+        if (__DEV__) {
+          checkDuplicateProperties!(OptionTypes.COMPUTED, key)
+        }
+      }
+    }
+    ```
+  - 
+
+## 7. 侦听器(watch)
+### 7.1. 概念
+- 开发中我们在data返回的对象中定义了数据，这个数据通过插值语法等方式绑定到template中
+- 当数据变化时，template会自动进行更新来显示最新的数据
+- 但是在某些情况下，我们希望在代码逻辑中监听某个数据的变化，这个时候就需要用侦听器watch来完成了
 
