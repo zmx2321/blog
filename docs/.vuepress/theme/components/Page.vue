@@ -24,18 +24,18 @@ export default {
 <style lang="stylus">
 @require '../styles/wrapper.styl'
 
-.page
-  padding-bottom 2rem
-  display block
-  overflow: hidden;
+// .page
+//   padding-bottom 2rem
+//   display block
+//   overflow: hidden;
 
-  .theme-default-content:not(.custom) {
-    max-width: 1920px;
-    overflow hidden
-    padding: 2rem 0
-  }
+//   .theme-default-content:not(.custom) {
+//     max-width: 1920px;
+//     overflow hidden
+//     padding: 2rem 0
+//   }
 
-  @media (min-width: $MQMobile)
-    .theme-default-content:not(.custom)
-      max-width: 1400px;
+//   @media (min-width: $MQMobile)
+//     .theme-default-content:not(.custom)
+//       max-width: 1400px;
 </style>
