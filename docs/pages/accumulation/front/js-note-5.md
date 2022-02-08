@@ -354,3 +354,11 @@ export const uniqueArr = arr => {
   return Array.from(new Set(arr));
 }
 ```
+
+## 13. 求补集
+```js
+let a = new Set([1, 2, 3]);
+let b = new Set([1, 2, 3, 4, 5]);
+let difference = new Set([...b].filter(x => !a.has(x)));
+console.log([...difference])
+```
