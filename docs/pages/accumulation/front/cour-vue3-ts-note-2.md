@@ -1,4 +1,7 @@
 # vue2基础语法复习
+<ClientOnly>
+  <Valine></Valine>
+</ClientOnly>
 
 ## 1. vue基础模板
 - 模板
@@ -228,6 +231,7 @@ data() {
   - key属性主要用在vue的虚拟dom算法，在新旧nodes对比时辨识vnodes
   - 如果不使用key，vue会使用一种最大限度减少动态元素并且尽可能地尝试就地修改、复用相同类型元素的算法
   - 而使用key时，他会基于key的变化，重新排列元素顺序，并且会移除、销毁key不存在的元素
+  - v-for时，可以使用of作为分隔符，他更符合js迭代器语法
 ### 5.2. 问题
   - 没有key的时候，如何尝试修改和复用的
   - 有key的时候，如何基于key重新排列的
@@ -315,6 +319,7 @@ data() {
 <!-- 如果旧的vnodes长度比新的长，就把多出来的vnodes全部卸载 -->
 <!-- 如果新的节点更多，就创建新的节点 -->
 <li v-for="item in letters" :key="item">{{item}}</li>
+<!-- <li v-for="item of letters" :key="item">{{item}}</li> -->
 
 <script>
 data() {
@@ -343,6 +348,8 @@ methods: {
 - 另外一种办法就是使用计算属性 computed
   - 对于任何包含响应式数据的复杂逻辑，都应该使用计算属性
   - 计算属性将被混入组件实例中，所有getter和setter的this上下文自动地绑定为组件实例
+- 计算属性一般来自于data，他不是元数据
+- 一般很少侦听计算属性
 ### 6.2. 三种方法实现案例
 - 插值语法
   - 模板中存在大量复杂逻辑，不便于维护（模板中表达式初衷是简单的计算）
@@ -536,4 +543,153 @@ const App = {
 - 开发中我们在data返回的对象中定义了数据，这个数据通过插值语法等方式绑定到template中
 - 当数据变化时，template会自动进行更新来显示最新的数据
 - 但是在某些情况下，我们希望在代码逻辑中监听某个数据的变化，这个时候就需要用侦听器watch来完成了
+### 7.2. 基本使用
+```html
+您的问题: <input type="text" v-model="question">
 
+<script>
+data() {
+  return {
+    // 侦听question的变化时, 去进行一些逻辑的处理(JavaScript, 网络请求)
+    question: "Hello World",
+  }
+},
+watch: {
+  // question侦听的data中的属性的名称
+  // newValue变化后的新值
+  // oldValue变化前的旧值
+  question: function(newValue, oldValue) {
+    console.log("新值: ", newValue, "旧值", oldValue);
+    // 数据发生变化，触发方法
+    this.queryAnswer();
+  }
+},
+methods: {
+  // 需要在文本框输入内容时触发
+  // 即在文本内容改变时触发，此时需要侦听 question 这个数据的值
+  queryAnswer() {
+    console.log(`你的问题${this.question}的答案是哈哈哈哈哈`);
+    this.anwser = "";
+  }
+}
+</script>
+```
+### 7.3. 配置选项
+```html
+<h2>{{info.name}}</h2>
+<button @click="changeInfo">改变info</button>
+<button @click="changeInfoName">改变info.name</button>
+<button @click="changeInfoNbaName">改变info.nba.name</button>
+
+<script>
+data() {
+  return {
+    info: { name: "why", age: 18, nba: {name: 'kobe'} }
+  }
+},
+watch: {
+  // 默认情况下我们的侦听器只会针对监听的数据本身的改变(内部发生的改变是不能侦听) - 需要进行深度监听
+  // info(newInfo, oldInfo) {
+  //   console.log("newValue:", newInfo, "oldValue:", oldInfo);
+  // }
+
+  // 深度侦听/立即执行(一定会执行一次)
+  info: {
+    // 拿不到旧值，因为引用数据类型数据改变，地址还是同一个
+    handler: function(newInfo, oldInfo) {
+      // 打印出proxy对象   --  实际上vue的响应式数据是交给响应式系统(proxy)处理的（即被响应式系统劫持）
+      // 所以这里以及data里面的数据都是在proxy对象里面的
+      console.log("newValue:", newInfo.nba.name, "oldValue:", oldInfo.nba.name);
+    },
+    deep: true, // 深度侦听
+    // immediate: true // 立即执行  - 数据还没改变的时候需要执行时
+  }
+},
+methods: {
+  changeInfo() {
+    this.info = {name: "kobe"};
+  },
+  changeInfoName() {
+    this.info.name = "kobe";
+  },
+  changeInfoNbaName() {
+    this.info.nba.name = "james";
+  }
+}
+</script>
+```
+### 7.4. 其他
+```html
+<h2>{{info.name}}</h2>
+<button @click="changeInfo">改变info</button>
+<button @click="changeInfoName">改变info.name</button>
+<button @click="changeInfoNbaName">改变info.nba.name</button>
+<button @click="changeFriendName">改变friends[0].name</button>
+
+<script>
+data() {
+  return {
+    info: { name: "why", age: 18, nba: {name: 'kobe'} },
+    friends: [
+      {name: "why"}, 
+      {name: "kobe"}
+    ]
+  }
+},
+watch: {
+  info(newValue, oldValue) {
+    console.log(newValue, oldValue);
+  },
+  "info.name": function(newName, oldName) {
+    console.log(newName, oldName);
+  },
+  "friends[0].name": function(newName, oldName) {
+    console.log(newName, oldName);
+  },
+  // friends: {
+  //   handler(newFriends, oldFriend) {
+  //   },
+  //   deep: true
+  // }
+},
+methods: {
+  changeInfo() {
+    this.info = {name: "kobe"};
+  },
+  changeInfoName() {
+    this.info.name = "kobe";
+  },
+  changeInfoNbaName() {
+    this.info.nba.name = "james";
+  },
+  changeFriendName() {
+    this.friends[0].name = "curry";
+  }
+},
+created() {
+  const unwatch = this.$watch("info", function(newInfo, oldInfo) {
+    console.log(newInfo, oldInfo);
+  }, {
+    deep: true,
+    immediate: true
+  })
+  // unwatch()  // 这种写法可以取消侦听
+}
+</script>
+```
+### 7.5. 侦听器和计算属性的区别
+- 用法
+  - computed一定有返回值，而watch不需要返回值
+- 场景
+  - computed是依赖的数据发生改变时重新调用, watch是监听的响应式数据发生改变时重新调用
+  - watch不需要调用,并且只有监听数据发生改变时才会重新调用
+  - 当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的
+  - watch适合处理的场景是，侦听一个数的变化，当该数据变化，来处理其他与之相关数据的变化（该数据影响别的多个数据）
+    - 当数据变化时，触发一系列方法（代码逻辑）
+  - computed适合处理的场景是，获得一个值或者结果，该结果受其他的依赖的影响。（一个数据受多个数据影响）
+    - 当数据变化时，通过各种计算，返回一个新的值
+
+## 8. v-model
+
+
+## 9. 全局组件和局部组件

@@ -565,3 +565,6 @@ export default {
 }
 
 ```
+
+## 15. 重置
+- `this.queryParams = this.$options.data.call(this).queryParams`
