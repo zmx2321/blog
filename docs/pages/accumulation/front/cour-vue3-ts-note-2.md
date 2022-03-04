@@ -718,6 +718,29 @@ const obj = _.cloneDeep(info)
 ```
 
 ## 8. v-model
+- 概念
+  - v-model本质是语法糖，他负责监听用户的输入事件来更新数据
+  ```html
+  <!-- v-model的本质 -->
+  <!-- 1.v-bind value的绑定 2.监听input事件, 更新message的值 -->
+  <!-- 双向绑定即，把message的值，永远绑定在input上，同时input里面的值改变，同时也会改变message的值 -->
+  <input type="text" :value="message" @input="inputChange">
+
+  <script>
+    data() {
+      return {
+        message: "Hello World"
+      }
+    },
+    methods: {
+      inputChange(event) {
+        // 触发输入框，输入框中的值改变，message的值也改变
+        // 即双向绑定
+        this.message = event.target.value;
+      }
+    }
+  </script>
+  ```
 
 
 ## 9. 全局组件和局部组件
