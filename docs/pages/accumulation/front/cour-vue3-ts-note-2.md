@@ -689,6 +689,34 @@ created() {
   - computed适合处理的场景是，获得一个值或者结果，该结果受其他的依赖的影响。（一个数据受多个数据影响）
     - 当数据变化时，通过各种计算，返回一个新的值
 
+### 7.6. 浅拷贝和深拷贝
+- 浅拷贝
+```js
+const info = {name: "why", age: 18, friend: {name: "kobe"}};
+// {} 表示创建新的对象
+// 会把info对象中所有的东西拷贝一份，放到新的对象中，并赋值给obj
+// 如果对象中没有对象，他就是深拷贝，如果对象中还有对象，就是浅拷贝
+// 如果对象中还有对象，Object.assign拷贝的是对象的引用（对象里的对象实际上也是开辟了一个内存空间）
+const obj = Object.assign({}, info);
+
+// 引入lodash库 https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js
+// 也可以npm 引入
+// import _ from 'lodash'
+// Vue.prototype._ = _
+// 下划线_作为lodash主要的对象
+// lodash浅拷贝
+const obj = _.clone(info);
+```
+- 深拷贝
+```js
+const info = {name: "why", age: 18, friend: {name: "kobe"}};
+const obj = JSON.parse(JSON.stringify(info));
+
+// 引入lodash库 https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js
+// lodash深拷贝
+const obj = _.cloneDeep(info)
+```
+
 ## 8. v-model
 
 
