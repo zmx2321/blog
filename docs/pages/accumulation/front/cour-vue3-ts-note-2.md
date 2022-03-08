@@ -757,7 +757,6 @@ const obj = _.cloneDeep(info)
 
 ## 9. 全局组件和局部组件
 ### 9.1. 认识组件
-#### 9.1.1. 人和组件
 - 人处理问题的方式
   - 任何一个人处理信息的逻辑能力是有限的，所以当面对一个非常复杂的问题的时候，不太可能一次性解决
   - 但我们有一种与生俱来的能力，拆解问题
@@ -766,3 +765,117 @@ const obj = _.cloneDeep(info)
   - 如果我们将一个页面中所有逻辑放在一起，处理起来就会显得非常复杂，并且难以维护
   - 如果我们将一个页面拆分成一个个功能块，每个功能块完成属于自己这部分的独立功能，维护起来就大大方便了
   - 我们如果将一个个功能块拆分之后，就可以像搭积木一样来搭建我们的项目
+  - vue中的createApp函数传入了一个对象App，这个对象实际上本质是一个组件，也是应用程序的根组件
+
+### 9.2. 注册组件
+- 全局组件
+  - 意味着注册的这个组件可以在任何的组件模板中使用
+```html
+<div id="app"></div>
+
+<!-- 根组件 -->
+<template id="my-app">
+  <h2>{{title}}</h2>
+
+  <!-- 使用组件 -->
+  <component-a></component-a>
+  <component-b></component-b>
+</template>
+
+<!-- 组件a -->
+<template id="component-a">
+  <h2>{{title}}</h2>
+</template>
+
+<!-- 组件b -->
+<template id="component-b">
+  <h2>{{message}}</h2>
+</template>
+
+<script>
+  // template
+  const App = {
+    template: "#my-app",
+  };
+
+  // 将template当做参数传入createApp方法
+  const app = Vue.createApp(App);
+
+  // 使用app注册一个全局组件app.component()
+  // 全局组件: 意味着注册的这个组件可以在任何的组件模板中使用
+  app.component("component-a", {
+    template: "#component-a",
+    data() {
+      return {
+        title: "我是标题a",
+      };
+    },
+  });
+
+  /*
+   *  一个参数是组件的名称（有两种定义方式）
+   * 1、短横线分隔符
+   * 2. 驼峰
+   *    但在组件中使用的时候不推荐，使用的时候用短横线
+   *    使用驼峰定义组件，组件开头字母大写
+   */
+  app.component("component-b", {
+    template: "#component-b",
+    data() {
+      return {
+        message: "Hello World",
+      };
+    },
+  });
+
+  // 挂载组件到dom
+  app.mount("#app");
+</script>
+```
+
+- 局部组件
+  - 通过components属性进行注册
+```html
+<div id="app"></div>
+
+<template id="my-app">
+  <h2>{{message}}</h2>
+  <component-a></component-a>
+</template>
+
+<template id="component-a">
+  <h2>我是组件A</h2>
+  <p>我是内容, 哈哈哈哈</p>
+</template>
+
+<script>
+  const ComponentA = {
+    template: "#component-a"
+  }
+
+  const App = {
+    template: '#my-app',
+    components: {
+      // key: 组件名称
+      // value: 组件对象
+      ComponentA: ComponentA
+    },
+    data() {
+      return {
+        message: "Hello World"
+      }
+    }
+  }
+
+  const app = Vue.createApp(App);
+  // app.component("ComponentA", ComponentA);  // 全局注册
+  app.mount('#app');
+</script>
+```
+
+## 10. vue的开发模式
+- 目前我们使用vue的过程都是在html文件中，通过template编写自己的模板，脚本逻辑，样式等
+- 在真实开发中，我们通过后缀为.vue的单文件组件（single-file-components）来进行开发，并且可以使用webpack、vite或者rollup等构建工具对齐进行处理
+  - 即SCF开发模式
+
+## 11. 认识webpack
