@@ -919,7 +919,7 @@ const obj = _.cloneDeep(info)
 - 处理vue项目的SFC文件.vue文件
   - .vue、template等
 
-### 11.3. webpack的安装
+### 11.3. webpack的安装和配置
 #### 11.3.1. webpack和webpack-cli的关系
 - 执行webpack命令，会执行node_modules下的.bin目录下的webpack
 - webpack在执行时是依赖webpack-cli的，如果没有安装就会报错
@@ -943,3 +943,196 @@ const obj = _.cloneDeep(info)
   - npm install webpack webpack-cli -D
 - 查看版本
   - webpack -version
+
+#### 11.3.3. webpack的安装和基本打包
+- 创建目录
+  - 目录名暂定为basic_webpack
+  - 需要创建一个src目录
+    - src目录下放业务代码
+    ```js
+    // src/js/format.js
+    const priceFormat = function() {
+      return "¥99.88";
+    }
+
+    // CommonJS的导出
+    module.exports = {
+      priceFormat
+    }
+
+    // src/js/math.js
+    // ES Module
+    export const sum = (num1, num2)=> {
+      return num1 + num2;
+    }
+
+    // src/index.js
+    import { sum } from "./js/math";  // ES Module的导出
+    const { priceFormat } = require('./js/format')  // CommonJS的导出
+
+    // 浏览器无法直接运行
+    console.log(sum(20, 30))
+    console.log(priceFormat())  // 浏览器不能识别CommonJS，用webpack打包，浏览器就可以识别了
+    ```
+- 进入到webpack项目目录
+  - 终端输入指令`webpack`
+    - 如果项目目录下没有src文件夹会报错
+    - 他是自动找到src下的index.js文件去进行打包的
+    - 该目录下会多一个dist文件夹
+    - 这时候html文件引入dist中的main.js浏览器就运行正常了
+- 注意事项
+  - 我们输入的webpack是全局的webpack
+  - 但每个项目的webpack版本可能是不一样的
+  - 所以在我们真实的开发中，我们一般很少用全局的webpack去打包某个项目
+  - 我们会在每个项目中单独安装webpack
+- 在项目中局部安装webpack
+  - 进到项目目录  
+  - 创建package.json
+    - 帮助我们管理包依赖及项目信息
+    - 使用`npm init -y` 创建
+  - 局部安装webpack`yarn add webpack webpack-cli`
+    - 默认是安装在生产环境
+    - 如果需要在开发环境安装的话：`yarn add webpack webpack-cli -D`
+    - `yarn.lock`文件记录了我们安装的真正的版本号，并且可以让我们在下次安装的时候从缓存里面读取
+- 在局部安装的webpack中运行项目
+  - 需要找到node_modules下的.bin下的webpack
+    - `./node_modules/.bin/webpack`
+  - 或者直接使用npx
+    - `npx webpack`
+    - npx可以直接找到node_modules下的./bin目录
+  - 或者可以在package.json里面配置
+    - 之后就直接输入指令 `yarn build` 来执行了
+    ```json
+    // 在脚本中不需要使用npx，他会自动在node_modules里面找指令去执行
+    "scripts": {
+      "build": "webpack"
+    },
+    ```
+
+#### 11.3.4. webpack的配置文件
+- 打包的时候是默认进入 `src/index.js`进行打包的
+  - 如果需要指定入口需要使用指令: `webpack --entry ./src/main.js`
+  - 指定出口的话：`webpack --entry ./src/main.js -- output-path ./build`
+  - 此时我们可以改package.json文件
+    - `"build": "webpack --entry ./src/main.js -- output-path ./build"`
+    - 但这样就会显得很长，因为webpack配置不可能只有指定入口出口文件
+    - 此时我们可以建webpack的配置文件
+      - `webpack.config.js`
+      - 一般不改名字
+      - webpack.config.js为node环境，所以只能使用CommonJS
+- webpack配置文件
+  - 一旦有webpack.config.js配置文件，package.json里面的webpack会自动读取配置文件
+  - 如果文件名改了就读取不到了
+  - package.js里面依旧只要写 `"build": "webpack"`
+  ```js
+  const path = require('path')
+
+  module.exports = {
+    entry: "./src/main.js",  // 入口
+    // 出口
+    output: {
+      // path: './build',  // 需要写绝对路径，这么写会报错
+      // __dirname获取当前文件所在路径
+      path: path.resolve(__dirname, './build'),
+      filename: 'bundle.js'  // 出口文件名称,默认是main.js
+    }
+  }
+  ```
+- 如果配置文件名称改了
+  - `"build": "webpack --config test.config.js"`
+- 后面的webpack都是基于webpack.config.js这个配置文件展开的
+
+### 11.4. webpack对css进行打包
+- webpack依赖关系图（是一种数据结构）
+  - 不是树结构
+  - webpack首先需要有一个入口文件
+  - 会从入口文件开始查找所有的依赖，将他们打包，但如果没有依赖的，就不会被打包
+  - 如果一个文件未被打包，可以在任何一个被依赖的文件中将它引入
+  - 他会标记哪些模块被加载过，不会有依赖冲突
+  - webpack是一个强大的生态，他不止有核心的功能，还可以加载各种依赖和插件
+- 将css引入并打包
+  - 在src中创建js
+  ```js
+  // element.js
+
+  import "../css/style.css";
+  import "../css/title.less";
+
+  const divEl = document.createElement("div");
+  divEl.className = "title";
+  divEl.innerHTML = "你好啊,李银河";
+
+  document.body.appendChild(divEl);
+  ```
+  - 如果路径都没有错，他依旧会报错
+    - webpack将css文件当成了模块，报错信息是需要一个合适的loader去处理这类型文件
+    - webpack默认执行js，但不认识css
+  - 需要下载css-loader
+    - `yarn add css-loader -D`
+  - 还需要在webpack进行配置来使用css-loder
+    - 内联方式（不常用）
+      - 在引入css的时候 `import "css-loader!../css/style.css";`
+      - ! 必须要加
+    - 配置方式
+      - 可以在module中添加规则
+      - 配置规则之后打包没问题，但还没有生效
+  - css-loader只是负责解析.css文件，但不会将解析后的css插入到页面中
+    - 插入的操作可以使用 style-loader
+    - `yarn add style-loader -D`
+    - loader的加载是有顺序的，他是从右向左（从下向上，从后向前）的
+    ```js
+    // 模块
+    module: {
+      // 规则
+      rules: [
+        // 配置规则之后打包没问题，但还没有生效
+        {
+          // 匹配到以css结尾的文件，都使用css-loader
+          test: /\.css$/, // 正则表达式
+          // 1.loader的写法(语法糖)
+          // loader: "css-loader"
+  
+          // 2.完整的写法
+          use: [
+            //   {loader: "css-loader"}
+            // 最常用的方式
+            /// loader加载是有顺序的，他的加载顺序是从后往前的
+            "style-loader",
+            "css-loader",
+          ]
+        },
+      ]
+    }
+    ```
+- 引入less
+  - `yarn add less -D`
+  - 可以将less编译成css
+    - `npx lessc ./test.scss demo.css`
+    - 在根目录下生成demo.css
+    - 因为在node-modules里面有lessc
+    - 要对项目中的less文件进行批处理，可以使用webpack，需要使用less-loader这个工具
+      - `yarn add less-loader -D`
+  - webpack.js配置
+  ```js
+  // 测试less
+  {
+    test: /\.less$/,
+    // 先将less编译成css、再解析css，最后插入css
+    use: [
+      "style-loader",
+      "css-loader",
+      "less-loader",
+    ]
+  }
+  ```
+- postCss工具
+  - postCss是一个通过js来转化样式的工具
+  - 可以在样式前加前缀，可以做浏览器的适配
+  - 引入方式和上面差不多
+  - postcss.config里面可以使用`postcss-preset-env`，功能更强大
+
+
+---
+<br />
+
+<font color="#666" size="5">\~End~</font>
