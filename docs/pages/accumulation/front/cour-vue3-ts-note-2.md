@@ -1130,7 +1130,69 @@ const obj = _.cloneDeep(info)
   - 可以在样式前加前缀，可以做浏览器的适配
   - 引入方式和上面差不多
   - postcss.config里面可以使用`postcss-preset-env`，功能更强大
+  ```json
+  "postcss": "^8.3.0",
+  "postcss-cli": "^8.3.1",
+  "postcss-loader": "^5.3.0",
+  "postcss-preset-env": "^6.7.0",
+  ```
+  ```js
+  // postcss.config.js
+  module.exports = {
+    plugins: [
+      require("postcss-preset-env")
+    ]
+  }
 
+  // webpack.config.js
+  {
+    test: /\.css$/, //正则表达式
+
+    use: [
+      "style-loader",
+      "css-loader",
+      "postcss-loader"
+      // {
+      //   loader: "postcss-loader",
+      //   options: {
+      //     postcssOptions: {
+      //       plugins: [
+      //         require("autoprefixer")
+      //       ]
+      //     }
+      //   }
+      // }
+    ]
+  },
+  ```
+
+### 11.5. webpack对静态资源进行打包
+- 简述
+  - 要处理图片，我们也需要相对应的loader：file-loader
+    - file-loader的作用就是帮助我们处理`import/require()`方式引入的一个文件资源，并且会将它放到我们输出的文件夹中
+  - webpack5已经不推荐使用file-loader了，但目前脚手架还没升级
+- 安装并使用
+  - `yarn add file-loader -D`
+  ```js
+  // 设置背景图片
+  import "../css/image.css";
+  const bgDivEl = document.createElement('div');
+  bgDivEl.className = "image-bg";
+  document.body.appendChild(bgDivEl);
+
+  // 引入的图片
+  import zzhnImage from '../img/zznh.png';
+  import "../font/iconfont.css";
+  const imgEl = document.createElement('img');
+  imgEl.src = zzhnImage;
+  document.body.appendChild(imgEl);
+
+  // 匹配图片
+  {
+    test: /\.(jpe?g|png|gif|svg)$/,
+    use: 'file-loader'
+  },,
+  ```
 
 ---
 <br />
