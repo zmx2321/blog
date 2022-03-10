@@ -879,3 +879,67 @@ const obj = _.cloneDeep(info)
   - 即SCF开发模式
 
 ## 11. 认识webpack
+### 11.1. 梗概
+- 由来
+  - 开发过程中我们需要通过模块化进行开发
+  - 需要用一些高级特性加快我们开发的效率或者安全性，如ts、sass等
+  - 开发完成之后，需要对代码进行压缩合并及其他相关优化
+- 概念
+  - 静态的模块化打包工具，为现代的js应用程序（webpack is a static module bundler for modern javascript application）
+  - 打包(bundler): webpack可以帮助我们进行打包
+  - 静态的(static): 我们最终可以将代码打包成最终的静态资源
+  - 模块化(module): webpack默认支持各种模块化开发，ES Module、CommonJS、AMD、CMD等
+    - ES Module在浏览器中使用
+      - export导出，import导入
+      - 静态编译期间就确定模块的依赖
+      - 在编译期间会将所有import提升到顶部
+      - 导出的一个引用，内部修改可以同步到外部
+      - 顶层this指向undefined
+    - CommonJS在node中才能使用
+      - exports导出，require导入
+      - 运行时加载模块
+      - 不会提升require
+      - 导出的是一个值拷贝，会对加载结果进行缓存，一旦内部再修改这个值，则不会同步到外部
+      - 顶层的this指向这个模块本身
+    - 在webpack里面都可以使用
+  - 现代的(modern): 正是因为现代前端开发面临的各种问题，才催生了webpack的出现和发展
+
+### 11.2. vue项目加载的文件
+- js的打包
+  - 将es6转换成es5
+  - ts处理，将其转换成js
+- css处理
+  - css文件模块的加载、提取
+  - less/sass等预处理器的处理
+- 资源文件img、font
+  - 图片img文件的加载
+  - 字体font文件的加载
+- html资源的处理
+  - 打包html资源文件
+- 处理vue项目的SFC文件.vue文件
+  - .vue、template等
+
+### 11.3. webpack的安装
+#### 11.3.1. webpack和webpack-cli的关系
+- 执行webpack命令，会执行node_modules下的.bin目录下的webpack
+- webpack在执行时是依赖webpack-cli的，如果没有安装就会报错
+- webpack-cli中执行代码时，才是真正利用webpack进行编译和打包的过程
+  - webpack-cli的主要作用是，当我们需要用命令行去执行webpack的时候，对我们的命令去做一些读取
+    - 类似于webpack -- xxx
+    - 他的本质还是去调webpack
+  - webpack有一系列调用过程
+    - 我们执行webpack命令的时候，先执行webpack里面的东西
+    - webpack去调webpack-cli
+    - webpack-cli再去调webpack
+- 所以在安装webpack时，我们需要同时安装webpack-cli（第三方脚手架事实上是没有使用webpack-cli的，而是类似于自己的vue-service-cli的东西）
+  - 编译一个项目的时候并不需要webpack-cli（如vue、react脚手架）
+  - 因为我们编译项目的时候不需要用 webpack -xxx 去执行
+
+#### 11.3.2. 安装webpack
+- 全局安装
+  - npm install webpack webpack-cli -g
+  - 建议全局安装
+- 局部安装
+  - npm install webpack webpack-cli -D
+- 查看版本
+  - webpack -version
