@@ -1182,7 +1182,6 @@ const obj = _.cloneDeep(info)
 
   // 引入的图片
   import zzhnImage from '../img/zznh.png';
-  import "../font/iconfont.css";
   const imgEl = document.createElement('img');
   imgEl.src = zzhnImage;
   document.body.appendChild(imgEl);
@@ -1195,19 +1194,148 @@ const obj = _.cloneDeep(info)
       // 官方推荐使用asset module 资源模块替换loader
       use: 'file-loader', 
   }, */
+  // url-loader作用和file-loader作用相似，但可以将较小的文件转换成base64的uri
+  // yarn add url-loader -D
+  /* {
+    test: /\.(jpe?g|png|gif|svg)$/,
+    use: {
+      loader: "url-loader",
+      options: {
+        // outputPath: "img",
+        name: "img/[name]_[hash:6].[ext]",
+        limit: 100 * 1024
+      }
+    }
+  }, */
+  // 直接使用资源模块类型（asset module type）
+  // asset => url-loader+配置资源体积限制实现 => 在导出一个data uri和发送一个单独文件直接自动选择
   {
     test: /\.(jpe?g|png|gif|svg)$/,
     type: "asset",
     generator: {
+      // [name]获取文件名称，[ext]表示扩展名
       filename: "img/[name]_[hash:6][ext]"
     },
+    // asset类型需要做以下配置
     parser: {
       dataUrlCondition: {
+        // 100kb*1024
         maxSize: 100 * 1024
       }
     }
   },
   ```
+- 打包字体
+  ```js
+  // i元素
+  import "../font/iconfont.css";  // 引入依赖图
+  const iEl = document.createElement('i');
+  iEl.className = "iconfont icon-ashbin";
+  document.body.appendChild(iEl);
+
+  // 直接使用资源模块类型（asset module type）
+  // asset/resource => file-loader => 发送一个单独的文件并导出url
+  // 字体 - 一般不转base64
+  {
+    test: /\.(eot|ttf|woff2?)$/,
+    type: "asset/resource",
+    generator: {
+      filename: "font/[name]_[hash:6][ext]"
+    }
+  }
+  ```
+- 资源模块类型（asset module type）
+  - webpack5之前，加载这些资源我们需要使用一些loader，如raw-loader、url-loader、file-loader
+  - webpack5开始，我们可以直接使用资源模块类型（asset module type），来代替上面的类型
+  - 即webpack5不需要安装url-loader、file-loader
+  - asset/resource => file-loader => 发送一个单独的文件并导出url
+  - asset/inline => url-loader => 导出一个资源的data uri
+  - asset/source => raw-loader => 导出资源的源代码
+  - asset => url-loader+配置资源体积限制实现 => 在导出一个data uri和发送一个单独文件直接自动选择
+
+### 11.6. webpack中的插件(plugin)
+- 简述
+  - loader是用于特定的模块类型进行转换
+  - plugin可以用于执行更广泛的任务，比如打包优化、资源管理、环境变量注入等
+  - webpack的插件贯穿于整个webpack生命周期中
+  - 比如我们用loader打包css，实际上是将css注入到html中的，我们可以使用插件来将所有css提取到独立的文件里面去
+  - 插件必须手动导入
+  - 一般插件都会封装成一个class
+- CleanWebpackPlugin
+  - 我们每次修改一些配置，重新打包时，都需要手动删除dist文件夹
+  - 但我们可以借助cleanWebpackPlugin这个插件来帮我们完成这个操作
+  - 安装并使用
+    - `yarn add clean-webpack-plugin -D`
+    - 引入 => `const { CleanWebpackPlugin } = require('clean-webpack-plugin')`
+    - 导出的是一个对象，我们需要在这个对象中取出CleanWbpackPlugin（CleanWbpackPlugin是一个类）
+    ```js
+    // 插件
+    plugins: [
+      // 通过类创建对象
+      // 删除dist
+      new CleanWebpackPlugin(),
+    ],
+    ```
+- HtmlWbpackPlugin
+  - 我们的html文件时编写在根目录下的，而最终打包的dist文件夹中是没有index.html的
+  - 在进行项目部署时，必然也是需要对应的入口文件index.html
+  - 所以我们也需要对index.html进行打包处理
+  - 使用了这个插件之后，我们可以不需要创建index.html，他会自动生成模板
+  - 它内置了index.html模板，但如果不想用它内置的，可以自定义模板
+  - 像vuecli中，他就是以public里面的index.html为模板打包的
+  - 插件中引入没有顺序问题
+  - 安装并使用
+    - `yarn add html-webpack-plugin -D`
+    ```js
+    // 引入html-webpack-plugin插件
+    const HtmlWebpackPlugin = require('html-webpack-plugin')
+    // 打包index.html
+    // new HtmlWebpackPlugin()  // 默认
+    new HtmlWebpackPlugin({
+      title: 'Output Management',  // 标题
+      //  如果模板里面有baseurl，需要定义
+      // template: './public/index.html'  // 传入自定义模板
+    })
+    ```
+- DefinePlugin
+  - 在index.html模板中，可能会有 <%变量 %>，这个是EJS模块填充数据的方式
+  - DefinePlugin允许在编译时创建配置的全局常量，是一个webpack内置的插件
+  - 可以直接对webpack进行解构，拿到这个类
+  ```js
+  const { DefinePlugin } = require('webpack')
+  // 创建全局常量
+  new DefinePlugin({
+    // 当前文件夹
+    BASE_URL: "./"  // 这里的BASE_URL可用在传入的自定义模板中，类似于vuecli中的public
+  })
+  ```
+- copy-webpack-plugin
+  - vue打包之后，public的内容会复制到打包文件中
+  - 安装并使用
+    - `yarn add copy-webpack-plugin -D`
+    ```js
+    const { CopyWebpackPlugin } = require('copy-webpack-plugin')
+
+    // 拷贝文件
+    new CopyWebpackPlugin({
+      // 匹配规则
+      patterns: [
+        {
+          // 从哪里开始复制
+          from: 'public',
+          // 复制到哪个文件夹
+          to: './',  // 可以不写，当前目录
+          globOptions: {
+            // 忽略当前文件夹下所有index.html
+            ignore: [
+              '**/index.html'
+            ]
+          }
+        }
+      ]
+    })
+    ```
+
 
 ---
 <br />
