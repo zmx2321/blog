@@ -58,11 +58,11 @@ const mysql = require('mysql');
 module.exports = {
     // 数据库配置
     config: {
-        host: '127.0.0.1',
-        port: 3306,
-        user: 'root',
-        password: 'root',
-        database: 'exapp'  // 数据库
+      host: '127.0.0.1',
+      port: 3306,
+      user: 'root',
+      password: 'root',
+      database: 'exapp'  // 数据库
     },
 
     // 连接数据库，使用mysql的连接池的连接方式
@@ -261,3 +261,9 @@ module.exports = router;
 ```
 - 请求页面
   - `http://localhost:3000/getPostCate?id=1`
+
+  
+---
+<br />
+
+<font color="#666" size="5">\~End~</font>

@@ -1188,10 +1188,25 @@ const obj = _.cloneDeep(info)
   document.body.appendChild(imgEl);
 
   // 匹配图片
+  /* {
+      test: /\.(jpe?g|png|gif|svg)$/,
+      // 会生成两张图片，css-loader 6.0.0以上版本。对引入背景图片的url解析方式不一样，导致生成了两个图片（一个正常由file-loader解析生成，一个仅由css-loader解析引入）
+      // 将css-loader版本由6降到5就行了
+      // 官方推荐使用asset module 资源模块替换loader
+      use: 'file-loader', 
+  }, */
   {
     test: /\.(jpe?g|png|gif|svg)$/,
-    use: 'file-loader'
-  },,
+    type: "asset",
+    generator: {
+      filename: "img/[name]_[hash:6][ext]"
+    },
+    parser: {
+      dataUrlCondition: {
+        maxSize: 100 * 1024
+      }
+    }
+  },
   ```
 
 ---

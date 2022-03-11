@@ -27,3 +27,9 @@ module.exports = {
 const config = require('./config');
 // console.log(config.ahUrl);
 ```
+
+
+---
+<br />
+
+<font color="#666" size="5">\~End~</font>
