@@ -896,7 +896,7 @@ const obj = _.cloneDeep(info)
       - 导出的一个引用，内部修改可以同步到外部
       - 顶层this指向undefined
     - CommonJS在node中才能使用
-      - exports导出，require导入
+      - module.exports导出，require导入
       - 运行时加载模块
       - 不会提升require
       - 导出的是一个值拷贝，会对加载结果进行缓存，一旦内部再修改这个值，则不会同步到外部
