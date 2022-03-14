@@ -1336,6 +1336,13 @@ const obj = _.cloneDeep(info)
     })
     ```
 
+### 11.7. webpack中的模式
+- 开发模式
+  - mode: 'development',
+  - devtool: 'source-map'  // 生成代码的时候，也会生成对应的map文件，浏览器控制台能显示报错的位置
+- 生产模式
+  - mode: 'production',
+
 
 ---
 <br />
