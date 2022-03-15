@@ -536,7 +536,6 @@ const App = {
       }
     }
     ```
-  - 
 
 ## 7. 侦听器(watch)
 ### 7.1. 概念
@@ -1343,6 +1342,97 @@ const obj = _.cloneDeep(info)
 - 生产模式
   - mode: 'production',
 
+### 11.8. babel
+- 简述
+  - 将es6转es5，将jsx、ts转js等，都需要babel，现在前端所有的脚手架中几乎都内置了babel，所以学习babel对我们理解代码从编写到线上的转变过程至关重要
+  - babel是一个工具链，主要用于旧浏览器或者环境中将es5+代码转换为向后兼容版本的js，包括语法转换，源代码转换等
+  - babel本身可作为一个独立的工具(和postCss一样)，不和webpack等构建工具配置来单独使用
+- 安装和使用
+  - 如果希望在命令行尝试使用babel，需要安装如下库
+    - @babel/core => baebl核心代码，必须安装
+    - @babel/cli => 可以让我们在命令行使用babel
+    - `yarn add @babel/core @babel/cli -D`
+  - 使用 `npx babel demo.js --out-dir dist`
+    - src => 源代码目录
+    - --out-dir => 指定要输出的文件夹
+    - 或者 `npx babel demo.js --out-file test.js`
+    - 但转换的依然是es语法
+- 插件
+  -比如我们需要转换箭头函数，需要使用箭头函数转换相关的插件
+    - `yarn add @babel/plugin-transform-arrow-functions -D`
+    - `npx babel demo.js --out-file test.js --plugins=@babel/plugin-transform-arrow-functions`
+  - 不使用块级作用域(const，let)
+    - `yarn add @babel/plugin-transform-block-scoping`
+    - `npx babel demo.js --out-file test.js --plugins=@babel/plugin-transform-arrow-functions,@babel/plugin-transform-block-scoping`
+    - 所有const，let就变成var了
+  - babel的预设(preset)
+    - 如果转换的内容过多，一个个设置太过麻烦，我们可以使用预设
+    - `yarn add @babel/preset-env -D`
+    - `npx babel demo.js --out-file test.js --presets=@babel/preset-env`
+    - 一般开发的时候不需要一个个去配置，直接写预设就可以了
+- babel的底层原理
+  - 概念
+    - 这种将一种源代码(原生语言)转换成另一种源代码(模板语言)的工作，可以理解成编译器，即我们可以将babel看作是一个编译器
+    - babel的作用就是将我们的源代码，转换成浏览器可以识别的另一种源代码
+  - babel也有编译器的工作流程
+    - 解析阶段(parsing)
+    - 转生阶段(transformation)
+    - 生成阶段(code generaation)
+    - 可以参考网站 [https://github.com/jamiebuilds/the-super-tiny-compiler](https://github.com/jamiebuilds/the-super-tiny-compiler)
+  - babel的执行原理
+    - 原生源代码 => 词法分析 => tokens数组 => 语法分析 => AST抽象语法树 => 遍历 => 访问 => 应用插件 => 新的AST => 目标源代码
+- babel-loader
+  - webpack是模块化打包工具，把很多资源当成是模块，然后将他们打包，担他不负责在打包的过程中做一系列转换
+  - webpack虽然看起来是打包了，但是没有将es6代码转成es5的，所以配置webpack还需要使用babel
+  - 在webpack中使用babel需要使用babel-loader
+  - 安装和使用
+    - `yarn add babel-loader -D`
+    - 如果核心文件没有安装 `yarn add babel-loader @babel/core -D`
+    ```js
+    {
+      // 执行js代码的时候，使用babel-loader
+      test: /\.js$/,
+      // 这么写直接build还不能转换代码，因为没有使用插件
+      // loader: "babel-loader"
+      use: {
+        loader: "babel-loader",
+        options: {
+          // 使用插件
+          /* plugins: [
+            "@babel/plugin-transform-arrow-functions",
+            "@babel/plugin-transform-block-scoping"
+          ] */
+          // 或者直接使用预设
+          presets: [
+            "@babel/preset-env"
+            // 如果有参数可能要写成
+            // ["@babel/preset-env", {.....}]
+          ]
+        }
+      }
+    }
+    ```
+  - 我们也可以将babel抽取到独立的文件中
+    - babel提供了两种配置文件
+      - babel.config.json(或者.js,.cjs,.mjs)
+        - 比较推荐
+      - .babelrc.json(或者.babelrc,.js,.mjs)
+        - rc表示运行时编译 => runtime complier 
+        - 比较早期的
+    - 创建babel.config.js
+      ```js
+      module.exports = {
+        presets: [
+          "@babel/preset-env"
+        ]
+      }
+
+      // 在外部对babel做配置
+      {
+        test: /\.js$/,
+        loader: "babel-loader"
+      }
+      ```
 
 ---
 <br />
