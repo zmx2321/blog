@@ -1305,8 +1305,8 @@ const obj = _.cloneDeep(info)
   // 创建全局常量
   new DefinePlugin({
     // 当前文件夹
-    BASE_URL: "./"  // 这里的BASE_URL可用在传入的自定义模板中，类似于vuecli中的public
-  })
+    BASE_URL: "'./'",  // 这里的BASE_URL可用在传入的自定义模板中，类似于vuecli中的public
+  }),
   ```
 - copy-webpack-plugin
   - vue打包之后，public的内容会复制到打包文件中

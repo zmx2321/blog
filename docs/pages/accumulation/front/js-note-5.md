@@ -78,7 +78,7 @@ export function download (url, params, filename, status) {
 this.download(url, 555)
 ```
 
-## 3. 对象数组根据对象属性删除
+## 2. 对象数组根据对象属性删除
 ```js
 // 对象数组根据对象属性删除
 removeByValue(arr, value) {
@@ -90,7 +90,7 @@ removeByValue(arr, value) {
 },
 ```
 
-## 6. 判断是否为图片
+## 3. 判断是否为图片
 ```js
 // 获取路径扩展名
 getFileprefix(url) {
@@ -127,7 +127,7 @@ getFileValue(row, item) {
 },
 ```
 
-## 7. 参数转对象
+## 4. 参数转对象
 ```js
 const urlToObj = str=> {
     let strContainer={};
@@ -142,8 +142,8 @@ const urlToObj = str=> {
 }
 ```
 
-## 8. 时间相关
-### 8.1. 时间戳
+## 5. 时间相关
+### 5.1. 时间戳
 ```js
 // 设置时间戳
 getNowFormate(time) {
@@ -168,7 +168,7 @@ getNowFormate(time) {
 getNowFormate();  // 默认当前时间
 ```
 
-### 8.2. 获取上月
+### 5.2. 获取上月
 ```js
 // 设置时间戳
 export const getNowFormate = time=> {
@@ -201,7 +201,7 @@ export const getLastMonthArr = ()=> {
 }
 ```
 
-### 8.3. 完整显示时间
+### 5.3. 完整显示时间
 ```js
 // 设置时间戳 - 显示
 export const getDateTimeNowFormate = time=> {
@@ -229,7 +229,7 @@ export const getDateTimeNowFormate = time=> {
 }
 ```
 
-## 9. 深拷贝
+## 6. 深拷贝
 ```js
 // 深拷贝
 export const deepClone = (obj = {}) => {
@@ -266,8 +266,8 @@ export const deepClone = (obj = {}) => {
 }
 ```
 
-## 10. 防抖和节流
-### 10.1. 防抖
+## 7. 防抖和节流
+### 7.1. 防抖
 ```js
 // 防抖
 export const debounce = (fn, delay = 500) => {
@@ -302,7 +302,7 @@ export const debounce = (fn, delay = 500) => {
     }
 }
 ```
-### 10.2. 节流
+### 7.2. 节流
 ```js
 // 节流
 export const throttle = (fn, delay = 100) => {
@@ -334,7 +334,7 @@ export const objIsEmpty = obj => {
 }
 ```
 
-## 11. 获取路径扩展名
+## 8. 获取路径扩展名
 ```js
 // 获取路径扩展名
 export const getFileprefix = url => {
@@ -347,7 +347,7 @@ export const getFileprefix = url => {
 }
 ```
 
-## 12. 去重
+## 9. 去重
 ```js
 // 去重
 export const uniqueArr = arr => {
@@ -355,10 +355,61 @@ export const uniqueArr = arr => {
 }
 ```
 
-## 13. 求补集
+## 10. 求补集
 ```js
 let a = new Set([1, 2, 3]);
 let b = new Set([1, 2, 3, 4, 5]);
 let difference = new Set([...b].filter(x => !a.has(x)));
 console.log([...difference])
+```
+
+## 10. 获取设备类型
+```js
+OSnow() {
+  const agent = navigator.userAgent.toLowerCase();
+  const isMac = /macintosh|mac os x/i.test(navigator.userAgent);
+
+  let uaType = ""
+
+  if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
+    uaType = "win32"
+  }
+  if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
+    uaType = "win64"
+  }
+  if(isMac){
+    uaType = "mac"
+  }
+
+  return uaType
+},
+```
+
+## 11. 获取zoom
+```js
+// 缩放
+const getZoom = ()=> {
+  let zoom = window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI;
+  // console.log("当前浏览器zoom值", zoom)
+
+  if (zoom != 1) {
+    // console.log("系统检测到您的设备对显示进行改变，可能导致页面显示不全,请调整后打开")
+    // Message.error("系统检测到您的设备对显示进行改变，可能导致页面显示不全,请调整后打开");
+
+    // document.body.style.zoom = -0.6 * zoom + 1.55;
+    document.body.style.zoom = 1/zoom;
+  } else {
+    document.body.style.zoom = 1
+  }
+
+  // console.log("调整后zoom值", document.body.style.zoom)
+}
+
+// 初始化
+getZoom()
+
+// 改变窗口大小时重新设置 rem
+window.onresize = function () {
+  getZoom()
+}
 ```
