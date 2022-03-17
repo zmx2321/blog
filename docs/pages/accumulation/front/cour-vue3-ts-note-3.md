@@ -42,13 +42,16 @@ app.mount('#app')
 - 页面渲染不出的原因
   - 在浏览器上有这样一段警告：Component provided template option but runtime compilation is not supported in this build of Vue
   - 组件提供了template，但我们现在用的是runtime compilation，不支持对vue进行构建
+  - vue在对我们的代码打包的时候有很多版本
 
 ### 1.2. vue打包不同版本解析
-- vue.global.js
+- vue(.runtime).global(.prod).js
+  - 常用vue.global.js
+  - runtime包括compiler
+  - prod版本是做过压缩的
   - 直接通过浏览器script引入
   - 会暴露一个全局的vue来使用
-
-
+- vue(.runtime).esm-brower(.prod).js
 
 ## 2. vite2搭建Vue环境
 
