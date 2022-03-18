@@ -25,8 +25,8 @@
   ```
 - 配置main.js
 ```js
-// 这样打包并不会出问题，但页面渲染没出来
-import { createApp } from 'vue'  // 将vue当成是一个模块直接去引入
+// 单只写vue，这样打包并不会出问题，但页面渲染没出来
+import { createApp } from 'vue/dist/vue.esm-bundler'  // 将vue当成是一个模块直接去引入
 
 // vue代码
 const app = createApp({
@@ -41,18 +41,41 @@ app.mount('#app')
 ```
 - 页面渲染不出的原因
   - 在浏览器上有这样一段警告：Component provided template option but runtime compilation is not supported in this build of Vue
-  - 组件提供了template，但我们现在用的是runtime compilation，不支持对vue进行构建
+  - 组件提供了template，但我们现在用的是runtime compilation，runtime版本没有编译器，不支持对vue进行编译
   - vue在对我们的代码打包的时候有很多版本
 
 ### 1.2. vue打包不同版本解析
 - vue(.runtime).global(.prod).js
   - 常用vue.global.js
-  - runtime包括compiler
+  - runtime
+    - 完整版是同时包含编译器和运行时的版本，CDN引入所对应的文件名为vue.js或vue.min.js
+      - 该版本有编译器，占用代码体积，所以比runtime版大40%的体积
+    - runtime版本是只包含运行时的版本，没有编译器，CDN引入所对应的文件名为vue.runtime.js或vue.runtime.min.js
+      - 因该版本无编译器，故占用代码体积小，但无法直接实现页面渲染，需要利用 render 里的 h 函数来创建 HTML 节点，vue.js的webpack引入和@vue/cli 引入都默认使用此版本
   - prod版本是做过压缩的
   - 直接通过浏览器script引入
   - 会暴露一个全局的vue来使用
 - vue(.runtime).esm-brower(.prod).js
+  - 用于通过原生ES模块导入使用(在浏览器中通过`<script type='module'>`来使用)
+- vue(.runtime).esm-bundler.js
+  - 用于webpack、rollup、parcel等构建工具
+  - 构建工具中默认是vue.runtime.esm-bundler.js
+  - 如果我们需要解析模板template，那么需要手动指定vue.esm-bundler.js
+  - 所以在webpack中打包的代码无法在浏览器显示
+- vue.cjs(.prod).js
+  - 服务端渲染使用
+  - 通过require在node.js中使用
+- 总结：vue.js是完整版，包含运行时加编译器，vue.runtime.js仅包含运行时，runtime代码体积比完整版少40%，vue默认打包的版本是runtime无法直接在浏览器渲染，需要指定vue/dist/vue.esm-bundler
+- 在vue中我们有三种方式编写dom元素
+  - template模板的方式(之前经常使用的方式)
+  - render函数的方式，使用h函数来编写渲染的内容
+  - 通过.vue文件中的template来编写模板
 
 ## 2. vite2搭建Vue环境
 
 ## 3. Vite3新增语法
+
+
+
+代码笔记：
+  https://github.com/zmx2321/blog_code/tree/master/accumulation/front/cour-vue3-ts-note/webpack_demo/webpack_vue
