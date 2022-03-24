@@ -566,5 +566,88 @@ export default {
 
 ```
 
-## 15. 重置
+## 16. 重置
 - `this.queryParams = this.$options.data.call(this).queryParams`
+
+## 17. 监听vuex状态
+```js
+// store
+const state = {
+  isFixNav: false
+}
+
+const mutations = {
+  SET_NAV_FIX: (state, isFixNav) => {
+    state.isFixNav = isFixNav
+  }
+}
+
+const actions = {
+  getNavFix({ commit }, isFixNav) {
+    commit('SET_NAV_FIX', isFixNav)
+  }
+}
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions
+}
+
+// layout
+import store from '@/store'
+
+let timer = setTimeout(() => {
+  let main = document.querySelector('.app-main')
+  let nav = document.querySelector('.navbar_wrap')
+  // console.log(main, nav)
+
+  // 滚动条监听
+  document.addEventListener('scroll', (e)=> {
+    console.log(e.target.scrollTop)
+
+    if(!main || !nav) {
+      return
+    }
+
+    if(e.target.scrollTop > 100) {
+      main.classList.add('fixed')
+      nav.classList.add('fixed')
+
+      // logo
+      store.dispatch('xjp/getNavFix', true)
+      // console.log(store.getters.isFixNav)
+      // console.log(store)
+    } else {
+      main.classList.remove('fixed')
+      nav.classList.remove('fixed')
+
+      // logo
+      store.dispatch('xjp/getNavFix', false)
+    }
+  }, true);
+
+  clearTimeout(timer)
+}, 300);
+
+// vue
+computed: {
+    ...mapGetters([
+      'sidebar',
+      'avatar',
+      'device',
+      'isFixNav'
+    ]),
+}
+
+watch: {
+    // 监听vux的nav
+    isFixNav(val) {
+      this.navStatus = val
+    }
+},
+
+<img src="@/assets/logo/logo1.png" alt="" v-if="!navStatus">
+<img src="@/assets/logo/logo.png" alt="" v-else>
+```
