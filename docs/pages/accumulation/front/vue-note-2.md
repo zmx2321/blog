@@ -632,22 +632,55 @@ let timer = setTimeout(() => {
 }, 300);
 
 // vue
-computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar',
-      'device',
-      'isFixNav'
-    ]),
-}
+import { mapGetters } from 'vuex'
 
 watch: {
     // 监听vux的nav
     isFixNav(val) {
+      console.log("123475", val)
       this.navStatus = val
     }
-},
+  },
+  computed: {
+    ...mapGetters([
+      'isFixNav'
+    ]),
+  },
 
 <img src="@/assets/logo/logo1.png" alt="" v-if="!navStatus">
 <img src="@/assets/logo/logo.png" alt="" v-else>
+```
+
+## 18. 国际化表单校验不生效
+```html
+<template>
+  <div id="app">
+    <router-view v-if="isActiveRoute" />
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isActiveRoute: true
+    }
+  },
+  methods: {
+    reload() {
+      this.isActiveRoute = false;
+      this.$nextTick( () => {
+        this.isActiveRoute = true;
+      })
+    }
+  },
+  watch: {
+    '$i18n.locale'(newVal, oldVal) {
+      if(newVal != oldVal) {
+        this.reload()
+      }
+    }
+  }
+}
+</script>
 ```
