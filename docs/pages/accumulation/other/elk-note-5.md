@@ -7,7 +7,6 @@
 ```js
 "/elasticApi": {
   changeOrigin: true, //允许跨域
-  // target: "http://192.168.2.240:9200",
   target: dataWareConfig.elsearchUrl,
   ws: true,
   pathRewrite: {
@@ -15,23 +14,61 @@
   }
 },
 
- export const SaveKibanaList = (indexes, params)=> {
-  return new Promise(resolve=> {
-    esBatchAddApi(indexes, params);
-    resolve(true);
-  });
+import axios from '@/router/axios_elk';
+
+ // 接口 - 查询
+ const getESApi = (indexes, params) => {
+    let res = axios({
+        url: `/${esApiUrl}/${indexes}/_search`,
+        method: 'post',
+        data: params
+    });
+    return res;
+};
+
+ // es api 操作 1111
+ export const esOptionApi = (indexes, params, succ)=> {
+     // console.log("es api 操作");
+
+     getESApi(indexes, params).then(res=> {
+         let hitsData = res.data;  // 获取目标数据集合
+
+         if(hitsData.hits) {
+             hitsData = hitsData.hits;
+
+             succ(hitsData);
+         } else {
+             // 当没有返回异常状态码时，执行回调
+             if(hitsData.hasOwnProperty("status") == false) succ(hitsData);
+             else if(hitsData.status != 404) { // 当索引存在时，返回错误，需要提示
+                Message.error("es数据获取异常");
+             }
+         }
+     }).catch(err=> {
+         if(err) {
+             Message.error("es数据获取异常");
+             console.log(err);
+         }
+     });
+ }
+
+ // 调用es接口
+let params = {
+  "query": {
+    "constant_score": {
+      "filter": {
+        "term": {
+          "__id.keyword": id
+        }
+      }
+    }
+  }
 }
 
- // 接口 - 根据id查询
- const getESApiById = (indexes, params, id) => {
-  var res = axios({
-    url: `/${esApiUrl}/${indexes}/_doc/${id}`,
-    method: 'post',
-    data: params
-  });
- };
-
- dataWareUtil.esOptionApi(getForecastList, params, hisData=> {})
+// 调用es接口删除数据
+dataWareUtil.esOptionApi(delForecastoList, params, hisData=> {
+  // todo(hisData);
+})
 ```
 
 ## 2. kibana插件开发

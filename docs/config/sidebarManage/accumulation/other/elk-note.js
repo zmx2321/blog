@@ -10,5 +10,6 @@ module.exports = {
         'elk-note-6',
         'elk-note-7',
         'elk-note-8',
+        'elk-note-9',
     ]
 };
