@@ -68,8 +68,36 @@ app.mount('#app')
 - 总结：vue.js是完整版，包含运行时加编译器，vue.runtime.js仅包含运行时，runtime代码体积比完整版少40%，vue默认打包的版本是runtime无法直接在浏览器渲染，需要指定vue/dist/vue.esm-bundler
 - 在vue中我们有三种方式编写dom元素
   - template模板的方式(之前经常使用的方式)
+    - 这里的template我们必须通过源码中的一部分代码进行编译
   - render函数的方式，使用h函数来编写渲染的内容
+    - h函数可以直接返回一个虚拟节点，即Vnode节点
   - 通过.vue文件中的template来编写模板
+    - .vue文件中的template可以通过v-loader，再依赖另外一个库，对其进行编译和处理
+- vscode对sfc的支持（single-file components[单文件组件]）
+  - vetur，从vue2开发就一直在使用的vscode支持vue的插件
+  - volar，官方推荐的插件（后续会继续volar开发官方的vscode插件）
+- webpack解析sfc文件
+  - 在开发环境安装vue-loader
+    - 为了解析.vue文件
+    - yarn add vue-loader@next -D => 会报错
+    - yarn add vue/compiler-sfc - D
+    ```js
+    const { VueLoaderPlugin } = require('vue-loader/dist/index');
+    new VueLoaderPlugin()
+    ```
+  - 警告的意思
+    - `__vue_OPTIONS_API__` => 对vue2做适配
+      - 默认为true，如果项目中没有vue2的语法，建议设置为false
+    - `vue_prod_devtools` => vue调试工具
+      - 一般建议生产环境关闭
+    ```js
+    new DefinePlugin({
+      BASE_URL: "'./'",
+      __VUE_OPTIONS_API__: true,  // 是否兼容vue2
+      __VUE_PROD_DEVTOOLS__: false  // 生产环境是否打开调试工具
+    }),
+    ```
+
 
 ## 2. vite2搭建Vue环境
 
