@@ -413,3 +413,89 @@ window.onresize = function () {
   getZoom()
 }
 ```
+
+## 12. 获取月份区间
+```js
+// 根据年月判断天数
+getMonthDay(year, month) {
+  // console.log(year, month)
+  const isLeapYear = year => {
+    if(year/4 == 0 && year/100 != 0){
+      return true ;
+    } else if (year/400 == 0){
+      return true ;
+    } else{
+      return false ;
+    }
+  }
+
+  let days = 0
+
+  switch (month) {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+      days = 31
+      break
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+      days = 30
+      break
+    case 2:
+      isLeapYear(year) ? days = 29 : days = 28;
+  }
+
+  // console.log(days)
+  return days
+},
+
+getTitleLabel() {
+  let date = new Date();
+  let y = date.getFullYear();
+  let m = date.getMonth() + 1;
+  let d = date.getDate();
+  parseInt(m) < 10 ? m='0'+m : m
+  parseInt(d) < 10 ? d='0'+d : d
+
+  let date0 = y + '-' + m
+  let thisTimeArr = date0.split('-')
+  // 上月
+  let lastMonth = parseInt(thisTimeArr[1]) - 1
+  parseInt(lastMonth) < 10 ? lastMonth='0'+lastMonth : lastMonth
+  // console.log(lastMonth)
+
+  date.setTime(date.getTime()-24*60*60*1000);
+  let d1 = date.getDate();
+  parseInt(d1) < 10 ? d1='0'+d1 : d1
+
+  let time0Str = ""
+  let timeStr = ""
+
+  if(this.queryParams.nowDate === "" || this.queryParams.nowDate.split('-')[1] === m) {
+    this.queryParams.nowDate = date0
+    // console.log(d, d1)
+
+    if(parseInt(d) === 1) {
+      // 月初第一天，昨天应是上个月，判断月 1-月底
+      time0Str = thisTimeArr[0] + '.' + lastMonth + '.01'
+      timeStr = thisTimeArr[0] + '.' + lastMonth + '.' + this.getMonthDay(parseInt(thisTimeArr[0]), parseInt(thisTimeArr[1]) - 1)
+    } else {
+      time0Str = y + '.' + m + '.01'
+      timeStr = y + '.' + m + '.' + d1
+    }
+  } else {
+    let selTimeArr = this.queryParams.nowDate.split('-')
+    console.log(selTimeArr)
+    time0Str = selTimeArr[0] + '.' + selTimeArr[1] + '.01'
+    timeStr = selTimeArr[0] + '.' + selTimeArr[1] + '.' + this.getMonthDay(parseInt(selTimeArr[0]), parseInt(selTimeArr[1]))
+  }
+
+  this.labelTitle = `【${time0Str}-${timeStr}】${this.titleStr}-`
+},
+```

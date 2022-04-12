@@ -375,14 +375,14 @@ refreshList() {
 ## 4. 在vue项目中使用高德地图的geojson
 - 安装vue-amap
 - 在main.js中配置
-    ```js
-    AMap.initAMapApiLoader({
-        // 高德key
-        key: 'key',
-        // 插件集合 （插件按需引入）
-        plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor','AMap.Geolocation', 'AMap.DistrictSearch', 'AMap.Marker']
-    })
-    ``` 
+```js
+AMap.initAMapApiLoader({
+    // 高德key
+    key: 'key',
+    // 插件集合 （插件按需引入）
+    plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor','AMap.Geolocation', 'AMap.DistrictSearch', 'AMap.Marker']
+})
+``` 
 - 在vue文件中引入并使用
     - 基础使用
     ```html
@@ -907,3 +907,129 @@ refreshList() {
         }
         </style>
         ```
+
+## 5. vue中cascader级联选择器
+```html
+<template>
+  <el-cascader v-model="currentAddressStr" :props="props" @change="addressHandleChange" />
+</template>
+
+<script>
+// api
+
+export default {
+  data () {
+    return {
+      currentAddressStr: this.addressStr,  // vue不推荐直接在子组件中修改父组件传来的props的值
+      props: {
+        lazy: true,
+        // heckStrictly: true,
+        lazyLoad: (node, resolve) => {
+          // 级联控件 - 选地址
+          this.selectAddress(node, resolve)
+        }
+      },
+    }
+  },
+
+  props: {
+    // 级联控件数据 - 结果数据
+    addressStr: {
+      type: Array,
+      default: () => []
+    }
+  },
+
+  methods: {
+    /**
+     * api
+     */
+    // 获取服务区地址 - 省
+    getProvinceAreaList () {
+      return new Promise((resolve, reject) => {
+        getProvinceAreaList().then(res => {
+          resolve(res.rows)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
+    // 根据code获取区域地址
+    getRegionsByCode (code) {
+      return new Promise((resolve, reject) => {
+        getRegionsByCode(code).then(res => {
+          if (res.data) {
+            resolve(res.data.serviceAreaList)
+          }
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
+    /**
+     * 控件
+     */
+    // 级联控件 - 选地址
+    async selectAddress (node, resolve) {
+      const { level } = node;
+
+      if (level === 0) {
+        let provinceAreaList = await this.getProvinceAreaList()
+        // console.log(provinceAreaList)
+
+        const nodes = provinceAreaList.map(item => ({
+          value: item.regionCode,
+          label: item.regionName,
+          leaf: node.level >= 2,
+        }))
+        resolve(nodes);
+      }
+
+      if (level === 1) {
+        if(node.value === 'xxx') {
+            let data
+            resolve(data)
+            return
+        }
+
+        let regionsList = await this.getRegionsByCode(node.value)
+
+        const nodes = regionsList.map(item => ({
+          value: item.id.toString(),
+          label: item.serviceAreaName + "(" + item.geographicalDivision + ")",
+          leaf: node.level === 1,
+        }))
+
+        resolve(nodes);
+      }
+      
+      // 到最后一级的时候消除加载圈及禁止继续请求
+      if(level === 2) {
+        let data
+        resolve(data)
+        return
+      }
+    },
+
+    // 切换区域响应事件
+    addressHandleChange (val) {
+    //   console.log("tools", val)
+
+      // 父组件修改子组件model时触发
+      this.currentAddressStr = val
+
+      if (val[0] === 'xxx') {
+        return
+      }
+
+      this.$emit("addressHandleChange", val)
+    }
+  }
+}
+</script>
+
+<!-- cascaderFlag 执行时显示，触发回调，走业务 -->
+<cascader-tool ref="cascaderRef" @addressHandleChange="addressHandleChange" :addressStr="addressStr" v-if="cascaderFlag" />
+```
