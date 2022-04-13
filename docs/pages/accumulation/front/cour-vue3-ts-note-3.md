@@ -98,9 +98,122 @@ app.mount('#app')
     }),
     ```
 
-### 1.2. 热加载
-
-
+### 1.2. webpack中的服务
+> 希望当文件发生变化时，可以自动完成编译和展示
+- 可实现的方案
+  - webpack watch mode
+  - webpack-dev-server(常用)
+  - webpack-dev-middleware(比较少)
+- webpack提供的watch模式 （webpack watch mode）
+  - 该模式下，webpack依赖图中所有的文件，只要有一个发生了更新，那么代码将被重新编译
+    - 但这个模式不能刷新浏览器，即不能实时重新加载（live reloading）
+  - 开启的两种方式
+    - 在导出的配置中，添加 watch: true
+      - 在webpack.config.js中添加配置
+    - 在webpack的命令中，添加 --watch标识 （在package.json中）
+      - `"build": "webpack --watch"`,
+      - webpack-cli会帮助我们处理--watch这个选项，最终变成watch: true的配置
+      - 每次保存，会重新进行编译
+- webpack-dev-server
+  - 该指令会自动帮我们搭建一个本地服务器
+    - 这个服务是基于node中的express框架的
+  - 用这个指令，他不会帮我们打包代码（即生成build文件）的
+    - 这个工具依然是会对我们的代码进行打包的，只是编译和打包的代码没有做文件的写入
+    - 他是先将编译的内容放到内存中，再通过我们的express服务器来访问之前我们放到内存里面的资源，并直接读取到浏览器
+    - 少了从文件到内存的过程，增加了开发效率，即浏览器访问也会更加快速一些
+    - 事实上，webpack-dev-server使用了一个库叫memfs(memory-fs-webpack)(fs=>file-system=>文件系统)
+    - 在node-modules中的webpack-dev-server文件的package.json中可以找到memfs这个库的引入
+    - 这个不是webpack官方开发的，属于第三方的库
+    - webpack官方开发的memory-fs在很久之前的webpack版本有用过，但已经很多年不维护了
+  - 安装
+    - `yarn add webpack-dev-server -D` => 开发时使用
+    - 在package.json中 `"serve": "webpack serve"`
+      - 执行serve命令之后，webpack内部会找到dev-server来帮助我们启动本地服务
+      - 这个指令也是根据webpack的cli，来找到serve参数，然后根据这个参数，利用webpack-dev-server帮助我们启动本地服务
+  - 在webpack.config.js中做一些配置
+  ```js
+  module.exports = {
+    target: "web",  // 为什么环境打包的（node或者web），如果不设置模块热替换可能会出问题
+    // ...
+    devServer: {
+      // 在开发环境中不想被复制，只在开发环境中使用的话，就需要在这里添加
+      // contentbase代表html页面所在的相对目录，如果我们不配置项，devServer默认html所在的目录就是项目的根目录
+      contentBase: "./public",  // 如果有资源没有在webpack中加载到（不在webpack的依赖图中），就会从public中加载
+      hot: true,  // 模块热替换（HMR）  并不是浏览器刷新，而是局部改变局部刷新  不开启的时候，保存源代码，会刷新整个页面
+      host: "0.0.0.0",
+      port: 7777,
+      open: true,
+      // compress: true,
+      proxy: {
+        "/api": {
+          target: "http://localhost:8888",
+          pathRewrite: {
+            "^/api": ""
+          },
+          secure: false,
+          changeOrigin: true
+        }
+      }
+    },
+    plugins: [
+      // 我们一般是打包的时候将public文件复制出来的，但如果不用CopyWebpackPlugin插件的话，我们可以使用devserver中的contentBase
+      // 注释掉之后即没有被打包到内存中
+      // new CopyWebpackPlugin({
+      //   patterns: [
+      //     {
+      //       from: "public",
+      //       to: "./",
+      //       globOptions: {
+      //         ignore: [
+      //           "**/index.html"
+      //         ]
+      //       }
+      //     }
+      //   ]
+      // }),
+    ]
+    // ...
+  }
+  ```
+- 总结一下webpack-dev-server的执行逻辑
+  - dev-server会帮我们编译打包，然后将所有的静态资源放到内存中（memfs）但不写入文件
+  - 放到内存中之后，会开启一个express服务
+  - 浏览器访问服务，第一次浏览器访问的是index.html
+  - 假如这个index.html中引入的某个文件在webpack的打包文件中是不存在的
+  - 我们可以通过devserver中的contentBase来进行配置一个文件夹
+  - webpack就会根据contentBase配置的文件夹读到内存里面，再返回给index.html中
+  - contentBase一般是用来指定被访问html页面所在目录的，我们的常用方法是`contentBase: "./public"`
+  - 我们使用CopyWebpackPlugin这个插件也可以将文件复制到webpack打包的静态资源中
+  - 如果在开发阶段不希望进行拷贝，就需要在devserver中做contentBase配置，特别是有一些视频资源的时候
+  - 一般开发阶段用devserver中做contentBase，生产阶段用CopyWebpackPlugin
+- 注意事项
+  - 如果修改了webpack配置，都需要重新运行
+  - 浏览器下面经常会出现一行字：\[HMR\] wating for update from wds...
+    - 模块热替换正在等待webpack-dev-server更新
+    - 这个来自于webpack中的socket服务器
+    - 设置模块热替换之后，webpack不知道哪些文件需要进行这个设置，他依然还是刷新整个页面的，可以在main.js里面进行配置
+      ```js
+      import "./js/element";  // 第一次仍然需要引入
+      if (module.hot) {
+        module.hot.accept("./js/element.js", () => {
+          console.log("element模块发生更新了");
+        })
+      }
+      ```
+    - 但在真实开发中，类似vue-loader已经帮我们做好了这些工作，开箱即用即可，但js需要自己设置
+- 深入理解模块热替换（HMR）
+  - HMR的基本原理
+    - webpack-dev-server会创建两个服务：提供静态资源的服务(express)和socket服务(net.Socket)
+    - express server负责直接提供静态资源的服务(打包之后的资源直接被浏览器请求和解析)
+    - HMR服务的本质是一个socket server
+  - HMR Socket Server是一个socket长链接
+    - 服务端可以直接发送文件到客户端
+    - 服务器监听到对应模块发生变化时，会生成两个文件（manifest.json、update chunk.js）,并直接发送给客户端(浏览器)
+      - manifest.json描述文件，描述是哪一个部分发生了变化
+      - update chunk.js表示具体变化的内容
+    - 浏览器拿到两个新文件后，通过HMR runtime机制，加载这两个文件， 并针对修改的模块进行更新
+    ![hmr原理](/blog/images/accumulation/front/cour-vue3-ts-note/hmr.png)
+    
 ## 2. vite2搭建Vue环境
 
 

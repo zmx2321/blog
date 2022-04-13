@@ -751,8 +751,8 @@ const obj = _.cloneDeep(info)
 - 源码
   - 实际上v-model的原理更复杂，因为他是在template里面绑定的，这里面涉及到对模板的编译，并且要适配所有标签的绑定
   - 详见如下源码
-  ![图片alt](/blog/images/accumulation/front/cour-vue3-ts-note/vueym2.png)
-  ![图片alt](/blog/images/accumulation/front/cour-vue3-ts-note/vueym3.png)
+  ![vueym2](/blog/images/accumulation/front/cour-vue3-ts-note/vueym2.png)
+  ![vueym3](/blog/images/accumulation/front/cour-vue3-ts-note/vueym3.png)
 
 ## 9. 全局组件和局部组件
 ### 9.1. 认识组件
