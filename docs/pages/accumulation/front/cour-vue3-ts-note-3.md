@@ -311,12 +311,37 @@ module.exports = merge(commonConfig, {
 // 因为xxx-config.js文件在config里面了，所以配置文件中的输出路径等要做修改，从当前目录修改到上一级目录
 ```
 
-## 2. vite2搭建Vue环境
+## 2. vue脚手架
+### 2.1. cli简述
+- 脚手架是一个建筑学上的概念，但软件工程中也会将一些帮助我们搭建项目的工具称之为脚手架
+- cli（Command-Line Interface）,命令行界面
+- vue-cli内置了webpack相关的配置，我们不需要从零来配置
+### 2.2. 使用vue-cli搭建vue项目
+- vue-cli是一个工具，要使用它必须得先安装
+  - `npm install @vue/cli -g`  => 安装
+  - `npm update @vue/cli -g`  => 升级
+- 使用脚手架创建项目
+  - `vue create xxx`
+  - 脚手架中webpack的配置已经都配置好了，只要进行选择需要使用的依赖就可以使用了
+  ![vuecreate](/blog/images/accumulation/front/cour-vue3-ts-note/vuecreate.png)
+  - webpack里面babel,postcss等那些配置信息可以放在package.json里面，也可以放在外面作单独的配置文件，一般建议选择放在单独的文件中
+  - .browserslistrc文件主要用来设置适配浏览器的范围
+    - 哪些浏览器需要做适配，哪些不需要，可以在这里做配置
+    ```js
+    > 1%  // 市场份额大于1%
+    last 2 versions  // 最后两个版本
+    not dead  // 还在维护
+    // ......
+    ```
+### 2.3. vue-cli原理简介
+- 当我们执行`yarn serve`时，他执行的是`vue-cli-service serve`
+- 在webpack中我们执行的是`webpack`，他执行的是`webpack.config.js`文件
+- 即在vue脚手架中，将我们之前的`webpack`指令改成了`vue-cli-service`指令
+
+## 3. Vite
 
 
-## 3. Vite3新增语法
+---
+<br />
 
-
-
-代码笔记：
-  https://github.com/zmx2321/blog_code/tree/master/accumulation/front/cour-vue3-ts-note/webpack_demo/webpack_vue
+<font color="#666" size="5">\~End~</font>
