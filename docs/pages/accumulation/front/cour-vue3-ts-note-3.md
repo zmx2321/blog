@@ -5,6 +5,7 @@
 
 ## 1. Webpack5搭建Vue环境
 ### 1.1. 安装并配置vue
+> 代码笔记：https://zmx2321.github.io/blog_code/accumulation/front/cour-vue3-ts-note/webpack_demo/webpack_vue/webpack.config.js
 - `yarn add vue`
   - 如果是安装下一个版本的 => `yarn add vue@next`
   - vue在开发环境和生产环境都需要使用，所以不能加 `-D`
@@ -98,7 +99,9 @@ app.mount('#app')
     }),
     ```
 
-### 1.2. webpack中的服务
+### 1.3. webpack中的服务
+> 代码笔记：https://zmx2321.github.io/blog_code/accumulation/front/cour-vue3-ts-note/webpack_demo/webpack-vue/webpack.config.js
+
 > 希望当文件发生变化时，可以自动完成编译和展示
 - 可实现的方案
   - webpack watch mode
@@ -154,13 +157,17 @@ app.mount('#app')
       // html不进行压缩，因为我们请求的时候，他默认会去找index.html,所以html文件一般不进行压缩
       // compress: true,  // 压缩，表示是否为静态资源开启gzip，默认false 
       proxy: {
+        // "/api": "http://localhost:8888",  // 如果以这种方式做代理，资源会请求不到，如果请求的接口是 /api/user，代理会请求到 http://localhost:8888/api/user，这个/api实际上是多余的，需要重写路径
+        // 将api代理到target里面
         "/api": {
           target: "http://localhost:8888",
+          // 重写（正则）
           pathRewrite: {
+            // 以/api为开头的这段字符串重写为空字符串
             "^/api": ""
           },
-          secure: false,
-          changeOrigin: true
+          secure: false,  // 默认不接收转发到https的服务器上，如果希望支持https，需要设置成false
+          changeOrigin: true  // 他表示是否更新代理后请求的headers中的host地址，false的话不发送，如果后端需要验证header上的源是否匹配的话，就会拒绝链接，防止爬虫
         }
       }
     },
@@ -223,6 +230,87 @@ app.mount('#app')
     - 浏览器拿到两个新文件后，通过HMR runtime机制，加载这两个文件， 并针对修改的模块进行更新
     ![hmr原理](/blog/images/accumulation/front/cour-vue3-ts-note/hmr.png)
     
+### 1.4. historyApiFallback
+- 简介
+  - historyApiFallback主要的作用是解决spa页面在路由跳转之后，页面进行刷新时，返回404的错误
+  - devserver中实现historyApiFallback功能是通过connect-history-api-fallback库的
+- 值
+  - boolean：默认为false,如果为true，在刷新时，返回404错误时，会自动返回到index.html的内容
+  - object：可以配置from来匹配路径，决定跳转到哪一个页面
+
+### 1.5. resolve
+- 简介
+  - 用于设置模块如何被解析
+  - resolve可以帮助webpack从每个require/import语句中农，找到合适的模块代码
+  - webpack使用enhanced-resolve来解析文件路径
+- webpack可以解析三种路径
+  - 绝对路径（完整路径）
+  - 相对路径
+    - 在import/require中给定的相对路径，会拼接上下文路径，来生成模块的绝对路径
+  - 模块路径
+    - 比如`const path = require("path");`中的path
+    - webpack中的resolve配置下，有个modules，即resolve.modules中指定的所有目录检索模块
+      - 默认是node_modules,所以默认会从node_modules中查找文件
+      ```js
+      module.exports = {
+        // ...
+        resolve: {
+          modules: ['node_modules'],  // 默认
+          // 解析的文件类型有默认值的，所以在引入的时候可以不加js
+          // webpack是根据根据extensions查找对应的文件的
+          extensions: [".js", ".json", ".mjs", ".vue", ".ts", ".jsx", ".tsx"],
+          // 设置别名
+          alias: {
+            // 将@设置为项目根目录下的src文件夹
+            "@": path.resolve(__dirname, "./src"),
+            "js": path.resolve(__dirname, "./src/js")
+          }
+        }
+        // ...
+      }
+      ```
+    - 还可以通过设置别名的方式来替换初识模块路径
+- webpack解析文件流程
+  - 确定是文件还是文件夹
+  - 如果是文件
+    - 如果有文件扩展名，则直接打包文件
+    - 否则将使用resolve.modules选项作为文件扩展名解析
+  - 如果是文件夹
+    - 会在文件夹中根据resolve.mainFiles配置选项中指定的文件顺序进行查找
+    - resolve.mainFiles默认值是['index']
+    - 再根据extensions解析扩展名
+    - 比如自己建了一个util文件夹，里面有个index.js
+      - 他会找到util/index
+      - 然后根据extensions配置拼接后缀，即index.js
+      - 最终形成了util/index.js
+    - 这是enhanced-resolve库的解析规则
+- 配置自己的extensions，写法如上
+- 配置自己的别名，写法同上
+
+## 1.6. 如何区分开发环境
+- 分出若干配置文件
+  - webpack.comm.config.js
+  - webpack.dev.config.js
+  - webpack.prod.config.js
+- 修改package.json
+  ```js
+  'build': 'webpack --config ./config/webpack.prod.conf'  // 生产环境
+  'serve': 'webpack --config ./config/webpack.dev.conf'  // 开发环境
+  ```
+- 需要使用webpack官方的插件来引入公共配置
+```js
+// yarn add webpack-merge -D 
+const { merge } = require('webpack-merge');
+const commonConfig = require('./webpack.comm.config');
+
+// 这个merge是一个方法
+module.exports = merge(commonConfig, {
+  mode: "",  // development 或者 production
+})
+
+// 因为xxx-config.js文件在config里面了，所以配置文件中的输出路径等要做修改，从当前目录修改到上一级目录
+```
+
 ## 2. vite2搭建Vue环境
 
 
