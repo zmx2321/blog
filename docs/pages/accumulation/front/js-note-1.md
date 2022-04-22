@@ -2640,3 +2640,53 @@ this.getButtonList(item=> {
     item.classList.remove('factivity')
 })
 ```
+
+## 89. 标签多选
+```js
+setTagStatus(e) {
+    let { target } = e
+    let { textContent } = target
+
+    target.classList.toggle('active')  // 选中效果
+    let activeFlag = target.classList.contains('active')  // 判断是否选中 （选中:true）
+    // console.log(activeFlag, textContent)
+
+    /**
+     * 0：未选中，1：选中  selected
+     * 点击，根据当前textContent匹配数组项，根据activeFlag修改selected字段
+     * 根据当前项修改数组中对应项
+     */
+    // console.log("tagList", this.tagList)
+    this.tagList.forEach(item=> {
+        // 根据当前点击项匹配数组中对应的对象
+        if(item.brandLabel === textContent) {
+            // console.log("数组项", item)  // 数组项
+
+            // true 选中 1 => selected=1
+            if(activeFlag) {
+                item.selected = '1'
+            } else {
+                item.selected = '0'
+            }
+        }
+    })
+},
+// 确认标签
+tagSubmit() {
+    // console.log("确认标签")
+    // console.log("tagList", this.tagList)
+
+    let idStr = ""
+
+    // 遍历标签列表，摘选出所有选中标签   selected=1
+    this.tagList.forEach(item=> {
+        if(item.selected === '1') {
+            idStr += item.id + ','
+        }
+    })
+    // 删除末尾逗号
+    idStr = idStr.substr(0, idStr.length-1)
+
+    console.log(idStr)
+}
+```
