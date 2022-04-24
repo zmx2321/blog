@@ -287,7 +287,7 @@ app.mount('#app')
 - 配置自己的extensions，写法如上
 - 配置自己的别名，写法同上
 
-## 1.6. 如何区分开发环境
+### 1.6. 如何区分开发环境
 - 分出若干配置文件
   - webpack.comm.config.js
   - webpack.dev.config.js
@@ -334,9 +334,122 @@ module.exports = merge(commonConfig, {
     // ......
     ```
 ### 2.3. vue-cli原理简介
-- 当我们执行`yarn serve`时，他执行的是`vue-cli-service serve`
-- 在webpack中我们执行的是`webpack`，他执行的是`webpack.config.js`文件
-- 即在vue脚手架中，将我们之前的`webpack`指令改成了`vue-cli-service`指令
+- 简述
+  - 在package.json中执行`webpack`，他实际上是在node_modules里面去找`bin/webpack`
+  - 同样的，package.json中执行`yarn serve`，即执行`vue-cli-service serve`，他实际上是在node_modules里面去找`bin/vue-cli-service`
+  - `bin/vue-cli-service`文件中require的内容实际上是一个软连接，通过这个文件去查找`vue-cli-service`的真实代码 => `node_modules/@vue/cli-service`
+  - 在`node_modules/@vue/cli-service`文件中，我们可以找到pacaage.json中，在bin对象中，有一段话`"vue-cli-service": "bin/vue-cli-service.js"`
+    - 即我们在执行`yarn serve`的时候，实际上是在执行`vue-cli-service`,即真正执行的是`node_modules/@vue/cli-service/bin/vue-cli-service.js`文件中的内容
+    - 他会从`.../cli-service/lib/Service.js`中拿到Service这个类，然后进行实例化(`new Service`)，最后执行Service类中的`run`方法
+      - 实例化的时候，会自动执行其构造方法(constructor中的方法)
+      - `vue-cli-service.js`中执行的`service.run(command, args, rawArgv)`中，command为传进来的值(serve,build...)，之后传给Service.js中的run方法进行处理
+      - `vue-cli-service serve`，run方法里面command第一个参数就是serve,`vue-cli-service build`,run方法里面command第一个参数就是build
+      - 在Service.js的run方法中，第一个参数为name，即从`vue-cli-service.js`传过来的参数，即从最外层`vue-cli-service serve`传过来的参数，`Service.js`中的run方法通过这个name获取到command这个对象
+      - 再通过解构，获取到command这个对象中的fn函数，最终返回这个函数
+      - 在这个run方法里，最核心的问题是如何获取到这个command对象的 => `let command = this.commands[name]`
+      - 即`this.commands[name]`这段话究竟做了哪些操作
+  - 总结来说，我们在外部执行`yarn serve`，实际上就是在执行Service这个类的构造器和run方法
+  ```js
+  /**
+   * vue-cli-service
+   */
+  const Service = require('../lib/Service')
+  const service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
+
+  service.run(command, args, rawArgv).catch(err => {
+    // ......
+  })
+
+  /**
+   * Service
+   */
+  // service类
+  module.exports = class Service {
+    // 构造器
+    constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
+      this.commands = {}  // commands对象默认为空
+      this.plugins = this.resolvePlugins(plugins, useBuiltIn)  // commands真正赋值的地方，执行实例化类中的方法
+      // 引入插件，并执行
+      this.modes = this.plugins.reduce((modes, { apply: { defaultModes }}) => {
+        return Object.assign(modes, defaultModes)
+      }, {})
+      // ......
+    }
+
+    // ......
+
+    // run方法
+    async run (name, args = {}, rawArgv = []) {
+      // resolve mode
+      // prioritize inline --mode
+      // fallback to resolved default modes from plugins or development if --watch is defined
+      const mode = args.mode || (name === 'build' && args.watch ? 'development' : this.modes[name])
+
+      // --skip-plugins arg may have plugins that should be skipped during init()
+      this.setPluginsToSkip(args)
+
+      // load env variables, load user config, apply plugins
+      this.init(mode)  // 加载环境变量
+
+      args._ = args._ || []
+      let command = this.commands[name]   // 最核心问题，this.commands[name]做了哪些工作
+      if (!command && name) {
+        error(`command "${name}" does not exist.`)
+        process.exit(1)
+      }
+      if (!command || args.help || args.h) {
+        command = this.commands.help
+      } else {
+        args._.shift() // remove command itself
+        rawArgv.shift()
+      }
+      const { fn } = command
+      return fn(args, rawArgv)
+    },
+
+    // 加载插件
+    resolvePlugins (inlinePlugins, useBuiltIn) {
+      const idToPlugin = id => ({
+        id: id.replace(/^.\//, 'built-in:'),
+        apply: require(id)
+      })
+
+      let plugins
+
+      const builtInPlugins = [
+        './commands/serve',
+        './commands/build',
+        './commands/inspect',
+        './commands/help',
+        // config plugins are order sensitive
+        './config/base',
+        './config/css',
+        './config/prod',
+        './config/app'
+      ].map(idToPlugin)
+
+      // ......
+      plugins = builtInPlugins.concat(projectPlugins)
+
+      return plugins
+    },
+    // 加载环境变量
+    init (mode = process.env.VUE_CLI_MODE) {
+      // ...
+
+      // 遍历所有插件
+      this.plugins.forEach(({ id, apply }) => {
+        if (this.pluginsToSkip.has(id)) return
+        apply(new PluginAPI(id, this), this.projectOptions)
+      })
+
+      // ...
+    }
+
+    // ......
+  }
+  
+  ```
 
 ## 3. Vite
 
