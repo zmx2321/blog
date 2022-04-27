@@ -2690,3 +2690,88 @@ tagSubmit() {
     console.log(idStr)
 }
 ```
+
+## 90. 滚动条自动滚动
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>autoScroll</title>
+</head>
+<style>
+  .parent {
+    width: 300px;
+    height: 200px;
+    margin: 0 auto;
+    background: #242424;
+    overflow-y: scroll;
+  }
+  /*设置的子盒子高度大于父盒子，产生溢出效果*/
+  .child {
+    height: auto;
+  }
+  .child li {
+    height: 50px;
+    margin: 2px 0;
+    background: #009678;
+  }
+</style>
+<body>
+  <div id="parent" class="parent">
+    <div id="child1" class="child">
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+      <li>4</li>
+      <li>5</li>
+    </div>
+    <div id="child2" class="child"></div>
+  </div>
+  <script type="text/javascript">
+    (function () {
+      var parent = document.getElementById('parent');
+      var child1 = document.getElementById('child1');
+      var child2 = document.getElementById('child2');
+      child2.innerHTML = child1.innerHTML;
+      setInterval(function () {
+        if(parent.scrollTop >= child1.scrollHeight) {
+          parent.scrollTop = 0;
+        } else {
+          parent.scrollTop++;
+        }
+      }, 20);
+    })()
+  </script>
+</body>
+</html>
+```
+
+## 91. 通过class设置锚点
+```js
+export const setSmoothScroll = target=> {
+  let appDom = document.querySelector('#app')
+  appDom.scrollTop = 50;  // 初始值 - 否则会有bug
+
+  target = target?target:'aaa'; // className
+  const targetDom = document.querySelector('.' + target); // 目标节点class
+  let targetHeight = targetDom.getBoundingClientRect().top - 130  // dom距离顶部距离
+  appDom.scrollTop = targetHeight
+
+  let startTime = +new Date();
+  let duration = 800; //ms
+
+  const run = ()=> {
+    let time = +new Date() - startTime;
+
+    appDom.scrollTo(0,  targetHeight * (time / duration));
+    run.timer = requestAnimationFrame(run);
+
+    if (time >= duration) {
+      appDom.scrollTo(0, targetHeight);
+      cancelAnimationFrame(run.timer);
+    }
+  }
+  requestAnimationFrame(run);
+}
+```
