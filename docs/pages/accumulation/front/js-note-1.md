@@ -2775,3 +2775,40 @@ export const setSmoothScroll = target=> {
   requestAnimationFrame(run);
 }
 ```
+
+## 92. 通过class设置锚点2
+```js
+export const setSmoothScroll = target=> {
+    const scrollBox = document.querySelector('#app')
+    let distance = scrollBox.scrollTop
+    const curTag = document.querySelector('.' + target) // 节点tag
+    const offsetTop = curTag.offsetTop - 120 // 滚动距离
+    let step = offsetTop / 50
+    if (offsetTop > distance) {
+        smoothDown()
+    } else {
+        const newTotal = distance - offsetTop
+        step = newTotal / 50
+        smoothUp()
+    }
+    scrollBox.scrollTop = offsetTop
+    function smoothDown() {
+        if (distance < offsetTop) {
+            distance += step
+            scrollBox.scrollTop = distance
+            setTimeout(smoothDown, 10)
+        } else {
+            scrollBox.scrollTop = offsetTop
+        }
+    }
+    function smoothUp() {
+        if (distance > offsetTop) {
+            distance -= step
+            scrollBox.scrollTop = distance
+            setTimeout(smoothUp, 10)
+        } else {
+            scrollBox.scrollTop = offsetTop
+        }
+    }
+}
+```
