@@ -333,11 +333,11 @@ module.exports = merge(commonConfig, {
     not dead  // 还在维护
     // ......
     ```
-### 2.3. vue-cli原理简介
+### 2.3. vue-cli原理简介1
 - 简述
   - 在package.json中执行`webpack`，他实际上是在node_modules里面去找`bin/webpack`
   - 同样的，package.json中执行`yarn serve`，即执行`vue-cli-service serve`，他实际上是在node_modules里面去找`bin/vue-cli-service`
-  - `bin/vue-cli-service`文件中require的内容实际上是一个软连接，通过这个文件去查找`vue-cli-service`的真实代码 => `node_modules/@vue/cli-service`
+  - `bin/vue-cli-service`文件中require的内容实际上是一个软连接(符号链接)，通过这个文件去查找`vue-cli-service`的真实代码 => `node_modules/@vue/cli-service`
   - 在`node_modules/@vue/cli-service`文件中，我们可以找到pacaage.json中，在bin对象中，有一段话`"vue-cli-service": "bin/vue-cli-service.js"`
     - 即我们在执行`yarn serve`的时候，实际上是在执行`vue-cli-service`,即真正执行的是`node_modules/@vue/cli-service/bin/vue-cli-service.js`文件中的内容
     - 他会从`.../cli-service/lib/Service.js`中拿到Service这个类，然后进行实例化(`new Service`)，最后执行Service类中的`run`方法
@@ -350,7 +350,22 @@ module.exports = merge(commonConfig, {
       - 即`this.commands[name]`这段话究竟做了哪些操作
   - 总结来说，我们在外部执行`yarn serve`，实际上就是在执行Service这个类的构造器和run方法
   ```js
+  // 最外层package.json
+  // 通过webpack的认知，这里执行的东西是vue-cli-service的serve或者build
+  // 即我们是在node_modules/bin中去找vue-cli-service这个指令（实际上是软连接，通过软连接找到真实代码）
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+
+  // 在软连接中，我们可以找到@vue/cli-service这个包，这个包就是vue-cli-service运行的真实代码，在这个包中存在package.json文件
+  // package.json
+  "bin": {
+    "vue-cli-service": "bin/vue-cli-service.js"
+  },
+
   /**
+   * 执行bin指令，找到vue-cli-service.js
    * vue-cli-service
    */
   const Service = require('../lib/Service')
@@ -379,6 +394,7 @@ module.exports = merge(commonConfig, {
     // ......
 
     // run方法
+    // 其实run方法最终是去调用serve.js中registerCommand函数中的异步函数
     async run (name, args = {}, rawArgv = []) {
       // resolve mode
       // prioritize inline --mode
@@ -389,20 +405,16 @@ module.exports = merge(commonConfig, {
       this.setPluginsToSkip(args)
 
       // load env variables, load user config, apply plugins
+      // 在构造器里面加载插件的时候，已经改造过plugins了
       this.init(mode)  // 加载环境变量
 
       args._ = args._ || []
+      // 根据commands对象(默认空对象，但在初始化插件(resolvePlugins)的时候进行了赋值)和传进来的name去获取到command这个对象
       let command = this.commands[name]   // 最核心问题，this.commands[name]做了哪些工作
-      if (!command && name) {
-        error(`command "${name}" does not exist.`)
-        process.exit(1)
-      }
-      if (!command || args.help || args.h) {
-        command = this.commands.help
-      } else {
-        args._.shift() // remove command itself
-        rawArgv.shift()
-      }
+      
+      // ...
+      // 通过解构获取command对象中的fn方法，并最终调用了这个函数
+      // 这个fn，实际上就是serve.js中被new PluginAPI出来的registerCommand函数中第三个参数的函数
       const { fn } = command
       return fn(args, rawArgv)
     },
@@ -416,6 +428,7 @@ module.exports = merge(commonConfig, {
 
       let plugins
 
+      // 可以简单理解成映射，将数组中每一项弄成对象
       const builtInPlugins = [
         './commands/serve',
         './commands/build',
@@ -438,6 +451,13 @@ module.exports = merge(commonConfig, {
       // ...
 
       // 遍历所有插件
+      // 在构造器里面加载插件的时候，已经改造过plugins了，每个plugins有id和apply两个属性
+      // 并且调用apply方法  （require各种插件）
+      // 即在调用apply方法的时候，实际上是在require各种插件，比如(./commands/serve)
+      // 进到./commands/serve.js，即是把module.exports中的箭头函数导出了
+      // 即调用apply方法的时候，实际上是执行require里面js中的箭头函数
+      // 以serve.js举例
+      // 将new PluginAPI(id, this)传到serve.js函数中，而PluginAPI.js中有registerCommand方法，就可以使用api.registerCommand来注册command了
       this.plugins.forEach(({ id, apply }) => {
         if (this.pluginsToSkip.has(id)) return
         apply(new PluginAPI(id, this), this.projectOptions)
@@ -449,7 +469,39 @@ module.exports = merge(commonConfig, {
     // ......
   }
   
+  // 在PluginAPI.js中，
+  class PluginAPI {
+    // ...
+    registerCommand (name, opts, fn) {
+      if (typeof opts === 'function') {
+        fn = opts
+        opts = null
+      }
+      // 将注册得函数传给了serve.js中的registerCommand
+      this.service.commands[name] = { fn, opts: opts || {}}
+    }
+    // ...
+  }
+
+  // serve.js
+  module.exports = (api, options) => {
+    // 这里的异步fn指的是上文run方法最终执行的那个函数，即在serve.js中registerCommand函数的第三个参数
+    api.registerCommand('serve', { /*...*/ }, async function serve (args) {
+      // webpack就是在这里面导入的
+      // webpack可以算是一个函数，拿到webpack的配置文件，然后去调用这个函数
+      const webpack = require('webpack')  
+      const WebpackDevServer = require('webpack-dev-server')
+      // ...
+
+      // 在这里获取webpack所有配置
+      const webpackConfig = api.resolveWebpackConfig()
+    }
+  }
   ```
+![vueym3](/blog/images/accumulation/front/cour-vue3-ts-note/vuecli1.png)
+
+### 2.4. vue-cli原理简介异步fn
+> 
 
 ## 3. Vite
 
