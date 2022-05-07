@@ -6,5 +6,6 @@ module.exports = {
         'interview-ready-2',
         'interview-ready-3',
         'interview-ready-4',
+        'interview-ready-5',
     ]
 };

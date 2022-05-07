@@ -631,10 +631,20 @@ module.exports = merge(commonConfig, {
   }
   ```
 ![vueym3](/blog/images/accumulation/front/cour-vue3-ts-note/vuecli1.png)
-### 2.4. 
-> 
 
-## 3. Vite
+## 3. 认识Vite
+### 3.1. 简述
+- webpack是目前整个前端使用最多的构建工具，但除了webpack，也有其他的一些构建工具，比如rollup、parcel、glup、vite等
+- vite在官方的定位是，下一代前端开发与构建工具，发音: /vit/
+- webpack的不足(下一代开发与构建工具的定义)
+  - 在实际开发中，我们编写的代码往往是不能被浏览器直接识别的，比如es6、ts、vue等，所以我们必须使用构建工具去进行转换和编译，类似的工具有webpack、rollup、parcel
+  - 但随着项目越来越大，需要处理的js越来越多，模块越来越多，构建工具需要很长时间才能开启服务，hmr也需要几秒钟才能在浏览器反应出来
+- vite由两部分组成
+  - 一个开发的服务器
+    - 基于原生ES模块提供了丰富的内建功能，HMR的速度非常快
+  - 一套构建指令
+    - 它使用rollup打开我们的代码，并且他是预配置的，可以输出生成环境的优化过的静态资源
+### 3.2. 
 
 
 ---
