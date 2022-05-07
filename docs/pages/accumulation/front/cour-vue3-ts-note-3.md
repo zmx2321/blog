@@ -333,7 +333,7 @@ module.exports = merge(commonConfig, {
     not dead  // 还在维护
     // ......
     ```
-### 2.3. vue-cli原理简介1
+### 2.3. vue-cli原理简介
 - 简述
   - 在package.json中执行`webpack`，他实际上是在node_modules里面去找`bin/webpack`
   - 同样的，package.json中执行`yarn serve`，即执行`vue-cli-service serve`，他实际上是在node_modules里面去找`bin/vue-cli-service`
@@ -435,6 +435,7 @@ module.exports = merge(commonConfig, {
         './commands/inspect',
         './commands/help',
         // config plugins are order sensitive
+        // 下面这些配置，同样会在初始化的时候执行，这里面包含很多默认的webpack配置
         './config/base',
         './config/css',
         './config/prod',
@@ -464,12 +465,17 @@ module.exports = merge(commonConfig, {
       })
 
       // ...
+
+      this.projectOptions = defaultsDeep(userOptions, defaults())
+
+      // 下面是加载配置文件的一些东西，在下面讲解
+      // ...
     }
 
     // ......
   }
   
-  // 在PluginAPI.js中，
+  // 在PluginAPI.js中
   class PluginAPI {
     // ...
     registerCommand (name, opts, fn) {
@@ -486,6 +492,7 @@ module.exports = merge(commonConfig, {
   // serve.js
   module.exports = (api, options) => {
     // 这里的异步fn指的是上文run方法最终执行的那个函数，即在serve.js中registerCommand函数的第三个参数
+    // 实际上，在resolvePlugins方法里面所有command文件下的js文件都有fn这个方法，这里只是举了serve.js这个例子，实际上，
     api.registerCommand('serve', { /*...*/ }, async function serve (args) {
       // webpack就是在这里面导入的
       // webpack可以算是一个函数，拿到webpack的配置文件，然后去调用这个函数
@@ -494,13 +501,137 @@ module.exports = merge(commonConfig, {
       // ...
 
       // 在这里获取webpack所有配置
+      // 最终的处理config配置的在server.js这个文件中的resolveWebpackConfig方法
+      // 最终所有配置信息会放在chainableConfig文件中，这是默认的配置
+      // 在resolveWebpackConfig方法中会将默认配置(chainableConfig)和自定义的配置进行merge
+      // 在resolveChainableWebpackConfig函数中，this.webpackChainFns实际上是一个个函数，我们在下面展开讲解
       const webpackConfig = api.resolveWebpackConfig()
+
+      // webpack本质上是一个函数，调用这个函数，并且把之前拿到的配置文件传过来，最后拿到编译之后的结果
+      const compiler = webpack(webpackConfig)
+
+      // 将编译后的结果compiler拿过来，放到WebpackDevServer这个类中，这样就拿到这个server了，即serve（webpack serve）
+      const server = new WebpackDevServer(compiler, Object.assign({
+        // ...
+      }, projectDevServerOptions, {
+        // http配置，类似proxy代理之类，这里用的是node的express框架
+      })
+
+      return new Promise((resolve, reject) => {
+        // ... server配置
+
+        // 监听开启一个服务
+        server.listen(port, host, err => {
+          if (err) {
+            reject(err)
+          }
+        })
+      }
+    }
+  }
+
+  // 根据const webpackConfig = api.resolveWebpackConfig()展开讲解
+  // service.js
+  module.exports = class Service {
+    constructor (context, { plugins, pkg, inlineOptions, useBuiltIn } = {}) {
+      // 这些都是自己的配置，只是使用了两种加载方法，chainWebpack或者configureWebpack
+      this.webpackChainFns = []
+      this.webpackRawConfigFns = []
+      // ...
+    }
+
+    // 根据PluginAPI.js中resolveWebpackConfig函数下return this.service.resolveWebpackConfig(chainableConfig)找到service下的resolveWebpackConfig函数
+    resolveWebpackConfig (chainableConfig = this.resolveChainableWebpackConfig()) {
+      // ...
+
+      let config = chainableConfig.toConfig()
+      this.webpackRawConfigFns.forEach(fn => {
+        if (typeof fn === 'function') {
+          // function with optional return value
+          const res = fn(config)
+          if (res) config = merge(config, res)
+        } else if (fn) {
+          // merge literal values
+          config = merge(config, fn)
+        }
+      })
+
+      // 处理merge后的一些东西
+      // ...
+
+      return config
+    }
+
+    // resolveWebpackConfig函数的参数,也是函数，其中this.webpackChainFns是一堆方法，历然后在上面的方法中将他们遍一个个和this.webpackRawConfigFns进行merge
+    resolveChainableWebpackConfig () {
+      const chainableConfig = new Config()
+      // apply chains
+      this.webpackChainFns.forEach(fn => fn(chainableConfig))
+      return chainableConfig
+    }
+
+    // 加载环境变量
+    init (mode = process.env.VUE_CLI_MODE) {
+      // ...
+
+      // 项目的配置
+      const userOptions = this.loadUserOptions()
+      this.projectOptions = defaultsDeep(userOptions, defaults())
+
+      // 全局搜索this.webpackChainFns
+      // 以下都是来自项目中的配置文件(vue.config.js)
+      // 主要就是this.projectOptions.chainWebpack
+      if (this.projectOptions.chainWebpack) {
+        this.webpackChainFns.push(this.projectOptions.chainWebpack)
+      }
+      if (this.projectOptions.configureWebpack) {
+        this.webpackRawConfigFns.push(this.projectOptions.configureWebpack)
+      }
+    }
+
+    // 判断入口配置文件信息,自己写的配置文件
+    loadUserOptions () {
+      // vue.config.c?js
+      let fileConfig, pkgConfig, resolved, resolvedFrom
+      const esm = this.pkg.type && this.pkg.type === 'module'
+
+      const possibleConfigPaths = [
+        process.env.VUE_CLI_SERVICE_CONFIG_PATH,
+        './vue.config.js',
+        './vue.config.cjs'
+      ]
+
+      let fileConfigPath
+      for (const p of possibleConfigPaths) {
+        const resolvedPath = p && path.resolve(this.context, p)
+        // 文件流
+        if (resolvedPath && fs.existsSync(resolvedPath)) {
+          fileConfigPath = resolvedPath
+          break
+        }
+      }
+
+      // ......
+      // if?  resolved = fileConfig
+      // if?  resolved = pkgConfig
+      // ...
+
+      return resolved
+    }
+
+    // 框架默认的webpack配置，我们以config/base为例(在resolvePlugins函数里面的builtInPlugins数组中)
+    // 从上文可见，这里的api实际上来自于PluginAPI，执行了chainWebpack方法，实际上是将这里面的函数push到了service.js里面的webpackChainFns数组中，之后的操作就和上文一样了
+    // 所以this.webpackChainFns中实际上是包含了很多的函数，包括自定义的webpack配置和系统的webpack配置
+    module.exports = (api, options) => {
+      api.chainWebpack(webpackConfig => {
+        // 大多是webpack配置
+        // ...
+      }
     }
   }
   ```
 ![vueym3](/blog/images/accumulation/front/cour-vue3-ts-note/vuecli1.png)
-
-### 2.4. vue-cli原理简介异步fn
+### 2.4. 
 > 
 
 ## 3. Vite
