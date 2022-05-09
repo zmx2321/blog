@@ -28,5 +28,6 @@
 - init函数在对plugins对象数组遍历的时候，将每个对象的id和apply给解构了出来，并执行apply方法，这里的apply实际上代表各自的插件，在apply方法即插件中传入两个配置项作为参数，其中一个配置项是PluginAPI的实例，另一个配置项是项目的配置projectOptions（里面包含但不仅限于vue.config.js的配置），所以在每个插件中，第一个参数为PluginAPI的实例，即源码中的api，所以这个api也就可以使用PluginAPI这个js文件中的所有方法了
 - 在run方法中，我们还看到，它最终返回了一个fn，并调用了他，这个fn是通过command对象解构出来的，再往上看，可以看到command是通过this.commands[name]这个对象被赋值的，所以后面的重点是这个this.commands[name]做了哪些操作
 - 我们知道在vue-cli-service中执行run方法的时候，传过去的值为外部yarn或者npm run后面带的东西，比如serve或者build，即this.commands[name]中的这个name实际上是外部传过来的serve或者build的东西，那this.commands这个对象是什么呢，或者说他是什么时候被赋值的呢
-- 从上文我们知道，
+- 从上文我们知道，实际上我们在构造器里面的resolvePlugins函数给plugins赋值之后，对象数组中的每个apply属性的值实际上代表的就是一个个被require的模块，在执行init方法的时候，遍历了这个plugins数组，并apply了一个个插件，并且看模块中的module.exports可以知道，实际上是执行了一个个模块里面的方法，在这个方法中还将实例化的PluginAPI这个类当作参数传入，实际上是一个个模块里面的第一个参数api就是这个PluginAPI
+- 我们以commands/serve为例，
 
