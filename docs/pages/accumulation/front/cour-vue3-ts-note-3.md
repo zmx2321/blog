@@ -337,7 +337,7 @@ module.exports = merge(commonConfig, {
 - 简述
   - 在package.json中执行`webpack`，他实际上是在node_modules里面去找`bin/webpack`
   - 同样的，package.json中执行`yarn serve`，即执行`vue-cli-service serve`，他实际上是在node_modules里面去找`bin/vue-cli-service`
-  - `bin/vue-cli-service`文件中require的内容实际上是一个软连接(符号链接)，通过这个文件去查找`vue-cli-service`的真实代码 => `node_modules/@vue/cli-service`
+  - `bin/vue-cli-service`文件中require的内容实际上是一个软链接(符号链接)，通过这个文件去查找`vue-cli-service`的真实代码 => `node_modules/@vue/cli-service`
   - 在`node_modules/@vue/cli-service`文件中，我们可以找到pacaage.json中，在bin对象中，有一段话`"vue-cli-service": "bin/vue-cli-service.js"`
     - 即我们在执行`yarn serve`的时候，实际上是在执行`vue-cli-service`,即真正执行的是`node_modules/@vue/cli-service/bin/vue-cli-service.js`文件中的内容
     - 他会从`.../cli-service/lib/Service.js`中拿到Service这个类，然后进行实例化(`new Service`)，最后执行Service类中的`run`方法
