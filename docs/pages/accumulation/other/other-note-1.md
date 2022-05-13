@@ -150,3 +150,11 @@ git config user.email
 ## 10. push文件过大
 - `git config --global http.postBuffer 157286400`
   - 当推送大量数据时（初始推送大型存储库，使用非常大的文件进行更改）可能需要 http.postBuffer 在 git 客户端 （而不是服务器）上设置更高的 设置 ；将 Git 缓冲区大小增加到 repo 的最大单个文件大小
+
+  ## 20. 关于忽略文件.gitignore
+  - 我们发现直接将.env.development放入.gitignore不起作用
+  - 原因是.gitignore只能忽略那些原来没有被追踪的文件，如果某些文件已经被纳入了版本管理中，则修改.gitignore是无效的
+  - git清除本地缓存命令
+    - git rm .env.development --cached
+  - git commit提交代码
+  - 此时随意修改.env.development文件，就不会受到git的跟踪了，这样每次提交都不会提交.env.development的修改到git上了
