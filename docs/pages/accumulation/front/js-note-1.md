@@ -2812,3 +2812,10 @@ export const setSmoothScroll = target=> {
     }
 }
 ```
+
+## 93. 浏览器地址逆解析
+```js
+let { hash } = window.location
+let index = hash.lastIndexOf('=')
+this.username = decodeURIComponent(hash.substring(index+1, hash.length))
+```
