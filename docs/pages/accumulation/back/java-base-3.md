@@ -864,54 +864,54 @@ package eg.arr.objectArray_3;
 
 public class Student {
 	// 成员变量
-		private String name;
-		private int age;
+  private String name;
+  private int age;
 
-		// 构造方法
-		public Student() {
-			super();
-		}
+  // 构造方法
+  public Student() {
+    super();
+  }
 
-		public Student(String name, int age) {
-			super();
-			this.name = name;
-			this.age = age;
-		}
+  public Student(String name, int age) {
+    super();
+    this.name = name;
+    this.age = age;
+  }
 
-		// 成员方法
-		// getXxx()/setXxx()
-		public String getName() {
-			return name;
-		}
+  // 成员方法
+  // getXxx()/setXxx()
+  public String getName() {
+    return name;
+  }
 
-		public void setName(String name) {
-			this.name = name;
-		}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-		public int getAge() {
-			return age;
-		}
+  public int getAge() {
+    return age;
+  }
 
-		public void setAge(int age) {
-			this.age = age;
-		}
+  public void setAge(int age) {
+    this.age = age;
+  }
 
-		@Override
-		public String toString() {
-			return "Student [name=" + name + ", age=" + age + "]";
-		}
-		
-		//返回Student对象数组(默认学生)
-		/*public Student[] getStudent() {
-		    Student[] stu = new Student[3];
-			Student stu1 = new Student("张三", 18);
-			Student stu2 = new Student("李四", 45);
-			Student stu3 = new Student("王五", 33);
-			stu[0] = stu1;
-			stu[1] = stu2;
-			stu[2] = stu3;
-			return stu;	
-		}*/
+  @Override
+  public String toString() {
+    return "Student [name=" + name + ", age=" + age + "]";
+  }
+  
+  //返回Student对象数组(默认学生)
+  /*public Student[] getStudent() {
+      Student[] stu = new Student[3];
+    Student stu1 = new Student("张三", 18);
+    Student stu2 = new Student("李四", 45);
+    Student stu3 = new Student("王五", 33);
+    stu[0] = stu1;
+    stu[1] = stu2;
+    stu[2] = stu3;
+    return stu;	
+  }*/
 }
 
 // objectArray
@@ -974,56 +974,54 @@ public class objectArray {
 package eg.fn.reglog_1;
 
 public class UserData {
-    private String username;
-    private String password;
+  private String username;
+  private String password;
 
-    public UserData() {
+  public UserData() {
+  }
+
+  public UserData(String username, String password) {
+    super();
+    this.username = username;
+    this.password = password;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+
+    if ((obj != null) && (obj.getClass() == UserData.class)) {
+      UserData userData = (UserData) obj;
+
+      if ((this.getUsername().equals(userData.getUsername()))
+          && (this.getPassword().equals(userData.getPassword())))
+        return true;
     }
 
-    public UserData(String username, String password) {
-        super();
-        this.username = username;
-        this.password = password;
-    }
+    return false;
+  }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if (this == obj)
-            return true;
-
-        if ((obj != null) && (obj.getClass() == UserData.class)) {
-            UserData userData = (UserData) obj;
-
-            if ((this.getUsername().equals(userData.getUsername()))
-                    && (this.getPassword().equals(userData.getPassword())))
-                return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return "UserData [username=" + username + ", password=" + password + "]";
-    }
-
+  @Override
+  public String toString() {
+    return "UserData [username=" + username + ", password=" + password + "]";
+  }
 }
 // UserDataArray
 package eg.fn.reglog_1;
@@ -1036,61 +1034,60 @@ public class UserDataArray {
     }
 
     public UserDataArray(int maxNum) {
-        userDatas = new UserData[maxNum];
-        userNums = 0;
+      userDatas = new UserData[maxNum];
+      userNums = 0;
     }
 
     // 获取用户的注册数
     public int getUserNums() {
-        return userNums;
+      return userNums;
     }
 
     // 增加用户
     public void insertUserData(UserData userData) {
-        userDatas[userNums] = userData;
-        userNums++;
+      userDatas[userNums] = userData;
+      userNums++;
     }
 
     // 查找用户
     public boolean findUserData(UserData userData) {
-
-        for (int index = 0; index < userNums; index++) {
-            if (userData.equals(userDatas[index]))
-                return true;
-        }
-        return false;
+      for (int index = 0; index < userNums; index++) {
+          if (userData.equals(userDatas[index]))
+              return true;
+      }
+      return false;
     }
 
     // 显示用户
     public void displayUserData() {
-        for (int index = 0; index < userNums; index++)
-            System.out.println(userDatas[index].toString());
+      for (int index = 0; index < userNums; index++)
+        System.out.println(userDatas[index].toString());
     }
 
     // 删除用户
     public boolean deleteUserData(UserData userData) {
-        int goalPos;
+      int goalPos;
 
-        // 先遍历整个数组，获取需要删除的对象的位置
-        for (goalPos = 0; goalPos < userNums; goalPos++)
-            if (userData.equals(userDatas[goalPos]))
-                break;
+      // 先遍历整个数组，获取需要删除的对象的位置
+      for (goalPos = 0; goalPos < userNums; goalPos++)
+          if (userData.equals(userDatas[goalPos]))
+              break;
 
-        if (goalPos == userNums)
-            return false;
-        else {
-            for (int i = goalPos; i < userNums; i++)
-                userDatas[i] = userDatas[i + 1];
+      if (goalPos == userNums)
+          return false;
+      else {
+          for (int i = goalPos; i < userNums; i++)
+              userDatas[i] = userDatas[i + 1];
 
-            userNums--;
-            return true;
-        }
+          userNums--;
+          return true;
+      }
     }
     
     public static void main(String[] args) {
     	UserDataArray aa = new UserDataArray();
     	aa.displayUserData();
-	}
+	  }
 }
 // UserLoginRegisterApp
 package eg.fn.reglog_1;
@@ -1098,49 +1095,28 @@ package eg.fn.reglog_1;
 import java.util.Scanner;
 
 public class UserLoginRegisterApp {
+  public static final int maxUserNums = 3;// 设置最大用户数
 
-    public static final int maxUserNums = 3;// 设置最大用户数
-
-    @SuppressWarnings("resource")
+  @SuppressWarnings("resource")
 	public static void main(String[] args) {
 
-        // 初始化一个长度为3的UserData对象的数组
-        UserDataArray userDataArray = new UserDataArray(maxUserNums);
+      // 初始化一个长度为3的UserData对象的数组
+      UserDataArray userDataArray = new UserDataArray(maxUserNums);
 
-        while (true) {
-            System.out.println("欢迎来到乌托邦！");
-            System.out.println("1.注册\t2.登陆\t3.退出");
-            System.out.print("请选择你的操作:");
+      while (true) {
+        System.out.println("欢迎来到乌托邦！");
+        System.out.println("1.注册\t2.登陆\t3.退出");
+        System.out.print("请选择你的操作:");
 
-            Scanner scUserInput = new Scanner(System.in);
-            String userOerator = scUserInput.nextLine();
+        Scanner scUserInput = new Scanner(System.in);
+        String userOerator = scUserInput.nextLine();
 
-            switch (userOerator) {
-            case "1":// 注册环节
-                if (userDataArray.getUserNums() == maxUserNums) {
-                    System.out.println("不好意思，注册名额已经注册满了！");
-                    System.out.println("现在将转向主界面！");
-                } else {
-                    UserData userData = new UserData();
-                    System.out.print("请输入用户名:");
-                    String userName = scUserInput.nextLine();
-                    System.out.print("请输入密码:");
-                    String userPwd = scUserInput.nextLine();
-                    userData.setUsername(userName);
-                    userData.setPassword(userPwd);
-
-                    if (!userDataArray.findUserData(userData)) {
-                        userDataArray.insertUserData(userData);
-                        System.out.println("恭喜你注册成功！现在请重新登陆下！");
-                    } else {
-                        System.out.println("该用户已存在，请登陆或者更换用户名");
-                    }
-
-                    System.out.println("现在跳转到主界面。。。。");
-                }
-                break;
-
-            case "2":// 登陆环节
+        switch (userOerator) {
+          case "1":// 注册环节
+            if (userDataArray.getUserNums() == maxUserNums) {
+                System.out.println("不好意思，注册名额已经注册满了！");
+                System.out.println("现在将转向主界面！");
+            } else {
                 UserData userData = new UserData();
                 System.out.print("请输入用户名:");
                 String userName = scUserInput.nextLine();
@@ -1149,32 +1125,50 @@ public class UserLoginRegisterApp {
                 userData.setUsername(userName);
                 userData.setPassword(userPwd);
 
-                if (userDataArray.findUserData(userData)) {
-                    System.out.println("恭喜登陆成功，开始尽情享受�潘可�活吧！");
-                    System.exit(0);
+                if (!userDataArray.findUserData(userData)) {
+                    userDataArray.insertUserData(userData);
+                    System.out.println("恭喜你注册成功！现在请重新登陆下！");
                 } else {
-                    System.out.println("用户名和密码不匹配，请重新登陆或注册！");
-                    System.out.println("现在跳转到主界面。。。。");
+                    System.out.println("该用户已存在，请登陆或者更换用户名");
                 }
-                break;
 
-            case "3":
-                System.out.println("你确定要退出么？y or n?");
-                String userChoose = scUserInput.nextLine();
-                if ("y".equals(userChoose)) {
-                    System.out.println("既然你决心离去，我也不好挽留！！！");
-                    System.exit(0);
-                } else {
-                    System.out.println("我知道你是选错了。。。。");
-                    System.out.println("请重新做出你的选择！！！！");
-                }
-                break;
-            default:
-                System.out.println("你输入了非法字符，我崩溃了！！！！！");
-                System.exit(-1);
-                break;
+                System.out.println("现在跳转到主界面。。。。");
             }
+            break;
+          case "2":// 登陆环节
+            UserData userData = new UserData();
+            System.out.print("请输入用户名:");
+            String userName = scUserInput.nextLine();
+            System.out.print("请输入密码:");
+            String userPwd = scUserInput.nextLine();
+            userData.setUsername(userName);
+            userData.setPassword(userPwd);
+
+            if (userDataArray.findUserData(userData)) {
+                System.out.println("恭喜登陆成功，开始尽情享受�潘可�活吧！");
+                System.exit(0);
+            } else {
+                System.out.println("用户名和密码不匹配，请重新登陆或注册！");
+                System.out.println("现在跳转到主界面。。。。");
+            }
+            break;
+          case "3":
+            System.out.println("你确定要退出么？y or n?");
+            String userChoose = scUserInput.nextLine();
+            if ("y".equals(userChoose)) {
+                System.out.println("既然你决心离去，我也不好挽留！！！");
+                System.exit(0);
+            } else {
+                System.out.println("我知道你是选错了。。。。");
+                System.out.println("请重新做出你的选择！！！！");
+            }
+            break;
+          default:
+            System.out.println("你输入了非法字符，我崩溃了！！！！！");
+            System.exit(-1);
+            break;
         }
+      }
     }
 }
 ```
@@ -1186,537 +1180,250 @@ public class UserLoginRegisterApp {
 package eg.fn.UserManager;
 
 public class User {
-    private String username;
-    private String nickname;
-    private String password;
-    private int age;
-    
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public String getNickname() {
-        return nickname;
-    }
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public int getAge() {
-        return age;
-    }
-    public void setAge(int age) {
-        this.age = age;
-    }
-    
-    public User(String username, String password, String nickname, int age) {
-        super();
-        this.username = username;
-        this.nickname = nickname;
-        this.password = password;
-        this.age = age;
-    }
-    
-    @Override
-    public String toString() {
-        return "User [username=" + username + ", nickname=" + nickname
-                + ", password=" + password + ", age=" + age + "]";
-    }
-    
+  private String username;
+  private String nickname;
+  private String password;
+  private int age;
+  
+  public String getUsername() {
+    return username;
+  }
+  public void setUsername(String username) {
+    this.username = username;
+  }
+  public String getNickname() {
+    return nickname;
+  }
+  public void setNickname(String nickname) {
+    this.nickname = nickname;
+  }
+  public String getPassword() {
+    return password;
+  }
+  public void setPassword(String password) {
+    this.password = password;
+  }
+  public int getAge() {
+    return age;
+  }
+  public void setAge(int age) {
+    this.age = age;
+  }
+  
+  public User(String username, String password, String nickname, int age) {
+    super();
+    this.username = username;
+    this.nickname = nickname;
+    this.password = password;
+    this.age = age;
+  }
+  
+  @Override
+  public String toString() {
+    return "User [username=" + username + ", nickname=" + nickname
+            + ", password=" + password + ", age=" + age + "]";
+  }
 }
 
 // UserManager
 package eg.fn.UserManager;
 
 public class UserManager {
-    User[] users;
-    private int nums=0;
-    
-    
-    public UserManager(int size) {
-        users = new User[size];
-    }
+  User[] users;
+  private int nums=0;
+  
+  
+  public UserManager(int size) {
+    users = new User[size];
+  }
 
-    public void add(User user) {
-        //判断数组内存是否有剩余
-        if(nums>=users.length) {
-            System.out.println("对不起，用户数据内存已满，无法再添加"+user.getUsername()+"信息！");
-            return;
-        }
-        
-        //判断是否存在该用户数据
-        User u = this.load(user.getUsername());
-        if(u!=null) {
-            System.out.println("对不起，该用户:"+u.getUsername()+"数据已存在！");
-            return;
-        }
-        
-        //添加数据
-        users[nums] = user;
-        nums++;
-        System.out.println("用户:"+user.getUsername()+"数据已添加成功！");
-        return;
-        
+  public void add(User user) {
+    //判断数组内存是否有剩余
+    if(nums>=users.length) {
+      System.out.println("对不起，用户数据内存已满，无法再添加"+user.getUsername()+"信息！");
+      return;
     }
     
-    public User load(String username) {
-        for(int i=0;i<nums;i++) {
-            User u = users[i];
-            if(username.equals(u.getUsername())) {
-                return u;
-            }
-        }
-        return null;
+    //判断是否存在该用户数据
+    User u = this.load(user.getUsername());
+    if(u!=null) {
+      System.out.println("对不起，该用户:"+u.getUsername()+"数据已存在！");
+      return;
     }
     
-    public void delete(String username) {
-        int index=-1;
-        //通过index索引找到需要删除的数组下标值
-        for(int i=0;i<nums;i++) {
-            User u = users[i];
-            if(username.equals(u.getUsername())) {
-                index=i;
-                break;
-            }
-        }
-        
-        if(index==-1) {
-            System.out.println("对不起，要删除的用户："+username+"不存在！");
-            return;
-        }
-        
-        //从index位置开始，后一个数组元素赋值到前一个数组元素中，最后再将users[nums]=null，nums自减
-        for(int i=index+1;i<nums;i++) {
-            users[i-1] = users[i];
-        }
-        users[nums-1]=null;
-        nums--;
-        System.out.println("用户："+username+"数据删除成功！");
-        return;
-        
+    //添加数据
+    users[nums] = user;
+    nums++;
+    System.out.println("用户:"+user.getUsername()+"数据已添加成功！");
+    return;
+  }
+  
+  public User load(String username) {
+    for(int i=0;i<nums;i++) {
+      User u = users[i];
+      if(username.equals(u.getUsername())) {
+        return u;
+      }
+    }
+    return null;
+  }
+  
+  public void delete(String username) {
+    int index=-1;
+    //通过index索引找到需要删除的数组下标值
+    for(int i=0;i<nums;i++) {
+      User u = users[i];
+      if(username.equals(u.getUsername())) {
+        index=i;
+        break;
+      }
     }
     
-    public void add(int pos,User user) {
-        //首先检查pos是否合法
-        if(pos<0||pos>=nums) {
-            System.out.println("对不起，用户"+user.getUsername()+"信息添加位置不正确！");
-            return;
-        }
-        
-        //判断pos是否可以插入，即nums个数据已经存满了就不可以再增加新数据
-        if(nums>=users.length) {
-            System.out.println("对不起，内存已满，无法再添加"+user.getUsername()+"信息！");
-            return;
-        }
-        
-        //检查是否已存在user对象
-        User u = this.load(user.getUsername());
-        if(u!=null) {
-            System.out.println("对不起，该用户:"+u.getUsername()+"数据已存在！");
-            return;
-        }
-        
-        for(int i=nums;i>pos;i--) {
-            //前面有nums>=users.length判断，因此users[nums]空间存在，可以被前面的元素赋值
-            users[i] = users[i-1];
-        }
-        
-        users[pos] = user;
-        nums++;
-        System.out.println("用户:"+user.getUsername()+"数据已添加成功！");
-        return;
+    if(index==-1) {
+      System.out.println("对不起，要删除的用户："+username+"不存在！");
+      return;
     }
     
-    public void update(User user) {
-        //检查是否存在该用户数据
-        User u = this.load(user.getUsername());
-        if(u==null) {
-            System.out.println("对不起，该用户："+user.getUsername()+"数据不存在！");
-            return;
-        }
-        
-        //更新数据
-        u.setNickname(user.getNickname());
-        u.setPassword(user.getPassword());
-        u.setAge(user.getAge());
-        System.out.println("用户:"+user.getUsername()+"数据已更新成功！");
-        return;
+    //从index位置开始，后一个数组元素赋值到前一个数组元素中，最后再将users[nums]=null，nums自减
+    for(int i=index+1;i<nums;i++) {
+      users[i-1] = users[i];
+    }
+    users[nums-1]=null;
+    nums--;
+    System.out.println("用户："+username+"数据删除成功！");
+    return;
+  }
+  
+  public void add(int pos,User user) {
+    //首先检查pos是否合法
+    if(pos<0||pos>=nums) {
+      System.out.println("对不起，用户"+user.getUsername()+"信息添加位置不正确！");
+      return;
     }
     
-    public void login(String username,String password) {
-        //判断是否存在 username 用户名
-        User u = this.load(username);
-        
-        if(u==null) {
-            System.out.println("用户名："+username+"不正确，请检查输入！");
-            return;
-        }
-        
-        //判断密码是否正确
-        if(!password.equals(u.getPassword())) {
-            System.out.println("密码不正确，请检查输入！");
-            return;
-        }                
-        //成功登录系统
-        System.out.println("欢迎"+username+"登录系统！");
-        return;
+    //判断pos是否可以插入，即nums个数据已经存满了就不可以再增加新数据
+    if(nums>=users.length) {
+      System.out.println("对不起，内存已满，无法再添加"+user.getUsername()+"信息！");
+      return;
     }
     
-    public User[] list() {
-        User[] tus = new User[nums];    //只遍历数组元素中存有有效元素值的数组
-        for(int i=0;i<nums;i++) {
-            tus[i] = users[i];
-        }
-        return tus;
+    //检查是否已存在user对象
+    User u = this.load(user.getUsername());
+    if(u!=null) {
+      System.out.println("对不起，该用户:"+u.getUsername()+"数据已存在！");
+      return;
     }
+    
+    for(int i=nums;i>pos;i--) {
+      //前面有nums>=users.length判断，因此users[nums]空间存在，可以被前面的元素赋值
+      users[i] = users[i-1];
+    }
+    
+    users[pos] = user;
+    nums++;
+    System.out.println("用户:"+user.getUsername()+"数据已添加成功！");
+    return;
+  }
+  
+  public void update(User user) {
+    //检查是否存在该用户数据
+    User u = this.load(user.getUsername());
+    if(u==null) {
+      System.out.println("对不起，该用户："+user.getUsername()+"数据不存在！");
+      return;
+    }
+    
+    //更新数据
+    u.setNickname(user.getNickname());
+    u.setPassword(user.getPassword());
+    u.setAge(user.getAge());
+    System.out.println("用户:"+user.getUsername()+"数据已更新成功！");
+    return;
+  }
+  
+  public void login(String username,String password) {
+    //判断是否存在 username 用户名
+    User u = this.load(username);
+    
+    if(u==null) {
+      System.out.println("用户名："+username+"不正确，请检查输入！");
+      return;
+    }
+    
+    //判断密码是否正确
+    if(!password.equals(u.getPassword())) {
+      System.out.println("密码不正确，请检查输入！");
+      return;
+    }                
+    //成功登录系统
+    System.out.println("欢迎"+username+"登录系统！");
+    return;
+  }
+  
+  public User[] list() {
+    User[] tus = new User[nums];    //只遍历数组元素中存有有效元素值的数组
+    for(int i=0;i<nums;i++) {
+      tus[i] = users[i];
+    }
+    return tus;
+  }
 }
 
 // TestUser
 package eg.fn.UserManager;
 
 public class TestUser {
-
-    public static void main(String[] args) {
-        UserManager um = new UserManager(5);
-        um.add(new User("zs","123","张三",24));    //添加信息成功
-        um.add(new User("ls","123","李四",22));    //添加信息成功
-        um.add(new User("ls","123","李四",23));    //添加不成功，已存在
-        um.add(new User("ww","123","王五",21));    //添加信息成功
-        um.add(new User("zl","123","赵六",21));    //添加信息成功
-        um.add(new User("zq","123","朱七",22));    //添加信息成功
-        
-        um.add(new User("S","123","大S",22));    //满员了，添加信息不成功
-        
-        System.out.println("------分割线------");
-        
-        um.delete("ls");    //删除ls
-        um.delete("ls1231");    //提示要删除的用户名不存在
-        
-        System.out.println("------分割线------");
-        
-        um.update(new User("S","1234","大S",23));    //提示要更新的用户名不存在
-        um.update(new User("zq","1234","朱七",23));    //提示zq信息更新成功
-        
-        System.out.println("------分割线------");
-        
-        um.login("zs1", "1234");    //提示用户名错误
-        um.login("zs1", "123412");    //提示用户名错误
-        um.login("zs", "123412");    //提示密码错误
-        um.login("zs", "123");        //提示成功登陆系统
-        
-        um.login("ls", "123");    //用户名不存在，提示错误
-        
-        System.out.println("------分割线------");
-        
-        User[] u = um.list();
-        for(int i=0;i<u.length;i++) {
-            System.out.println(u[i]);
-        }
-        
-        System.out.println("------分割线------");
-        
-        um.add(1,new User("S","123","大S",22));
-        um.delete("ww");
-        um.add(1,new User("Y","123","大Y",22));
-        um.delete("Y");
-        um.add(3,new User("s","123","小S",22));
-        
-        System.out.println("------分割线------");
-        
-        User[] u2 = um.list();
-        for(int i=0;i<u2.length;i++) {
-            System.out.println(u2[i]);
-        }
+  public static void main(String[] args) {
+    UserManager um = new UserManager(5);
+    um.add(new User("zs","123","张三",24));    //添加信息成功
+    um.add(new User("ls","123","李四",22));    //添加信息成功
+    um.add(new User("ls","123","李四",23));    //添加不成功，已存在
+    um.add(new User("ww","123","王五",21));    //添加信息成功
+    um.add(new User("zl","123","赵六",21));    //添加信息成功
+    um.add(new User("zq","123","朱七",22));    //添加信息成功
+    
+    um.add(new User("S","123","大S",22));    //满员了，添加信息不成功
+    
+    System.out.println("------分割线------");
+    
+    um.delete("ls");    //删除ls
+    um.delete("ls1231");    //提示要删除的用户名不存在
+    
+    System.out.println("------分割线------");
+    
+    um.update(new User("S","1234","大S",23));    //提示要更新的用户名不存在
+    um.update(new User("zq","1234","朱七",23));    //提示zq信息更新成功
+    
+    System.out.println("------分割线------");
+    
+    um.login("zs1", "1234");    //提示用户名错误
+    um.login("zs1", "123412");    //提示用户名错误
+    um.login("zs", "123412");    //提示密码错误
+    um.login("zs", "123");        //提示成功登陆系统
+    
+    um.login("ls", "123");    //用户名不存在，提示错误
+    
+    System.out.println("------分割线------");
+    
+    User[] u = um.list();
+    for(int i=0;i<u.length;i++) {
+      System.out.println(u[i]);
     }
-
+    
+    System.out.println("------分割线------");
+    
+    um.add(1,new User("S","123","大S",22));
+    um.delete("ww");
+    um.add(1,new User("Y","123","大Y",22));
+    um.delete("Y");
+    um.add(3,new User("s","123","小S",22));
+    
+    System.out.println("------分割线------");
+    
+    User[] u2 = um.list();
+    for(int i=0;i<u2.length;i++) {
+      System.out.println(u2[i]);
+    }
+  }
 }
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
-```
-
-## 7. 问题7
-> 
-```java
-
 ```
