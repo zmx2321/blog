@@ -1296,3 +1296,583 @@ public class Wrap {
 	}
 }
 ```
+
+## 39. 问题39
+### 39.1. 二维数组示例1
+```java
+package eg.arr.twoDimensionalArray;
+
+public class TwoDimensionalArray_1 {
+	public static void main(String[] args){
+    int[][] num = {{1,2,3},{4,5,6}};
+    for( int i=0 ; i< num. length ; i++){
+      for( int j=0 ; j< num[ i]. length ; j++){
+        System. out.print( num[ i][ j]);
+      }
+      System.out.println();
+    }
+	}
+}
+```
+### 39.2. 二维数组示例2
+```java
+package eg.arr.twoDimensionalArray;
+
+public class TwoDimensionalArray_2 {
+	public static void main(String[] args) {
+		int[][] array = new int[3][];
+		//每个高维的数组（一维数组）指向一个低维的int数组
+		array[0] = new int[2];
+		array[1] = new int[3];
+		array[2] = new int[4];
+		
+		//给低维的数组进行赋值
+		array[0][0] = 1;
+		array[0][1] = 2;
+		
+		array[1][0] = 3;
+		array[1][1] = 4;
+		array[1][2] = 5;
+		
+		array[2][0] = 6;
+		array[2][1] = 7;
+		array[2][2] = 8;
+		array[2][3] = 9;
+		
+		for(int i=0; i<array.length; i++){
+			for(int j=0; j<array[i].length; j++){
+				if((i==array.length-1)&&(j==array[i].length-1)){
+					System.out.print(array[i][j]);
+				}else{
+					System.out.print(array[i][j] + ",");
+				}
+			}
+		}
+	}
+}
+```
+### 39.3. 二维数组示例3
+```java
+package eg.arr.twoDimensionalArray;
+
+public class TwoDimensionalArray_3 {
+	public static void main(String[] args) {
+		int arr[][] = { { 4, 3, 7 }, { 1, 5, 5 } };
+		String total="";
+		for (int i = 0; i <2; i++) {
+			for (int j = 0; j < 3; j++) {
+				total+=arr[i][j]+",";
+			}
+		}
+		System.out.println(total.substring(0,total.length()-1));
+	}
+}
+```
+
+## 40. 问题40
+> 编写程序在控制台输出斐波那契数列前20项，每输出5个数换行
+### 40.1. 定义三个变量方法  
+```java
+package eg.cal.Tibonacci;
+
+public class Tibonacci_1 {
+	// 定义三个变量方法  
+  public static void main(String[] args) {  
+    int a = 1, b = 1, c = 0;  
+    System.out.println("斐波那契数列前20项为：");  
+    System.out.print(a + "\t" + b + "\t");  
+    //因为前面还有两个1、1 所以i<=18  
+    for (int i = 1; i <= 18; i++) {  
+      c = a + b;  
+      a = b;  
+      b = c;  
+      System.out.print(c + "\t");  
+      if ((i + 2) % 5 == 0) {
+        System.out.println(); 
+      }
+    }  
+  }  
+}
+```
+### 40.2. 定义数组方法
+```java
+package eg.cal.Tibonacci;
+
+public class Tibonacci_2 {
+	// 定义数组方法  
+  public static void main(String[] args) {  
+    int arr[] = new int[20];  
+    arr[0] = arr[1] = 1;  
+    for (int i = 2; i < arr.length; i++) {  
+      arr[i] = arr[i - 1] + arr[i - 2];  
+    }  
+    System.out.println("斐波那契数列的前20项如下所示：");  
+    for (int i = 0; i < arr.length; i++) {  
+      if (i % 5 == 0) {
+        System.out.println();  
+      }
+      System.out.print(arr[i] + "\t");  
+    }  
+  }  
+}
+```
+### 40.3. 定义数组方法
+```java
+package eg.cal.Tibonacci;
+
+public class Tibonacci_3 {
+	// 使用递归方法  
+  private static int getFibo(int i) {  
+    if (i == 1 || i == 2)  
+      return 1;  
+    else  
+      return getFibo(i - 1) + getFibo(i - 2);  
+  }  
+
+  public static void main(String[] args) {  
+    System.out.println("斐波那契数列的前20项为：");  
+    for (int j = 1; j <= 20; j++) {  
+      System.out.print(getFibo(j) + "\t");  
+      if (j % 5 == 0)  
+        System.out.println();  
+    }  
+  }  
+}
+```
+### 40.4. 其他  
+> 产生10个斐波那契数列并将其存入数组并打印出来：1,1,2,3,5,8...，要求存入和输出单独写方法
+```java
+package eg.cal.Tibonacci;
+
+public class Tibonacci_4 {
+	public static void main(String[] args) {
+		int[] res = new int[10];  //用来将求出的结果存入此数组
+		
+		res[0] = res[1] = 1;  //斐波那契数列前两项值
+		
+		//求出第三到10项的斐波那契数列值
+		for (int i = 2; i < res.length; i++) {  
+			res[i] = res[i - 1] + res[i - 2];  
+    }
+		
+		//遍历数组并输出，用逗号隔开
+    System.out.print("斐波那契数列的前10项如下所示：");  
+    for (int i = 0; i < res.length; i++) {
+      if(i == res.length-1){
+        System.out.print(res[i]);
+      }else{
+        System.out.print(res[i] + ","); 
+      }
+    }
+	}
+}
+```
+
+## 41. 问题41
+> 计算n的阶乘 
+```java
+package eg.degin.factorial;
+
+import java.util.Scanner;
+
+public class Factorial {
+	@SuppressWarnings("resource")
+	public static void main(String[] arg) {  
+      Scanner scanner = new Scanner(System.in);  
+      int n = scanner.nextInt();  
+      System.out.println(factorial(n));  
+    }  
+    /** 
+     * 使用递归方法计算n的阶乘 
+     *  
+     * @param n 
+     * @return 
+     */  
+    private static long factorial(int n) {  
+      if (n == 0) {  
+        System.out.println(n + "! = " + 1);  
+        return 1;  
+      } else {  
+        long num = n * factorial(n - 1);  
+        System.out.println(n + "! = " + num);  
+        return num;  
+      }  
+    }  
+  
+    /** 
+     * 使用循环方式计算n的阶乘 
+     *  
+     * @param n 
+     * @return 
+     */  
+    @SuppressWarnings("unused")
+	  private long test(int n) {  
+      long num = 1;  
+      for (int i = 1; i <= n; i++) {  
+        num *= i;  
+      }  
+      return num;  
+    }  
+}
+```
+
+## 42. 问题42
+> 判断是否为数字
+### 42.1. 方法一
+```java
+package eg.ease.execepIsNum;
+
+import java.util.Scanner;
+
+public class IsNum_1 {
+	public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("输入x：");
+    String x;
+    do {
+        try {
+          x = sc.nextLine();
+          if (Integer.valueOf(x) instanceof Integer) {
+            System.out.println("输入为整数,程序结束.");
+            sc.close();
+            break;
+          } else {
+            x = sc.nextLine();
+          }
+        } catch (Exception e) {
+          System.out.println("请输入整数.");
+        }
+    } while (true);
+  }
+}
+```
+### 42.2. 方法二
+```java
+package eg.ease.execepIsNum;
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class IsNum_2 {
+	public static void main(String[] args) {
+		int num = 0;  //用来保存一个整数
+		System.out.print("请输入一个整数：");
+		
+		do{
+			//因为这段程序可能出现异常，所以用try来监测这块代码
+			try{  //监测
+				Scanner in = new Scanner(System.in);  //获取输入
+				num = in.nextInt();  //让用户输入一个整数(如果用户输入不是整数，则会报错InputMismatchException,所以需要抛出异常)
+				in.close();
+				break;
+			}catch(InputMismatchException e){
+				System.out.print("您输入的不是整数，请输入整数：");  //打印错误信息
+			}catch(Exception e){
+				System.out.print("您输入的不是整数，请输入整数：");  //打印错误信息
+			}
+		}while(true);
+		
+		System.out.println("\n您输入的" + num + "是整数，程序结束！");
+		System.exit(0);
+	}
+}
+```
+
+## 43. 问题43
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```

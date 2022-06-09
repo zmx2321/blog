@@ -702,3 +702,1021 @@ public class StudentMethod {
 	}
 }
 ```
+
+## 10. 问题10
+```java
+/*
+ *  对象数组
+ *  
+ *   * 我有5个学生，请把这个5个学生的信息存储到数组中，并遍历数组，获取得到每一个学生信息。
+ *		 学生：Student
+ *		 成员变量：name,age
+ *		 构造方法：无参,带参
+ *		 成员方法：getXxx()/setXxx()
+ *		 存储学生的数组?自己想想应该是什么样子的?
+ * 分析：
+ * 		A:创建学生类。
+ * 		B:创建学生数组(对象数组)。
+ * 		C:创建5个学生对象，并赋值。
+ * 		D:把C步骤的元素，放到数组中。
+ * 		E:遍历学生数组。
+ * 
+ */
+// Student.java
+package eg.arr.objectArray;
+
+public class Student {
+	// 成员变量
+		private String name;
+		private int age;
+
+		// 构造方法
+		public Student() {
+			super();
+		}
+
+		public Student(String name, int age) {
+			super();
+			this.name = name;
+			this.age = age;
+		}
+
+		// 成员方法
+		// getXxx()/setXxx()
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public int getAge() {
+			return age;
+		}
+
+		public void setAge(int age) {
+			this.age = age;
+		}
+
+		@Override
+		public String toString() {
+			return "Student [name=" + name + ", age=" + age + "]";
+		}
+}
+
+// ObjectArray.java
+package eg.arr.objectArray;
+
+public class ObjectArray {
+	public static void main(String[] args) {
+		// 创建学生数组(对象数组)。
+		Student[] students = new Student[5];
+		// for (int x = 0; x < students.length; x++) {
+		// System.out.println(students[x]);
+		// }
+		// System.out.println("---------------------");
+
+		// 创建5个学生对象，并赋值。
+		Student s1 = new Student("张三", 27);
+		Student s2 = new Student("李四", 30);
+		Student s3 = new Student("王五", 30);
+		Student s4 = new Student("刘琪", 60);
+		Student s5 = new Student("王力", 35);
+
+		// 把C步骤的元素，放到数组中。
+		students[0] = s1;
+		students[1] = s2;
+		students[2] = s3;
+		students[3] = s4;
+		students[4] = s5;
+
+		// 看到很相似，就想循环改
+		// for (int x = 0; x < students.length; x++) {
+		// students[x] = s + "" + (x + 1);
+		// }
+		// 这个是有问题的
+
+		// 遍历
+		for (int x = 0; x < students.length; x++) {
+			//System.out.println(students[x]);
+			
+			Student s = students[x];
+			System.out.println(s.getName()+"---"+s.getAge());
+		}
+	}
+}
+/**
+张三---27
+李四---30
+王五---30
+刘琪---60
+王力---35
+*/
+```
+
+## 11. 问题11
+> 实例化
+```java
+public class ObjectArray {
+	private String name;
+	private int age;
+	
+	public ObjectArray(String name,int age){
+		this.name=name;
+		this.age=age;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public static void main(String[] args) {
+		//创建1个Demo1对象数组student,包含了3个空间
+		ObjectArray[] student=new ObjectArray[3];
+		//实例化对象数组
+		student[0]=new ObjectArray("张飞",20);
+		student[1]=new ObjectArray("吴广",10);
+		student[2]=new ObjectArray("赵云",50);
+		//循环遍历取得
+		//student[i]得到的事对象数组
+		for (int i = 0; i < student.length; i++) {
+			System.out.println("名字:"+student[i].getName()+"年龄:"+student[i].getAge());
+		}
+	}
+}
+```
+
+## 12. 问题12
+> 实例化（两个文件）
+> 并排序
+```java
+// student.java
+package eg.arr.objectArray_3;
+
+public class Student {
+	// 成员变量
+		private String name;
+		private int age;
+
+		// 构造方法
+		public Student() {
+			super();
+		}
+
+		public Student(String name, int age) {
+			super();
+			this.name = name;
+			this.age = age;
+		}
+
+		// 成员方法
+		// getXxx()/setXxx()
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public int getAge() {
+			return age;
+		}
+
+		public void setAge(int age) {
+			this.age = age;
+		}
+
+		@Override
+		public String toString() {
+			return "Student [name=" + name + ", age=" + age + "]";
+		}
+		
+		//返回Student对象数组(默认学生)
+		/*public Student[] getStudent() {
+		    Student[] stu = new Student[3];
+			Student stu1 = new Student("张三", 18);
+			Student stu2 = new Student("李四", 45);
+			Student stu3 = new Student("王五", 33);
+			stu[0] = stu1;
+			stu[1] = stu2;
+			stu[2] = stu3;
+			return stu;	
+		}*/
+}
+
+// objectArray
+package eg.arr.objectArray_3;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class objectArray {
+	public static void main(String[] args) {
+		// 创建学生数组(对象数组)。
+		Student[] stu = new Student[5];
+		
+		// 创建5个学生对象，并赋值。
+		Student s1 = new Student("张三", 27);
+		Student s2 = new Student("李四", 30);
+		Student s3 = new Student("王五", 80);
+		Student s4 = new Student("刘琪", 60);
+		Student s5 = new Student("王力", 35);
+		
+		// 把C步骤的元素，放到数组中。
+		stu[0] = s1;
+		stu[1] = s2;
+		stu[2] = s3;
+		stu[3] = s4;
+		stu[4] = s5;
+		
+		// 遍历
+		System.out.println("排序前：");
+		for(Student s:stu){
+			System.out.println(s);
+		}
+		System.out.println("排序后：");
+		Arrays.sort(stu, new Comparator<Student>(){
+			@Override
+			public int compare(Student s1, Student s2) {
+				return s2.getAge() - s1.getAge();
+		}});
+		for(Student s:stu){
+			System.out.println(s);
+		}
+	}
+}
+```
+
+## 13. 问题13
+```java
+/*
+ * 需求：
+ * 通过使用对象数组，来完成用户的注册和登陆功能。
+ * 
+ * 分析：
+ * note1：初步思路：
+ *          1，由于使用对象数组，则首先应该有对象。
+ *              结合题目要求，该对象应具有用户名和密码两个属性。
+ *          2，利用数组，将对象封装起来，形成存储该结构的容器。
+ *          3，由于目前只有注册和登陆，故数组的操作中，只需要实现查找和插入的动作。
+ */
+// UserData
+package eg.fn.reglog_1;
+
+public class UserData {
+    private String username;
+    private String password;
+
+    public UserData() {
+    }
+
+    public UserData(String username, String password) {
+        super();
+        this.username = username;
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj)
+            return true;
+
+        if ((obj != null) && (obj.getClass() == UserData.class)) {
+            UserData userData = (UserData) obj;
+
+            if ((this.getUsername().equals(userData.getUsername()))
+                    && (this.getPassword().equals(userData.getPassword())))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "UserData [username=" + username + ", password=" + password + "]";
+    }
+
+}
+// UserDataArray
+package eg.fn.reglog_1;
+
+public class UserDataArray {
+    private UserData[] userDatas;
+    private int userNums;
+
+    public UserDataArray() {
+    }
+
+    public UserDataArray(int maxNum) {
+        userDatas = new UserData[maxNum];
+        userNums = 0;
+    }
+
+    // 获取用户的注册数
+    public int getUserNums() {
+        return userNums;
+    }
+
+    // 增加用户
+    public void insertUserData(UserData userData) {
+        userDatas[userNums] = userData;
+        userNums++;
+    }
+
+    // 查找用户
+    public boolean findUserData(UserData userData) {
+
+        for (int index = 0; index < userNums; index++) {
+            if (userData.equals(userDatas[index]))
+                return true;
+        }
+        return false;
+    }
+
+    // 显示用户
+    public void displayUserData() {
+        for (int index = 0; index < userNums; index++)
+            System.out.println(userDatas[index].toString());
+    }
+
+    // 删除用户
+    public boolean deleteUserData(UserData userData) {
+        int goalPos;
+
+        // 先遍历整个数组，获取需要删除的对象的位置
+        for (goalPos = 0; goalPos < userNums; goalPos++)
+            if (userData.equals(userDatas[goalPos]))
+                break;
+
+        if (goalPos == userNums)
+            return false;
+        else {
+            for (int i = goalPos; i < userNums; i++)
+                userDatas[i] = userDatas[i + 1];
+
+            userNums--;
+            return true;
+        }
+    }
+    
+    public static void main(String[] args) {
+    	UserDataArray aa = new UserDataArray();
+    	aa.displayUserData();
+	}
+}
+// UserLoginRegisterApp
+package eg.fn.reglog_1;
+
+import java.util.Scanner;
+
+public class UserLoginRegisterApp {
+
+    public static final int maxUserNums = 3;// 设置最大用户数
+
+    @SuppressWarnings("resource")
+	public static void main(String[] args) {
+
+        // 初始化一个长度为3的UserData对象的数组
+        UserDataArray userDataArray = new UserDataArray(maxUserNums);
+
+        while (true) {
+            System.out.println("欢迎来到乌托邦！");
+            System.out.println("1.注册\t2.登陆\t3.退出");
+            System.out.print("请选择你的操作:");
+
+            Scanner scUserInput = new Scanner(System.in);
+            String userOerator = scUserInput.nextLine();
+
+            switch (userOerator) {
+            case "1":// 注册环节
+                if (userDataArray.getUserNums() == maxUserNums) {
+                    System.out.println("不好意思，注册名额已经注册满了！");
+                    System.out.println("现在将转向主界面！");
+                } else {
+                    UserData userData = new UserData();
+                    System.out.print("请输入用户名:");
+                    String userName = scUserInput.nextLine();
+                    System.out.print("请输入密码:");
+                    String userPwd = scUserInput.nextLine();
+                    userData.setUsername(userName);
+                    userData.setPassword(userPwd);
+
+                    if (!userDataArray.findUserData(userData)) {
+                        userDataArray.insertUserData(userData);
+                        System.out.println("恭喜你注册成功！现在请重新登陆下！");
+                    } else {
+                        System.out.println("该用户已存在，请登陆或者更换用户名");
+                    }
+
+                    System.out.println("现在跳转到主界面。。。。");
+                }
+                break;
+
+            case "2":// 登陆环节
+                UserData userData = new UserData();
+                System.out.print("请输入用户名:");
+                String userName = scUserInput.nextLine();
+                System.out.print("请输入密码:");
+                String userPwd = scUserInput.nextLine();
+                userData.setUsername(userName);
+                userData.setPassword(userPwd);
+
+                if (userDataArray.findUserData(userData)) {
+                    System.out.println("恭喜登陆成功，开始尽情享受�潘可�活吧！");
+                    System.exit(0);
+                } else {
+                    System.out.println("用户名和密码不匹配，请重新登陆或注册！");
+                    System.out.println("现在跳转到主界面。。。。");
+                }
+                break;
+
+            case "3":
+                System.out.println("你确定要退出么？y or n?");
+                String userChoose = scUserInput.nextLine();
+                if ("y".equals(userChoose)) {
+                    System.out.println("既然你决心离去，我也不好挽留！！！");
+                    System.exit(0);
+                } else {
+                    System.out.println("我知道你是选错了。。。。");
+                    System.out.println("请重新做出你的选择！！！！");
+                }
+                break;
+            default:
+                System.out.println("你输入了非法字符，我崩溃了！！！！！");
+                System.exit(-1);
+                break;
+            }
+        }
+    }
+}
+```
+
+## 14. 问题14
+> 伪登陆
+```java
+// user
+package eg.fn.UserManager;
+
+public class User {
+    private String username;
+    private String nickname;
+    private String password;
+    private int age;
+    
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getNickname() {
+        return nickname;
+    }
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+    
+    public User(String username, String password, String nickname, int age) {
+        super();
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.age = age;
+    }
+    
+    @Override
+    public String toString() {
+        return "User [username=" + username + ", nickname=" + nickname
+                + ", password=" + password + ", age=" + age + "]";
+    }
+    
+}
+
+// UserManager
+package eg.fn.UserManager;
+
+public class UserManager {
+    User[] users;
+    private int nums=0;
+    
+    
+    public UserManager(int size) {
+        users = new User[size];
+    }
+
+    public void add(User user) {
+        //判断数组内存是否有剩余
+        if(nums>=users.length) {
+            System.out.println("对不起，用户数据内存已满，无法再添加"+user.getUsername()+"信息！");
+            return;
+        }
+        
+        //判断是否存在该用户数据
+        User u = this.load(user.getUsername());
+        if(u!=null) {
+            System.out.println("对不起，该用户:"+u.getUsername()+"数据已存在！");
+            return;
+        }
+        
+        //添加数据
+        users[nums] = user;
+        nums++;
+        System.out.println("用户:"+user.getUsername()+"数据已添加成功！");
+        return;
+        
+    }
+    
+    public User load(String username) {
+        for(int i=0;i<nums;i++) {
+            User u = users[i];
+            if(username.equals(u.getUsername())) {
+                return u;
+            }
+        }
+        return null;
+    }
+    
+    public void delete(String username) {
+        int index=-1;
+        //通过index索引找到需要删除的数组下标值
+        for(int i=0;i<nums;i++) {
+            User u = users[i];
+            if(username.equals(u.getUsername())) {
+                index=i;
+                break;
+            }
+        }
+        
+        if(index==-1) {
+            System.out.println("对不起，要删除的用户："+username+"不存在！");
+            return;
+        }
+        
+        //从index位置开始，后一个数组元素赋值到前一个数组元素中，最后再将users[nums]=null，nums自减
+        for(int i=index+1;i<nums;i++) {
+            users[i-1] = users[i];
+        }
+        users[nums-1]=null;
+        nums--;
+        System.out.println("用户："+username+"数据删除成功！");
+        return;
+        
+    }
+    
+    public void add(int pos,User user) {
+        //首先检查pos是否合法
+        if(pos<0||pos>=nums) {
+            System.out.println("对不起，用户"+user.getUsername()+"信息添加位置不正确！");
+            return;
+        }
+        
+        //判断pos是否可以插入，即nums个数据已经存满了就不可以再增加新数据
+        if(nums>=users.length) {
+            System.out.println("对不起，内存已满，无法再添加"+user.getUsername()+"信息！");
+            return;
+        }
+        
+        //检查是否已存在user对象
+        User u = this.load(user.getUsername());
+        if(u!=null) {
+            System.out.println("对不起，该用户:"+u.getUsername()+"数据已存在！");
+            return;
+        }
+        
+        for(int i=nums;i>pos;i--) {
+            //前面有nums>=users.length判断，因此users[nums]空间存在，可以被前面的元素赋值
+            users[i] = users[i-1];
+        }
+        
+        users[pos] = user;
+        nums++;
+        System.out.println("用户:"+user.getUsername()+"数据已添加成功！");
+        return;
+    }
+    
+    public void update(User user) {
+        //检查是否存在该用户数据
+        User u = this.load(user.getUsername());
+        if(u==null) {
+            System.out.println("对不起，该用户："+user.getUsername()+"数据不存在！");
+            return;
+        }
+        
+        //更新数据
+        u.setNickname(user.getNickname());
+        u.setPassword(user.getPassword());
+        u.setAge(user.getAge());
+        System.out.println("用户:"+user.getUsername()+"数据已更新成功！");
+        return;
+    }
+    
+    public void login(String username,String password) {
+        //判断是否存在 username 用户名
+        User u = this.load(username);
+        
+        if(u==null) {
+            System.out.println("用户名："+username+"不正确，请检查输入！");
+            return;
+        }
+        
+        //判断密码是否正确
+        if(!password.equals(u.getPassword())) {
+            System.out.println("密码不正确，请检查输入！");
+            return;
+        }                
+        //成功登录系统
+        System.out.println("欢迎"+username+"登录系统！");
+        return;
+    }
+    
+    public User[] list() {
+        User[] tus = new User[nums];    //只遍历数组元素中存有有效元素值的数组
+        for(int i=0;i<nums;i++) {
+            tus[i] = users[i];
+        }
+        return tus;
+    }
+}
+
+// TestUser
+package eg.fn.UserManager;
+
+public class TestUser {
+
+    public static void main(String[] args) {
+        UserManager um = new UserManager(5);
+        um.add(new User("zs","123","张三",24));    //添加信息成功
+        um.add(new User("ls","123","李四",22));    //添加信息成功
+        um.add(new User("ls","123","李四",23));    //添加不成功，已存在
+        um.add(new User("ww","123","王五",21));    //添加信息成功
+        um.add(new User("zl","123","赵六",21));    //添加信息成功
+        um.add(new User("zq","123","朱七",22));    //添加信息成功
+        
+        um.add(new User("S","123","大S",22));    //满员了，添加信息不成功
+        
+        System.out.println("------分割线------");
+        
+        um.delete("ls");    //删除ls
+        um.delete("ls1231");    //提示要删除的用户名不存在
+        
+        System.out.println("------分割线------");
+        
+        um.update(new User("S","1234","大S",23));    //提示要更新的用户名不存在
+        um.update(new User("zq","1234","朱七",23));    //提示zq信息更新成功
+        
+        System.out.println("------分割线------");
+        
+        um.login("zs1", "1234");    //提示用户名错误
+        um.login("zs1", "123412");    //提示用户名错误
+        um.login("zs", "123412");    //提示密码错误
+        um.login("zs", "123");        //提示成功登陆系统
+        
+        um.login("ls", "123");    //用户名不存在，提示错误
+        
+        System.out.println("------分割线------");
+        
+        User[] u = um.list();
+        for(int i=0;i<u.length;i++) {
+            System.out.println(u[i]);
+        }
+        
+        System.out.println("------分割线------");
+        
+        um.add(1,new User("S","123","大S",22));
+        um.delete("ww");
+        um.add(1,new User("Y","123","大Y",22));
+        um.delete("Y");
+        um.add(3,new User("s","123","小S",22));
+        
+        System.out.println("------分割线------");
+        
+        User[] u2 = um.list();
+        for(int i=0;i<u2.length;i++) {
+            System.out.println(u2[i]);
+        }
+    }
+
+}
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
+
+## 7. 问题7
+> 
+```java
+
+```
