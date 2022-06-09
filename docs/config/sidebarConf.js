@@ -622,8 +622,8 @@ module.exports = {
     '',
     linuxNoteConfig,  // linux笔记
     mysqlNoteConfig,  // mysql 数据库
-    // javaNoteConfig,  // java笔记
-    // javaBaseConfig,  /// java基础
+    javaBaseConfig,  /// java入门基础
+    javaNoteConfig,  // java笔记
     // javaFrameConfig  // java框架
   ],
   // 其他
