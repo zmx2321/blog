@@ -1035,6 +1035,13 @@ export default {
 ```
 
 ## 6. 使用vue-simple-uploader分片上传
+- 安装vue-simple-uploader并使用
+- yarn add vue-simple-uploader
+```js
+// main.js
+import uploader from 'vue-simple-uploader';
+Vue.use(uploader)
+```
 - uploadToolsBig
 ```html
 <template>
