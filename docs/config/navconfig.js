@@ -126,11 +126,11 @@ module.exports = [
     ]
   },
 
-  /* {
+  {
     text: '大杂烩',
     items: [
-      { text: '菜谱', link: '/pages/hodgepodge/food-menu/' },
+      // { text: '菜谱', link: '/pages/hodgepodge/food-menu/' },
       { text: '计划', link: '/pages/hodgepodge/plan/' },
     ]
-  }, */
+  },
 ];

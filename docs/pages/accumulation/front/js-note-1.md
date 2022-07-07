@@ -2819,3 +2819,17 @@ let { hash } = window.location
 let index = hash.lastIndexOf('=')
 this.username = decodeURIComponent(hash.substring(index+1, hash.length))
 ```
+
+## 94. 字符串数组操作
+```js
+pwStr.charAt(pwStr.length-1)  // 获取字符串最后一位
+
+// 数组加逗号
+pwlist.forEach((item, index)=> {
+    if(index+1 < pwlist.length) {
+        pwStr += item.berthId + ','
+    } else {
+        pwStr += item.berthId
+    }
+})
+```
