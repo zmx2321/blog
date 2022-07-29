@@ -442,3 +442,6 @@ Vue.component("CountUp", CountUp);
 ```html
 <count-up :count="123123" />
 ```
+
+# 在vue.config.js中获取文件名
+- outputDir: __dirname.split(/[\\/]/).pop(),
