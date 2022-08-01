@@ -104,8 +104,8 @@ module.exports = [
     ]
   },
 
-  // { text: '面试题', link: '/pages/interview/' },
-  { text: '面试题', link: '/pages/interview/interview-one-side-3' },
+  { text: '面试题', link: '/pages/interview/' },
+  // { text: '面试题', link: '/pages/interview/interview-one-side-3' },
 
   // { text: '算法', link: '/pages/algorithm/other/' },
   {
