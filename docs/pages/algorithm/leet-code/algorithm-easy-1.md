@@ -3,7 +3,7 @@
   <Valine></Valine>
 </ClientOnly>
 
-[代码笔记](https://zmx2321.github.io/blog_code/algorithm/leet-code/algorithm-easy/algorithm-easy-1/)
+[代码笔记](https://zmx2321.github.io/blog_code/algorithm/leet-code/example/easy/两数之和)
 
 ## 问题
 #### 题目描述

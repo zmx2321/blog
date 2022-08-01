@@ -4,7 +4,7 @@
 </ClientOnly>
 
 ## 解答
-> [示例链接](http://zmx2321.github.io/blog_code/algorithm/other/algorithm-base/arr_charu/)
+> [代码笔记](https://zmx2321.github.io/blog_code/algorithm/other/example/base/arr_charu)
 
 ```js
 /**

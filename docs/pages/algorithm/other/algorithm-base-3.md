@@ -5,7 +5,7 @@
 
 ## 题目
 ### 1. 题目一
-> [示例链接](http://zmx2321.github.io/blog_code/algorithm/other/algorithm-base/arr_digui/)
+> [代码笔记](https://zmx2321.github.io/blog_code/algorithm/other/example/base/arr_digui)
 
 实现1-100之间，不能被3整除的数相加
 

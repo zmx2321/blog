@@ -1,2 +1,3 @@
 # README
-> 算法-其他
+
+[代码笔记](https://zmx2321.github.io/blog_code/algorithm/other)

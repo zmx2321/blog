@@ -4,7 +4,7 @@
 </ClientOnly>
 
 ## 题目
-> [示例链接](https://zmx2321.github.io/blog_code/algorithm/script-oj/classic-questions/classic-questions-2)
+> [代码笔记](https://zmx2321.github.io/blog_code/algorithm/other/example/other/extname函数)
 
 完成 extname 函数，它会接受一个文件名作为参数，你需要返回它的扩展名。
 
