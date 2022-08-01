@@ -499,3 +499,50 @@ getTitleLabel() {
   this.labelTitle = `【${time0Str}-${timeStr}】${this.titleStr}-`
 },
 ```
+
+## 使用递归思想将对象所有null转化成空字符串
+```js
+obj: {
+  a: null,
+  b: "",
+  c: 1,
+  d: ['1', '2', null],
+  e: {
+    e1: null,
+    e2: undefined,
+    e3: 1,
+    e4: '123',
+    e5: false,
+    e6: {
+      e61: [1, 2, 4, undefined, null, 3],
+      e62: null,
+      e63: undefined,
+      e64: {
+        e641: null,
+        e642: "123",
+        e643: true
+      }
+    }
+  }
+}
+
+setObj(obj) {
+  // 判断是否是对象或数组
+  const isObj = obj=> {
+    return typeof obj === 'object' && obj !== null
+  }
+
+  // 遍历
+  for(let key in obj) {
+    if(obj[key] == null) {
+      obj[key] = ''
+    }
+    // 对象或者数组
+    if(isObj(obj[key])) {
+      this.setObj(obj[key])
+    }
+  }
+
+  return obj
+},
+```
