@@ -77,7 +77,6 @@ class Solution {
 > #### 解法一：暴力法
 > - 使用两层循环，外层循环计算当前元素与 target 之间的差值，内层循环寻找该差值，若找到该差值，则返回两个元素的下标。
 > - 时间复杂度：O(n²)。
-> - [示例链接](https://zmx2321.github.io/blog_code/algorithm/leet-code/algorithm-easy/algorithm-easy-1/)
 ```js
 /**
  * @param {number[]} nums
