@@ -323,3 +323,36 @@ min-height: calc(100vh - #{$navbar} - #{$tagHeight});
 
 calc(100% - #{$a})
 ```
+
+## 11. 三角形
+```html
+<li>同比<b class="up">25.87%</b></li>
+
+<style>
+.compare {
+    b {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: -12px;
+        top: 4px;
+        width: 0px; /*设置宽高为0，所以div的内容为空，从才能形成三角形尖角*/
+        height: 0px;
+        border-left: 5px solid transparent; /*transparent 表示透明*/
+        border-right: 5px solid transparent;
+        overflow: hidden;
+    }
+
+    &.up::before {
+        border-bottom: 10px solid #E54246;
+    }
+
+    &.down::before {
+        border-top: 10px solid #22D9DB;
+    }
+    }
+}
+</style>
+```
