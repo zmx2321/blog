@@ -1295,8 +1295,9 @@ export const mergeFile = data => {
 }
 ```
 
-## 7.柱状图图表样式
+## 7.图表电池样式
 ```js
+// var barData = [0, ~~(Math.random() * 100), ~~(Math.random() * 100), ~~(Math.random() * 100), ~~(Math.random() * 100)];
 var barData = [60, 30, 52, 34, 90];
 var lineData = [63, 63, 63, 63, 100]
 this.chart.setOption(
