@@ -1294,3 +1294,83 @@ export const mergeFile = data => {
   });
 }
 ```
+
+## 7.柱状图图表样式
+```js
+var barData = [60, 30, 52, 34, 90];
+var lineData = [63, 63, 63, 63, 100]
+this.chart.setOption(
+  // option-start
+  {
+    grid: [{//图形的位置
+        top: "-1%",
+        left: "0%",
+        right: "0%",
+        bottom: "4%",
+    }],
+    xAxis: {
+      show: false,//是否展示X轴
+    },
+    yAxis: {
+      axisLine: {
+        show: false//不展示刻度
+      },
+      type: "category",
+      inverse: true,
+      axisLine: {
+        show: false,
+      },
+      axisTick: {
+        show: false,
+      },
+      axisLabel: {
+        inside: true,
+      },
+      data: ['服务器数（台）', '计算容量（核）', '内存容量（GB）', '存储容量（PB）'],
+    },
+    series: [
+      // 下层块
+      { 
+        name: '',
+        type: 'pictorialBar',
+        symbol: 'roundRect',
+        barWidth: '3%',
+        barMaxWidth: '20%',
+        symbolOffset: [75, 0],
+        itemStyle: {
+          normal: {
+            color: 'rgba(255,255,255,0.2000)'
+          }
+        },
+        z: -11,
+        symbolRepeat: true,
+        symbolSize: [6, 16],
+        data: lineData,
+        barGap: 50,
+        barCategoryGap: 0,
+        animationEasing: 'elasticOut',
+      },
+      // 上层块
+      { 
+        // name: '', // blue bar
+        type: 'pictorialBar',
+        symbol: 'roundRect',
+        barWidth: '2%',
+        barMaxWidth: 100,
+        symbolOffset: [75, 0],
+        itemStyle: {
+          normal: {
+            barMaxWidth: '20%',
+            barBorderRadius: 100,
+            color: '#00C0FF',
+          }
+        },
+        symbolRepeat: true,
+        symbolSize: [6, 16],
+        data: barData,
+      },
+    ],
+  }
+  // option-end
+)
+```
