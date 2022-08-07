@@ -1375,3 +1375,247 @@ this.chart.setOption(
   // option-end
 )
 ```
+```js
+symbolSize: [6, 10],  // 电池大小
+symbolOffset: [75, 0],  // 电池位置
+
+{
+  //图形的位置
+  grid: [{
+    top: -1,
+    left: "-28%",
+    right: '29%',
+    bottom: 0,
+  }],
+  xAxis: {
+    show: false,//是否展示X轴
+  },
+  yAxis: {
+    axisLine: {
+      show: false//不展示刻度
+    },
+    type: "category",
+  },
+  series: [
+    // 下层块(总)
+    // var barData = [0, ~~(Math.random() * 100), ~~(Math.random() * 100), ~~(Math.random() * 100), ~~(Math.random() * 100)];
+    { 
+      type: 'pictorialBar',
+      symbol: 'roundRect',
+      // barWidth: 0,
+      symbolOffset: this.symbolOffset,
+      itemStyle: {
+        normal: {
+          color: 'rgba(255,255,255,0.2000)'
+        }
+      },
+      symbolRepeat: true,
+      symbolSize: this.symbolSize,
+      barGap: 50,
+      barCategoryGap: 0,
+      animationEasing: 'elasticOut',
+      data: lineData,
+    },
+    // 上层块
+    { 
+      type: 'pictorialBar',
+      symbol: 'roundRect',
+      // barWidth: 0,
+      symbolOffset: this.symbolOffset,
+      itemStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: '#00C0FF',
+            },
+            {
+              offset: 1,
+              color: 'rgba(0,192,255,0.3000)',
+            },
+          ], false),
+        }
+      },
+      symbolRepeat: true,
+      symbolSize: this.symbolSize,
+      data: barData,
+    },
+  ],
+}
+```
+
+## 8. 柱状图定制
+```js
+seriesType: 'bar',
+barWidth: 4,
+lendTextStyle: {
+  color: 'rgba(255,255,255,0.6)',
+  fontSize: 10,
+},
+legendIcon: 'rect',
+legendItem: 8
+
+{
+  grid: {
+    top: 30,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '88%',
+    containLabel: true,
+  },
+  legend: [
+    {
+      data:[
+        {
+          name: '资产负债率',
+          icon: this.legendIcon
+        }
+      ],
+      color: '#f00',
+      itemWidth: this.legendItem,
+      itemHeight: this.legendItem,
+      left: 'left',
+      textStyle: this.lendTextStyle
+    }, 
+    {
+      data:[
+        {
+          name: '存活增长比率',
+          icon: this.legendIcon
+        }
+      ],   
+      itemWidth: this.legendItem,
+      itemHeight: this.legendItem,
+      left: 'left',
+      left:'15%' ,//调整位置
+      textStyle: this.lendTextStyle
+    }, 
+    {
+      data:[
+        {
+          name: '应收账款增长率',
+          icon: this.legendIcon
+        }
+      ],  
+      itemWidth: this.legendItem,
+      itemHeight: this.legendItem,
+      left: 'right',
+      textStyle: this.lendTextStyle
+    },
+  ],
+  xAxis: {
+    type: 'category',
+    offset: 18,
+    axisTick:{
+      show: false,  // 隐藏刻度线
+    },
+    axisLabel: {
+      padding: [0, 0, 0, -23],
+      interval: 0, // 横轴信息全部显示
+      rotate: 40,
+      textStyle: {
+        align:'left',
+        fontSize: 10,
+        color: '#fff'
+      },
+      formatter (val) {
+        var strs = val.split(""); //字符串数组
+        var str = "";
+        for (var i = 0, s; (s = strs[i++]);) {
+          //遍历字符串数组
+          str += s;
+          if (!(i % 4)) str += "\n"; //按需要求余
+        }
+        return str;
+      }
+    },
+    data: fieldData,
+  },
+  yAxis: [
+    {
+      axisTick:{
+        show: false,  // 隐藏刻度线
+      },
+      type: 'value',
+      min: 0,
+      max: 100,
+      interval: 20,
+      axisLabel: {
+        formatter: '{value}%'
+      }
+    },
+    {
+      axisTick:{
+        show: false,  // 隐藏刻度线
+      },
+      type: 'value',
+      min: 0,
+      max: 2.5,
+      interval: 0.5,
+    }
+  ],
+  series: [
+    {
+      name: '资产负债率',
+      type: this.seriesType,
+      barWidth: this.barWidth,
+      itemStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgba(72,143,255,100)',
+            },
+            {
+              offset: 1,
+              color: 'rgba(5,32,115,0)',
+            },
+          ], false),
+        }
+      },
+      data: yData1,
+    },
+    {
+      name: '存活增长比率',
+      type: this.seriesType,
+      barWidth: this.barWidth,
+      itemStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgba(175,143,255,100)',
+            },
+            {
+              offset: 1,
+              color: 'rgba(175,143,255,0)',
+            },
+          ], false),
+        }
+      },
+      data: yData2
+    },
+    {
+      name: '应收账款增长率',
+      type: this.seriesType,
+      barWidth: this.barWidth,
+      itemStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgba(26,175,135,100',
+            },
+            {
+              offset: 1,
+              color: 'rgba(26,175,135,0',
+            },
+          ], false),
+        }
+      },
+      data: yData3
+    }
+  ]
+}
+```
