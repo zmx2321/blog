@@ -1453,15 +1453,29 @@ lendTextStyle: {
   fontSize: 10,
 },
 legendIcon: 'rect',
-legendItem: 8
+legendItem: 8,
+yAxisLine: false,
 
 {
+  tooltip: {
+    trigger: 'axis',
+    textStyle: {
+      color: '#fff',
+      fontSize: 10,
+    },
+    axisPointer: {
+      type: 'cross',
+      crossStyle: {
+        color: '#fff'
+      }
+    }
+  },
   grid: {
     top: 30,
     left: 0,
     right: 0,
     bottom: 0,
-    height: '88%',
+    height: '87%',
     containLabel: true,
   },
   legend: [
@@ -1534,22 +1548,22 @@ legendItem: 8
   },
   yAxis: [
     {
-      axisTick:{
-        show: false,  // 隐藏刻度线
-      },
       type: 'value',
       min: 0,
       max: 100,
       interval: 20,
+      splitLine: {
+        show: this.yAxisLine,
+      },
       axisLabel: {
         formatter: '{value}%'
       }
     },
     {
-      axisTick:{
-        show: false,  // 隐藏刻度线
-      },
       type: 'value',
+      splitLine: {
+        show: this.yAxisLine,
+      },
       min: 0,
       max: 2.5,
       interval: 0.5,
@@ -1605,11 +1619,11 @@ legendItem: 8
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
-              color: 'rgba(26,175,135,100',
+              color: 'rgba(26,175,135,100)',
             },
             {
               offset: 1,
-              color: 'rgba(26,175,135,0',
+              color: 'rgba(26,175,135,0)',
             },
           ], false),
         }
