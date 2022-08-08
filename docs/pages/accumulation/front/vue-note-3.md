@@ -1633,3 +1633,72 @@ yAxisLine: false,
   ]
 }
 ```
+
+## 9. 图表横向重叠
+```js
+{
+  color: this.lineColors,
+  legend: {
+    left: 'left',
+    textStyle: this.lendTextStyle,
+    itemWidth: this.legendItem,
+    itemHeight: this.legendItem,
+    /* formatter (val) {
+      console.log(val)
+    } */
+  },
+  grid: {
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  xAxis: {
+    type: 'value',
+    show: false,
+    minorSplitLine: {
+      show: false
+    }
+  },
+  yAxis: {
+    type: 'category',
+    data: [''],
+    // 去除网格线
+    axisLine: {
+      show: false
+    },
+    // 去除刻度线
+    axisTick: {
+      show: false
+    }
+  },
+  series: [],
+}
+
+this.setOptions(option=> {
+  console.log(option)
+
+  for(let i=0; i<this.chartData.fieldData.length; i++) {
+    option.series.push({
+      type: 'bar',
+      stack: 'total',
+      barWidth: '10px',
+      label: {
+        show: false,
+      },
+      emphasis: {
+        focus: 'series'
+      },
+      name: this.chartData.legend[i],
+      data: this.chartData.fieldData[i],
+    })
+  }
+
+  this.chart.setOption(option)
+})
+
+export const industrialTalentData1 = {
+  legend: ['华为', '中兴', '烽火', '瑞斯'],
+  fieldData: [[320], [120], [220], [150]],
+}
+```
