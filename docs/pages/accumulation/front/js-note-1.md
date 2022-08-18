@@ -2833,3 +2833,14 @@ pwlist.forEach((item, index)=> {
     }
 })
 ```
+
+## 95. 判断是否包含某个class
+```js
+this.$el.parentNode.querySelectorAll(calss).forEach(item=> {
+    if(!item.classList.contains(dnCls)) {
+        item.classList.add(dnCls)
+    } else {
+        item.classList.remove(dnCls)
+    }
+})
+```
