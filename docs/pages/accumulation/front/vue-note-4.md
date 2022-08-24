@@ -443,5 +443,10 @@ Vue.component("CountUp", CountUp);
 <count-up :count="123123" />
 ```
 
-# 在vue.config.js中获取文件名
+## 9. 在vue.config.js中获取文件名
 - outputDir: __dirname.split(/[\\/]/).pop(),
+
+## 10. 脚手架安装报错（sass）
+- 报错信息：node-sass@5.0.0 postinstall: `node scripts/build.js`
+  - npm uninstall node-sass
+  - npm i node-sass --sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
