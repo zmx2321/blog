@@ -1721,4 +1721,17 @@ formatter (name) {
 
   return `${name} ${p}`
 }
+
+formatter (name) {
+  let { fieldData } = that.chartData
+  let curData
+
+  for(let i=0; i<fieldData.length; i++) {
+    if(fieldData[i].name === name) {
+      curData = fieldData[i].percentage
+    }
+  }
+
+  return `${name}(${curData}%)`
+}
 ```
