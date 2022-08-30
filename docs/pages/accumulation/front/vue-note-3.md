@@ -1702,3 +1702,23 @@ export const industrialTalentData1 = {
   fieldData: [[320], [120], [220], [150]],
 }
 ```
+
+## 10. echarts在lend上添加百分比
+```js
+formatter (name) {
+  let { fieldData, legend } = that.chartData
+  let total = 0
+  let curData
+
+  for(let i=0; i<legend.length; i++) {
+    total += parseInt(fieldData[i][0])
+
+    if(legend[i] === name) {
+      curData = parseInt(fieldData[i][0])
+    }
+  }
+  var p = Math.round(((curData / total) * 100)) + '%'; //求出百分比
+
+  return `${name} ${p}`
+}
+```
