@@ -546,3 +546,43 @@ setObj(obj) {
   return obj
 },
 ```
+
+## 14. 表格滚动
+```js
+// 表格滚动
+tableScroll(tbodyDom) {
+  if (tbodyDom.clientHeight >= tbodyDom.scrollHeight){
+    return;
+  }
+
+  return setInterval(() => {
+    // 元素自增距离顶部1像素
+    tbodyDom.scrollTop += 10
+    // 判断元素是否滚动到底部(可视高度+距离顶部=整个高度)
+    if (tbodyDom.clientHeight + tbodyDom.scrollTop == tbodyDom.scrollHeight) {
+      // 重置table距离顶部距离
+      tbodyDom.scrollTop = 0
+    }
+  }, 100)
+},
+
+dataAutoScroll() {
+  this.$nextTick(()=> {
+    let intervalTimer = null  // 定时器
+    let tableDom = this.$refs.publicServiceTableRef.$el  // 表格dom
+    let tbodyDom = tableDom.querySelector('.el-table__body-wrapper')
+
+    // 设置滚动
+    intervalTimer = this.tableScroll(tbodyDom)
+
+    // 鼠标移入，停止滚动
+    tbodyDom.onmouseover = ()=> {
+      clearInterval(intervalTimer);
+    }; 
+    // 鼠标移出，继续滚动
+    tbodyDom.onmouseout = ()=> {
+      intervalTimer = this.tableScroll(tbodyDom)
+    }; 
+  })
+},
+```
