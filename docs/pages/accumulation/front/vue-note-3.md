@@ -1069,3 +1069,14 @@ this.chart.on('legendselectchanged', obj=> {
   // ......
 })
 ```
+
+## 5. input快捷限制
+```js
+<el-input
+  type="number"
+  oninput="if(value.length>5)value=value.slice(0,4)"
+  v-model="zytrtj.inputNum"
+  placeholder="请输入"
+  class="f-fl"
+/>
+```
