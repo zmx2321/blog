@@ -3,6 +3,8 @@
   <Valine></Valine>
 </ClientOnly>
 
+> [演示](https://zmx2321.github.io/vue_demo/#/mapbox1)
+
 ## 1. mapLibre和mapbox官网地址
 - mapLibre
   - https://maplibre.org
@@ -163,7 +165,7 @@ const addMapLayer = (map, geoData, idName , color, opacity)=> {
         'type': 'geojson',
         'data': geoData
     });
-
+    // 添加面
     map.addLayer({
         'id': idName,
         'type': 'fill',  // fill类型layer
@@ -174,6 +176,22 @@ const addMapLayer = (map, geoData, idName , color, opacity)=> {
             'fill-opacity': opacity ? opacity : 0.7  // fill透明度
         }
     });
+    // 添加线
+    map.addLayer({
+      'id': idName + '_line',
+      'type': 'line',
+      'source': idName,
+      'layout': {},
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "paint": { 
+        "line-color": '#fff',
+        "line-width": 1,
+        "line-dasharray": [2, 4],
+      }
+  });
 }
 
 /******************************
@@ -252,78 +270,82 @@ export const renderGeoToShangHai = map => {
 <script>
 // map-core
 import * as mapUtils from './mapUtils'
-data() {
-  return {
-    glMap: null,
-    mainPopupData: {
-      mpdt0: 'xxx',
-    }, 
-    type0Data: {
-      type0dt1: 'xxxx',
-      type0dt2: 'xxxx',
-      type0table: {
-        columns: ['指标', '数据'],
-        type0tbData: [
-          {
-            type0tdCol1: 'xxx',
-            type0tdCol2: {
-              num: '123',
-              unit: '万'
-            }
-          },
-          {
-            type0tdCol1: 'xxx',
-            type0tdCol2: {
-              num: '456',
-              unit: '万'
-            }
-          },
-        ]
+
+export default {
+  data() {
+    return {
+      glMap: null,
+      mainPopupData: {
+        mpdt0: 'xxx',
+      }, 
+      type0Data: {
+        type0dt1: 'xxxx',
+        type0dt2: 'xxxx',
+        type0table: {
+          columns: ['指标', '数据'],
+          type0tbData: [
+            {
+              type0tdCol1: 'xxx',
+              type0tdCol2: {
+                num: '123',
+                unit: '万'
+              }
+            },
+            {
+              type0tdCol1: 'xxx',
+              type0tdCol2: {
+                num: '456',
+                unit: '万'
+              }
+            },
+          ]
+        }
       }
+      tabCurrent: '浙江'
     }
   }
-}
-computed: {
-  mainPopup() {
-    return `<section class="popupp_wrap main_popupp">
-              <ul>
-                <li>${this.mainPopupData.mpdt0}</li>
-              </ul>
-            </section>`
-  },
-  // type0气泡
-  type0Popup() {
-    /**
-     * table
-     */
-    let tbThStr = '' 
-    let tbTbdStr = '' 
-    this.type0Data.type0table.columns.forEach(item=> {
-      tbThStr += `<th>${item}</th>`
-    })
-    this.type0Data.type0table.type0tbData.forEach(item=> {
-      tbTbdStr += `<tr>
-        <td>${item.cszhtdCol1}</td> 
-        <td>${typeof item.cszhtdCol2 === 'object' ? '<span>'+ item.cszhtdCol2.num +'</span>' + item.cszhtdCol2.unit : item.cszhtdCol2}</td> 
-      </tr>`
-    })
+  computed: {
+    mainPopup() {
+      return `<section class="popupp_wrap main_popupp">
+                <ul>
+                  <li>${this.mainPopupData.mpdt0}</li>
+                </ul>
+              </section>`
+    },
+    // type0气泡
+    type0Popup() {
+      /**
+       * table
+       */
+      let tbThStr = '' 
+      let tbTbdStr = '' 
+      this.type0Data.type0table.columns.forEach(item=> {
+        tbThStr += `<th>${item}</th>`
+      })
+      this.type0Data.type0table.type0tbData.forEach(item=> {
+        tbTbdStr += `<tr>
+          <td>${item.cszhtdCol1}</td> 
+          <td>${typeof item.cszhtdCol2 === 'object' ? '<span>'+ item.cszhtdCol2.num +'</span>' + item.cszhtdCol2.unit : item.cszhtdCol2}</td> 
+        </tr>`
+      })
 
-    return `<section class="popupp_wrap gaosushiyou_popupp">
-              <ul>
-                <li>名称：${this.type0Data.type0dt1}</li>
-                <li>简介：${this.type0Data.type0dt2}</li>
-              </ul>
-              <table>
-                <thead>
-                  <tr>
-                    ${tbThStr}
-                  </tr>
-                </thead>
-                <tbody>
-                    ${tbTbdStr}
-                </tbody>
-              </table>
-            </section>`
+      return `<section class="popupp_wrap gaosushiyou_popupp">
+                <ul>
+                  <li>名称：${this.type0Data.type0dt1}</li>
+                  <li>简介：${this.type0Data.type0dt2}</li>
+                </ul>
+                <table>
+                  <thead>
+                    <tr>
+                      ${tbThStr}
+                    </tr>
+                  </thead>
+                  <tbody>
+                      ${tbTbdStr}
+                  </tbody>
+                </table>
+              </section>`
+    },
   },
   methods() {
     /**
@@ -459,8 +481,6 @@ computed: {
     },
     // type0标注
     setType0Marker(item) {
-      // console.log("创胜至合 7", item, this.tabCurrent)
-
       // console.log(item.shop_name, item.adress)
 
       this.type0Data = {
