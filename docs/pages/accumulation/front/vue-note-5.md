@@ -16,6 +16,9 @@
 ## 2. 在vue中引入并使用
 - yarn add maplibre-gl
 - 使用
+- 在public的index.html中添加
+  - `<link href='https://unpkg.com/maplibre-gl@2.1.9/dist/maplibre-gl.css' rel='stylesheet' />`
+- 默认配置
 ```html
 <!-- 创建一个地图容器 -->
 <div id='glMap' class="glMap_cont" style='width: 100%; height: 100%;' v-loading="mapLoading"></div>
@@ -24,8 +27,8 @@
   import maplibregl from 'maplibre-gl';
   //初始化地图实例
   let map = new maplibregl.Map({
-    container: 'map', //容器的id
-    style: './static/map.json', //地图描述数据的路径
+    container: 'glMap', //容器的id
+    // style: './static/map.json', //地图描述数据的路径
     center: [0, 0], // 初始位置，经度纬度 [lng, lat]
     zoom: 1, // 初始缩放
     antialias: true, //抗锯齿
