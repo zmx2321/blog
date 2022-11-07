@@ -1228,3 +1228,87 @@ watermark.set = (text, sourceBody) => {
   
 export default watermark
 ```
+
+## 7. 全屏和取消全屏
+```html
+<button class="full_screen_wrap qp" @click="setFullScreen"></button>
+
+<script>
+  export default {
+    data() {
+      return {
+        fullscreen: false,  // 是否全屏
+      }
+    },
+
+    methods: {
+      // 全屏
+      setFullScreen() {
+        // console.log('全屏')
+
+        // document.documentElement.webkitRequestFullScreen();
+        let element = document.documentElement;
+          // 判断是否已经是全屏
+          // 如果是全屏，退出
+          if (this.fullscreen) {
+              if (document.exitFullscreen) {
+                  document.exitFullscreen();
+              } else if (document.webkitCancelFullScreen) {
+                  document.webkitCancelFullScreen();
+              } else if (document.mozCancelFullScreen) {
+                  document.mozCancelFullScreen();
+              } else if (document.msExitFullscreen) {
+                  document.msExitFullscreen();
+              }
+              
+              let fullDom = document.querySelector('.full_screen_wrap')
+              fullDom.classList.remove('qp0')
+              fullDom.classList.add('qp')
+
+              // console.log('已还原！');
+          } else {    // 否则，进入全屏
+              if (element.requestFullscreen) {
+                  element.requestFullscreen();
+              } else if (element.webkitRequestFullScreen) {
+                  element.webkitRequestFullScreen();
+              } else if (element.mozRequestFullScreen) {
+                  element.mozRequestFullScreen();
+              } else if (element.msRequestFullscreen) {
+                  // IE11
+                  element.msRequestFullscreen();
+              }
+              
+              let fullDom = document.querySelector('.full_screen_wrap')
+              fullDom.classList.remove('qp')
+              fullDom.classList.add('qp0')
+
+              // console.log('已全屏！');
+          }
+          // 改变当前全屏状态
+          this.fullscreen = !this.fullscreen;
+      },
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+.full_screen_wrap {
+  position: absolute;
+  top: 14px;
+  right: 31px;
+  width: 21px;
+  height: 21px;
+  border: none;
+
+  &.qp {
+    background: url('/qp.png') top no-repeat;
+    background-size: 100%;
+  }
+
+  &.qp0 {
+    background: url('/qp0.png') top no-repeat;
+    background-size: 100%;
+  }
+}
+</style>
+```
