@@ -586,3 +586,14 @@ dataAutoScroll() {
   })
 },
 ```
+
+## 15. 根据url获取文件名
+```js
+getUrlsub(urlStr) {
+  let file = urlStr.substring(urlStr.lastIndexOf('/') + 1, urlStr.lastIndexOf('.') );
+
+  return file
+},
+
+this.getUrlsub(row.fileUrl)
+```
