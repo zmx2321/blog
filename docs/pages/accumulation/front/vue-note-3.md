@@ -1352,3 +1352,51 @@ export default watermark
 }
 </style>
 ```
+
+## 大屏自适应示例
+```html
+<!-- app.vue -->
+<script>
+import lodash from "lodash";
+export default {
+  name: 'App',
+  data() {
+    return {
+      style: {
+        transform: "scale(1) translate(-50%, -50%)",
+        width: "1920px",
+        height: "1080px"
+      },
+    }
+  },
+  mounted () {
+    this.setScale()
+    window.addEventListener("resize", lodash.debounce(this.setScale, 1000));
+    this.$once("hook:beforeDestroy", () => {
+      window.removeEventListener("resize", this.setScale);
+    });
+  },
+  methods: {
+    setScale() {
+      const w = window.innerWidth / 1920
+      const h = window.innerHeight / 1080
+      this.style.transform = `scale(${w},${h}) translate(-50%, -50%)`
+    }
+  },
+}
+</script>
+
+<style lang="less" scope>
+  #app {
+    font-size: 12px;
+    transform-origin: 0 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transition: 0.1s;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+</style>
+```
