@@ -800,10 +800,12 @@ export default {
 ## 5. 使用vue-simple-uploader分片上传
 - 安装vue-simple-uploader并使用
 - yarn add vue-simple-uploader
-```js
-// main.js
+```main.js
 import uploader from 'vue-simple-uploader';
 Vue.use(uploader)
+
+import uploadToolsBig from './components/managerTools/uploadManager/uploadToolsBig'
+Vue.component("uploadToolsBig", uploadToolsBig);
 ```
 - uploadToolsBig
 ```html
@@ -998,6 +1000,17 @@ export default {
 }
 </style>
 ```
+- config.js
+```js
+export const ACCEPT_CONFIG = {
+  image: ['.png', '.jpg', '.jpeg', '.gif', '.bmp'],
+  video: ['.mp4', '.rmvb', '.mkv', '.wmv', '.flv'],
+  document: ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.pdf', '.txt', '.tif', '.tiff', '.rar', '.zip'],
+  getAll() {
+    return [...this.image, ...this.video, ...this.document]
+  },
+};
+```
 - axios.js
 ```js
 import axios from 'axios'
@@ -1044,7 +1057,7 @@ export const requestApi = (option) => {
   }
 }
 ```
-- api.js
+- api.js  (uploadFile.js)
 ```js
 import {requestApi} from '@/utils/axios'
 
@@ -1057,17 +1070,412 @@ export const mergeFile = data => {
   });
 }
 ```
-
+- uploadFile.js完整
 ```js
-this.chart.on('legendselectchanged', obj=> {
-  // console.log(this.chartData, obj)
+import {requestApi} from '@/utils/axios'
 
-  this.chart.setOption({
-    legend:{ selected:{  [obj.name]: true}}
-  })
+const option = (url, data, method)=> {
+  return {
+    url,
+    method: ''? method:'post',
+    isJson: true,
+    data
+  }
+}
 
-  // ......
-})
+export const mergeFile = data => {
+  return requestApi(option('/uploader/mergeFile', JSON.stringify(data)));
+}
+
+export const selectFileList = params => {
+  return requestApi(option('/uploader/selectFileList', params));
+}
+
+export const deleteFile = params => {
+  return requestApi(option('/uploader/deleteFile', params));
+}
+
+export const deleteFilePhysics = params => {
+  return requestApi(option('/uploader/deleteFilePhysics', params));
+}
+
+export const downloadFile = params => {
+  return requestApi(option('/uploader/download', params));
+}
+
+```
+- 显示 - uploadRes.vue
+```html
+<template>
+  <section class="upload_table" :style="{width:uploadWidth}">
+    <!-- table主要区域 begin -->
+    <el-table :data="fileList" stripe class="table" ref="multipleTable" header-cell-class-name="table-header" v-loading="loading" v-if="total!==0">
+      <!-- <el-table-column label="序号" type="index" width="55" align="center"></el-table-column> -->
+      <el-table-column prop="id" label="ID" align="center" v-if="isShow"></el-table-column>
+      <el-table-column prop="filename" label="文件名" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="totalSizeName" label="文件大小" width="100"></el-table-column>
+      <el-table-column prop="location" label="location" align="center" v-if="isShow"></el-table-column>
+      <el-table-column prop="identifier" label="identifier" align="center" v-if="isShow"></el-table-column>
+      <el-table-column prop="isDelete" label="是否逻辑删除" v-if="isSurper"></el-table-column>
+      <el-table-column prop="createTime" label="上传时间" width="100">
+        <template slot-scope="scope">
+          {{ scope.row.createTime.substring(0, 10) }}
+        </template>
+      </el-table-column>
+      <!-- <el-table-column prop="updateTime" label="上传时间" width="160"></el-table-column> -->
+      <el-table-column label="操作" width="150" align="center">
+        <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-download" class="blue" @click="handleDownload(scope.$index, scope.row)">下载</el-button>
+          <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)" v-if="!isView">{{ isSurper?'逻辑删除':'删除' }}</el-button >
+          <el-button type="text" icon="el-icon-delete" class="red" @click="handleDeletePhysics(scope.$index, scope.row)" v-if="isSurper">物理删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <!-- <pagination
+        v-show="queryParams.pageSize/total<1"
+        :total="total"
+        :page.sync="queryParams.pageIndex"
+        :limit.sync="queryParams.pageSize"
+        @pagination="initTable" /> -->
+  </section>
+</template>
+
+<script>
+import { selectFileList, deleteFile, deleteFilePhysics } from "@/api/uploadFile";
+
+const pageSizeLimit = 50
+export default {
+  props: {
+    isView: {
+      type: Boolean,
+      default: false
+    },
+    isSurper: {
+      type: Boolean,
+      default: false
+    },
+    uploadWidth: {
+      type: String,
+      default: '38%'
+    }
+  },
+
+  data () {
+    return {
+      loading: false,
+      isShow: false,
+      queryParams: {
+        pageIndex: 1,
+        pageSize: pageSizeLimit,
+        isDelete: '0'
+      },
+      total: 0,
+      fileList: [],
+      deltxt: '删除',
+    }
+  },
+
+  methods: {
+    initTable(query) {
+      this.loading = true
+
+      if(query) {
+        this.queryParams = Object.assign(this.queryParams, query)
+      }
+
+      selectFileList(this.queryParams).then(res=> {
+        this.loading = false
+        this.total = res.data.data.total
+        this.fileList = res.data.data.list
+
+        /* console.log(res.data.data.total)
+        if(this.total === 0) {
+
+        } */
+      })
+    },
+    //下载
+    handleDownload(index, row) {
+      this.loadingOverLay = this.$loading({
+        lock: true,
+        text: '文件生成中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0,0,0,0.7)'
+      });
+      var elemIF = document.createElement('iframe');
+      elemIF.src =
+        process.env.VUE_APP_BASE_UPLOAD_API +
+        '/uploader/download?id=' +
+        row.id +
+        '&filename=' +
+        row.filename +
+        '&location=' +
+        row.location;
+      elemIF.style.display = 'none';
+      document.body.appendChild(elemIF);
+      this.loadingOverLay.close();
+    },
+    // 删除操作
+    handleDelete(index, row) {
+      // 二次确认删除
+      this.$confirm('确定要删除吗？', '提示', {
+        type: 'warning'
+      }).then(async () => {
+        let result = await deleteFile(row);
+        let { code } = result.data
+        if(code === 200) {
+          this.$message.success('删除成功');
+
+          this.initTable()
+        }
+      });
+    },
+    // 物理删除-操作
+    handleDeletePhysics(index, row) {
+      // 二次确认删除
+      this.$confirm('确定要删除吗？', '提示', {
+        type: 'warning'
+      }).then(async () => {
+        let result = await deleteFilePhysics(row);
+        let { code } = result.data
+        if(code === 200) {
+          this.$message.success('物理删除成功');
+
+          this.initTable()
+        }
+      });
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+::v-deep .el-table {
+  position: initial;
+  margin-top: -6px;
+
+  .el-table__header-wrapper {
+    display: none;
+  }
+
+  .el-table__body-wrapper {
+    td {
+      padding: 0;
+      border: none;
+
+      button {
+        margin: 0;
+        padding: 0;
+
+        span, i {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+</style>
+```
+- 使用
+```html
+<template>
+<uploadToolsBig :btnTxt="btnTxt"
+                :typeSubmitInfo="typeSubmitInfo"
+                :ifCover="ifCover"
+                :uploadParams="uploadParams"
+                @getRowData="getUploadParams(1)"
+                @initUploadTable="initCurrentUploadTable(1)" />
+<uploadRes ref="uploadRes1Ref" :uploadWidth="uploadWidth" />
+
+<uploadToolsBig :btnTxt="btnTxt"
+                :typeSubmitInfo="typeSubmitInfo"
+                :ifCover="ifCover"
+                :uploadParams="uploadParams"
+                @getRowData="getUploadParams(2)"
+                @initUploadTable="initCurrentUploadTable(2)" />
+<uploadRes ref="uploadRes2Ref" :uploadWidth="uploadWidth" />
+
+<uploadToolsBig :btnTxt="btnTxt"
+                :typeSubmitInfo="typeSubmitInfo"
+                :ifCover="ifCover"
+                :uploadParams="uploadParams"
+                @getRowData="getUploadParams(9)"
+                @initUploadTable="initCurrentUploadTable(4)" />
+<uploadRes ref="uploadRes4Ref" :uploadWidth="uploadWidth" />
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      uploadWidth: '88%',
+      btnTxt: '上传文件',
+      typeSubmitInfo: "支持扩展名：.rar .zip .doc .docx .pdf .jpg...",
+      ifCover: 1,
+      uploadParams: {
+        itemId: this.$route.query.id,  // 对象id
+        fileType: 2,  // 文件类型 - 资质审查资料
+        shopModel: 1,  // 默认品牌直营
+        fileModel: 1,  // 品牌直营1
+        // objectId: undefined
+      },
+    }
+  },
+
+  methods: {
+    // 获取ref
+    getCurrentRef(val) {
+      return this.$refs[`uploadRes${val}Ref`]
+    },
+    // 渲染所有文件列表
+    initUpload() {
+      console.log("渲染所有文件列表")
+      // this.uploadParams.fileModel = 2
+
+      const setObj =val=> {
+        return {
+          fileModel: val
+        }
+      }
+      const ifRef = (ref, params)=> {
+        if(ref) {
+          ref.initTable(params)
+          // next()
+        }
+      }
+      const parseObj = val=> {
+        return JSON.parse(JSON.stringify(Object.assign(this.uploadParams, setObj(val))))
+      }
+
+      let uploadParams1 = parseObj(1)
+      let uploadParams2 = parseObj(2)
+      let uploadParams4 = parseObj(9)
+
+      this.$nextTick(()=> {
+        this.getCurrentRef(1).initTable(uploadParams1)
+        this.getCurrentRef(2).initTable(uploadParams2)
+
+        ifRef(this.getCurrentRef(4), uploadParams4)
+      })
+    },
+    initCurrentUploadTable(val) {
+      // console.log("000", val, this.uploadParams)
+
+      this.$nextTick(()=> {
+        this.getCurrentRef(val).initTable(this.uploadParams)
+      })
+    },
+    // 父级传的方法
+    showUpload(val) {
+      // console.log(val)
+
+      /* this.uploadParams.objectId = val.brandMerchantNo
+
+      this.uploadDialogVisible = true */
+
+      this.initUpload()
+    },
+    // 父级传的方法
+    handleClick(tab) {
+      // console.log(this.$refs)
+
+      if(tab.name === 'ppzy') {
+        this.uploadParams.shopModel = 1
+      } else {
+        this.uploadParams.shopModel = 2
+      }
+
+      this.initUpload()
+    },
+
+    // 获取上传参数
+    getUploadParams(num) {
+      // console.log(num)
+
+      this.uploadParams.fileModel = num
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+$borderStyle: solid 1px #dbdbdb;
+
+.upload_dialog_wrap {
+  ::v-deep .el-dialog {
+    .el-dialog__header {
+      border-bottom: $borderStyle;
+
+      button {
+        display: none;
+      }
+    }
+
+    .el-dialog__body {
+      padding: 0;
+
+      .upload_dialog_cont {
+        width: 92%;
+        margin: 10px auto;
+
+        .digupload_left, .digupload_right {
+          dl {
+            &:not(:last-child) {
+              margin-bottom: 18px;
+            }
+            &:last-child {
+              margin-bottom: 13px;
+            }
+
+            dt {
+              position: relative;
+              margin-bottom: 10px;
+              left: 10px;
+
+              &::before {
+                content: '*';
+                position: absolute;
+                left: -10px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 7px;
+                height: 7px;
+                color: #f00;
+              }
+            }
+          }
+        }
+
+        .digupload_left, .digupload_right {
+          min-width: 49.9%;
+        }
+
+        .digupload_left {
+          dl.type4 {
+            // background: #f00;
+            ul {
+              li {
+                margin-bottom: 10px;
+
+                dl:first-child {
+                  margin-bottom: 0px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .upload_diagcont_btn {
+        border-top: $borderStyle;
+        text-align: right;
+        padding: 20px 30px;
+      }
+    }
+  }
+}
+</style>
 ```
 
 ## 5. input快捷限制
