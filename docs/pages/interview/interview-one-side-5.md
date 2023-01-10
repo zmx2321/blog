@@ -139,7 +139,7 @@ console.log(xialuo.__proto__ === Student.prototype)
 ```
 - 注意事项：
   - 我们在定义一个Student类的时候，会有一个显示原型指向一个对象，把方法都放到这个对象(原型)中来
-  - xialuo这个对象实际上除了本身有name和number两个属性值之外，还有一个__proto__，所有的方法都是通过这个隐式原型指向Student类中的原型获取的
+  - xialuo这个对象实际上除了本身有name和number两个属性值之外，还有一个__proto__，所有的方法都是通过这个隐式原型指向Student类中的原型获去的
   - 被实例化出来的对象的__proto__和类的原型(方法)指向同一个内存地址
 - 原型关系
   - 每个class都有显示原型prototype

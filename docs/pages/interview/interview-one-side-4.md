@@ -140,7 +140,7 @@ console.log(obj1.address.city)
  */
 const deepClone = (obj = {})=> {
   // obj是null，或者不是对象或数组，直接返回
-  if(typeof obj !== 'object' || obj == null ) {
+  if(typeof obj !== 'object' || obj == null) {
     // 递归里面，如果是值，直接返回
     return obj;
   }

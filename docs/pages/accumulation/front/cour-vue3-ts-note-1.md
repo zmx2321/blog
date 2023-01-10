@@ -25,7 +25,7 @@
     - vue2x => 是使用 Object.definePropery 来劫持数据的 getter 和 Setter 方法的
       - 这种方法存在缺陷，给当前对象添加或者删除属性的时候，无法奏效，需要用 vue2 封装的$set或者$delete 方法来修改或者删除对象属性
   - 删除了一些不必要的 api
-    - 移除了实例上的$on、$off、\$once
+    - 移除了实例上的$on、$off、$once
     - 移除了一些特性: filter、内联模块等
   - 编译上的优化
     - 生成的 Block Tree、Slot 编译优化、diff 算法优化
