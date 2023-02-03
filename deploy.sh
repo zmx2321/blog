@@ -20,6 +20,3 @@ git commit -m 'deploy'
 git push -f git@github.com:zmx2321/blog.git master:gh-pages
 
 cd -
-
-origin/gh-pages
-  origin/master
