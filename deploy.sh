@@ -4,7 +4,7 @@
 set -e
 
 # 生成静态文件
-# yarn docs:build
+yarn docs:build
 
 # 进入生成的文件夹
 cd docs/.vuepress/dist
@@ -19,3 +19,10 @@ git commit -m 'deploy'
 git push -f git@github.com:zmx2321/blog.git master:gh-pages
 
 cd -
+
+remotes/origin/HEAD -> origin/master
+  remotes/origin/gh-pages
+  remotes/origin/master
+
+   remotes/origin/gh-pages
+  remotes/origin/master
