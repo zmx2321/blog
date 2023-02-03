@@ -3,244 +3,7 @@
   <Valine></Valine>
 </ClientOnly>
 
-## 1. vue中echarts图表
-- `yarn add echarts`
-- main.js
-```js
-import echarts from 'echarts'
-
-Vue.prototype.echarts = echarts;
-```
-- 父组件
-```js
-<ZhuZhuangTu ref="zzt" :zzt='zzt' />
-
-data() {
-  return {
-    // 柱状图信息
-    zzt: {
-        area: [],  // 柱状图省份
-        cityNum: [],  // 柱状图数据
-    },
-  }
-}
-
-methods: {
-  // 人员进出省份统计
-  getTrackCountByProList() {
-      this.listLoading = true;
-
-      let params = {
-          stime: new DateTime().getTheDate() + " 00:00:00",
-          etime: new DateTime().getTheDate() + " 23:59:59"
-      }
-
-      getTrackCountByPros(params).then(res=> {
-          this.listLoading = false;
-
-          let trackCountByProsList = res.data.data.data;
-
-          // console.log(trackCountByProsList);
-
-          for(let item in trackCountByProsList) {
-              if(typeof trackCountByProsList[item] !== 'function') {
-                  // console.log(trackCountByProsList[item]);
-
-                  // 获取城市名称数组
-                  this.province_name.push({
-                      name: trackCountByProsList[item].name
-                  });
-
-                  // 获取城市人流量
-                  this.zzt.cityNum.push({
-                      num: trackCountByProsList[item].num
-                  });
-              }
-          }
-
-          // 柱状图
-          this.zzt.area = this.province_name;
-
-          this.$refs.zzt.getChartData();
-      }).catch({});
-  },
-}
-
-mouteds: {
-  this.getTrackCountByProList();
-}
-```
-- 子组件
-```js
-// 接受父组件的值
-props: {
-  zzt: Object,
-},
-
-// 柱状图数据
-methods: {
-  province_name:[],
-  cityNum: [],
-}
-
-methods: {
-  // 获取柱状图数据
-  getChartData(){
-      // console.log(this.zzt);
-
-      // 获取省份
-      for(let item in this.zzt.area) {
-          if(this.zzt.area[item].name != "") {
-              this.province_name.push(this.zzt.area[item].name);
-          }
-      }
-      // console.log("获取省份", this.province_name);
-
-      // 获取城市数据
-      for(let item in this.zzt.cityNum) {
-          if(this.zzt.cityNum[item].num !== undefined) {
-              this.cityNum.push(this.zzt.cityNum[item].num);
-          }
-      }
-      // console.log("获取城市数据", this.cityNum);
-
-      // 渲染柱状图
-      this.drawCal();
-  },
-
-  // 渲染柱状图
-  drawCal() {
-      var myChart = this.echarts.init(document.getElementById('echarts'))
-
-      let option = {
-          xAxis: {
-              type: 'category',
-              data: this.province_name,
-              axisLabel: {
-                  inside: false,
-                  textStyle: {
-                      color: '#b9b7b7',
-                  },
-                  interval: 0,  // 加上这个强制显示
-                  rotate: 63
-              },
-              axisTick: {
-                  show: false
-              },
-              axisLine: {
-                  show: false
-              },
-              z: 10
-          },
-          yAxis: {
-              name: "单位/人",
-              nameTextStyle: {
-                  color: '#9FA9BC',
-                  padding : [0, 0, 0, -50],
-              },
-              axisLine: {
-                  show: false
-              },
-              axisTick: {
-                  show: false
-              },
-              axisLabel: {
-                  textStyle: {
-                      color: '#b9b7b7'
-                  }
-              }
-          },
-          dataZoom: [
-              {
-                  type: 'inside'
-              }
-          ],
-          series: [
-              {
-                  type: 'bar',
-                  itemStyle: {
-                      color: 'rgba(0,0,0,0.05)',
-                  },
-                  barGap: '-100%',
-                  barCategoryGap: '40%',
-                  data: this.dataShadow,
-                  animation: false,
-              },
-              {
-                  type: 'bar',
-                  itemStyle: {
-                      barBorderRadius: [4.6, 4.6, 0, 0],
-
-                      color: {
-                          type: "linear",
-                          x: 0,
-                          y: 0,
-                          x2: 0,
-                          y2: 1,
-                          colorStops: [
-                              {
-                                  offset: 0,
-                                  color: "#03C2AC" // 0% 处的颜色
-                              },
-                              {
-                                  offset: 1,
-                                  color: "#000" // 100% 处的颜色
-                              }
-                          ],
-                          globalCoord: false // 缺省为 false
-                      },
-                  },
-                  emphasis: {
-                      itemStyle: {
-                          color: {
-                              type: "linear",
-                              x: 0,
-                              y: 0,
-                              x2: 0,
-                              y2: 1,
-                              colorStops: [
-                                  {
-                                  offset: 0,
-                                  color: "#000" // 0% 处的颜色
-                                  },
-                                  {
-                                  offset: 1,
-                                  color: "#03C2AC" // 100% 处的颜色
-                                  }
-                              ],
-                              globalCoord: false // 缺省为 false
-                          },
-                      },
-                  },
-                  data: this.cityNum,
-                  label: {
-                      show: true, //开启显示
-                      position: 'top', //在上方显示
-                      textStyle: { //数值样式
-                          color: '#9FA9BC',
-                          fontSize: 12
-                      }
-                  },
-              }
-          ]
-      };
-
-      /* var zoomSize = 6;
-      myChart.on('click', function (params) {
-          console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
-          myChart.dispatchAction({
-              type: 'dataZoom',
-              startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
-              endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
-          });
-      }); */
-
-      myChart.setOption(option);
-  },
-}
-```
-
-## 2. upload不直接上传
+## 1. upload不直接上传
 ```html
 <el-upload
     class="upload_wrap"
@@ -290,7 +53,7 @@ uploadChange(file) {
 </script>
 ```
 
-## 3. 选项卡异步切换
+## 2. 选项卡异步切换
 ```js
 // 选项卡异步切换
 switchTab(tab) {
@@ -372,7 +135,7 @@ refreshList() {
 },
 ```
 
-## 4. 在vue项目中使用高德地图的geojson
+## 3. 在vue项目中使用高德地图的geojson
 - 安装vue-amap
 - 在main.js中配置
 ```js
@@ -908,7 +671,7 @@ AMap.initAMapApiLoader({
         </style>
         ```
 
-## 5. vue中cascader级联选择器
+## 4. vue中cascader级联选择器
 ```html
 <template>
   <el-cascader v-model="currentAddressStr" :props="props" @change="addressHandleChange" />
@@ -1034,13 +797,15 @@ export default {
 <cascader-tool ref="cascaderRef" @addressHandleChange="addressHandleChange" :addressStr="addressStr" v-if="cascaderFlag" />
 ```
 
-## 6. 使用vue-simple-uploader分片上传
+## 5. 使用vue-simple-uploader分片上传
 - 安装vue-simple-uploader并使用
 - yarn add vue-simple-uploader
-```js
-// main.js
+```main.js
 import uploader from 'vue-simple-uploader';
 Vue.use(uploader)
+
+import uploadToolsBig from './components/managerTools/uploadManager/uploadToolsBig'
+Vue.component("uploadToolsBig", uploadToolsBig);
 ```
 - uploadToolsBig
 ```html
@@ -1235,6 +1000,17 @@ export default {
 }
 </style>
 ```
+- config.js
+```js
+export const ACCEPT_CONFIG = {
+  image: ['.png', '.jpg', '.jpeg', '.gif', '.bmp'],
+  video: ['.mp4', '.rmvb', '.mkv', '.wmv', '.flv'],
+  document: ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.pdf', '.txt', '.tif', '.tiff', '.rar', '.zip'],
+  getAll() {
+    return [...this.image, ...this.video, ...this.document]
+  },
+};
+```
 - axios.js
 ```js
 import axios from 'axios'
@@ -1281,7 +1057,7 @@ export const requestApi = (option) => {
   }
 }
 ```
-- api.js
+- api.js  (uploadFile.js)
 ```js
 import {requestApi} from '@/utils/axios'
 
@@ -1294,342 +1070,741 @@ export const mergeFile = data => {
   });
 }
 ```
-
-## 7.图表电池样式
+- uploadFile.js完整
 ```js
-// var barData = [0, ~~(Math.random() * 100), ~~(Math.random() * 100), ~~(Math.random() * 100), ~~(Math.random() * 100)];
-var barData = [60, 30, 52, 34, 90];
-var lineData = [63, 63, 63, 63, 100]
-this.chart.setOption(
-  // option-start
-  {
-    grid: [{//图形的位置
-        top: "-1%",
-        left: "0%",
-        right: "0%",
-        bottom: "4%",
-    }],
-    xAxis: {
-      show: false,//是否展示X轴
-    },
-    yAxis: {
-      axisLine: {
-        show: false//不展示刻度
-      },
-      type: "category",
-      inverse: true,
-      axisLine: {
-        show: false,
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLabel: {
-        inside: true,
-      },
-      data: ['服务器数（台）', '计算容量（核）', '内存容量（GB）', '存储容量（PB）'],
-    },
-    series: [
-      // 下层块
-      { 
-        name: '',
-        type: 'pictorialBar',
-        symbol: 'roundRect',
-        barWidth: '3%',
-        barMaxWidth: '20%',
-        symbolOffset: [75, 0],
-        itemStyle: {
-          normal: {
-            color: 'rgba(255,255,255,0.2000)'
-          }
-        },
-        z: -11,
-        symbolRepeat: true,
-        symbolSize: [6, 16],
-        data: lineData,
-        barGap: 50,
-        barCategoryGap: 0,
-        animationEasing: 'elasticOut',
-      },
-      // 上层块
-      { 
-        // name: '', // blue bar
-        type: 'pictorialBar',
-        symbol: 'roundRect',
-        barWidth: '2%',
-        barMaxWidth: 100,
-        symbolOffset: [75, 0],
-        itemStyle: {
-          normal: {
-            barMaxWidth: '20%',
-            barBorderRadius: 100,
-            color: '#00C0FF',
-          }
-        },
-        symbolRepeat: true,
-        symbolSize: [6, 16],
-        data: barData,
-      },
-    ],
+import {requestApi} from '@/utils/axios'
+
+const option = (url, data, method)=> {
+  return {
+    url,
+    method: ''? method:'post',
+    isJson: true,
+    data
   }
-  // option-end
-)
-```
-```js
-symbolSize: [6, 10],  // 电池大小
-symbolOffset: [75, 0],  // 电池位置
-
-{
-  //图形的位置
-  grid: [{
-    top: -1,
-    left: "-28%",
-    right: '29%',
-    bottom: 0,
-  }],
-  xAxis: {
-    show: false,//是否展示X轴
-  },
-  yAxis: {
-    axisLine: {
-      show: false//不展示刻度
-    },
-    type: "category",
-  },
-  series: [
-    // 下层块(总)
-    // var barData = [0, ~~(Math.random() * 100), ~~(Math.random() * 100), ~~(Math.random() * 100), ~~(Math.random() * 100)];
-    { 
-      type: 'pictorialBar',
-      symbol: 'roundRect',
-      // barWidth: 0,
-      symbolOffset: this.symbolOffset,
-      itemStyle: {
-        normal: {
-          color: 'rgba(255,255,255,0.2000)'
-        }
-      },
-      symbolRepeat: true,
-      symbolSize: this.symbolSize,
-      barGap: 50,
-      barCategoryGap: 0,
-      animationEasing: 'elasticOut',
-      data: lineData,
-    },
-    // 上层块
-    { 
-      type: 'pictorialBar',
-      symbol: 'roundRect',
-      // barWidth: 0,
-      symbolOffset: this.symbolOffset,
-      itemStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: '#00C0FF',
-            },
-            {
-              offset: 1,
-              color: 'rgba(0,192,255,0.3000)',
-            },
-          ], false),
-        }
-      },
-      symbolRepeat: true,
-      symbolSize: this.symbolSize,
-      data: barData,
-    },
-  ],
 }
+
+export const mergeFile = data => {
+  return requestApi(option('/uploader/mergeFile', JSON.stringify(data)));
+}
+
+export const selectFileList = params => {
+  return requestApi(option('/uploader/selectFileList', params));
+}
+
+export const deleteFile = params => {
+  return requestApi(option('/uploader/deleteFile', params));
+}
+
+export const deleteFilePhysics = params => {
+  return requestApi(option('/uploader/deleteFilePhysics', params));
+}
+
+export const downloadFile = params => {
+  return requestApi(option('/uploader/download', params));
+}
+
+```
+- 显示 - uploadRes.vue
+```html
+<template>
+  <section class="upload_table" :style="{width:uploadWidth}">
+    <!-- table主要区域 begin -->
+    <el-table :data="fileList" stripe class="table" ref="multipleTable" header-cell-class-name="table-header" v-loading="loading" v-if="total!==0">
+      <!-- <el-table-column label="序号" type="index" width="55" align="center"></el-table-column> -->
+      <el-table-column prop="id" label="ID" align="center" v-if="isShow"></el-table-column>
+      <el-table-column prop="filename" label="文件名" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="totalSizeName" label="文件大小" width="100"></el-table-column>
+      <el-table-column prop="location" label="location" align="center" v-if="isShow"></el-table-column>
+      <el-table-column prop="identifier" label="identifier" align="center" v-if="isShow"></el-table-column>
+      <el-table-column prop="isDelete" label="是否逻辑删除" v-if="isSurper"></el-table-column>
+      <el-table-column prop="createTime" label="上传时间" width="100">
+        <template slot-scope="scope">
+          {{ scope.row.createTime.substring(0, 10) }}
+        </template>
+      </el-table-column>
+      <!-- <el-table-column prop="updateTime" label="上传时间" width="160"></el-table-column> -->
+      <el-table-column label="操作" width="150" align="center">
+        <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-download" class="blue" @click="handleDownload(scope.$index, scope.row)">下载</el-button>
+          <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)" v-if="!isView">{{ isSurper?'逻辑删除':'删除' }}</el-button >
+          <el-button type="text" icon="el-icon-delete" class="red" @click="handleDeletePhysics(scope.$index, scope.row)" v-if="isSurper">物理删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <!-- <pagination
+        v-show="queryParams.pageSize/total<1"
+        :total="total"
+        :page.sync="queryParams.pageIndex"
+        :limit.sync="queryParams.pageSize"
+        @pagination="initTable" /> -->
+  </section>
+</template>
+
+<script>
+import { selectFileList, deleteFile, deleteFilePhysics } from "@/api/uploadFile";
+
+const pageSizeLimit = 50
+export default {
+  props: {
+    isView: {
+      type: Boolean,
+      default: false
+    },
+    isSurper: {
+      type: Boolean,
+      default: false
+    },
+    uploadWidth: {
+      type: String,
+      default: '38%'
+    }
+  },
+
+  data () {
+    return {
+      loading: false,
+      isShow: false,
+      queryParams: {
+        pageIndex: 1,
+        pageSize: pageSizeLimit,
+        isDelete: '0'
+      },
+      total: 0,
+      fileList: [],
+      deltxt: '删除',
+    }
+  },
+
+  methods: {
+    initTable(query) {
+      this.loading = true
+
+      if(query) {
+        this.queryParams = Object.assign(this.queryParams, query)
+      }
+
+      selectFileList(this.queryParams).then(res=> {
+        this.loading = false
+        this.total = res.data.data.total
+        this.fileList = res.data.data.list
+
+        /* console.log(res.data.data.total)
+        if(this.total === 0) {
+
+        } */
+      })
+    },
+    //下载
+    handleDownload(index, row) {
+      this.loadingOverLay = this.$loading({
+        lock: true,
+        text: '文件生成中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0,0,0,0.7)'
+      });
+      var elemIF = document.createElement('iframe');
+      elemIF.src =
+        process.env.VUE_APP_BASE_UPLOAD_API +
+        '/uploader/download?id=' +
+        row.id +
+        '&filename=' +
+        row.filename +
+        '&location=' +
+        row.location;
+      elemIF.style.display = 'none';
+      document.body.appendChild(elemIF);
+      this.loadingOverLay.close();
+    },
+    // 删除操作
+    handleDelete(index, row) {
+      // 二次确认删除
+      this.$confirm('确定要删除吗？', '提示', {
+        type: 'warning'
+      }).then(async () => {
+        let result = await deleteFile(row);
+        let { code } = result.data
+        if(code === 200) {
+          this.$message.success('删除成功');
+
+          this.initTable()
+        }
+      });
+    },
+    // 物理删除-操作
+    handleDeletePhysics(index, row) {
+      // 二次确认删除
+      this.$confirm('确定要删除吗？', '提示', {
+        type: 'warning'
+      }).then(async () => {
+        let result = await deleteFilePhysics(row);
+        let { code } = result.data
+        if(code === 200) {
+          this.$message.success('物理删除成功');
+
+          this.initTable()
+        }
+      });
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+::v-deep .el-table {
+  position: initial;
+  margin-top: -6px;
+
+  .el-table__header-wrapper {
+    display: none;
+  }
+
+  .el-table__body-wrapper {
+    td {
+      padding: 0;
+      border: none;
+
+      button {
+        margin: 0;
+        padding: 0;
+
+        span, i {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+</style>
+```
+- 使用
+```html
+<template>
+<uploadToolsBig :btnTxt="btnTxt"
+                :typeSubmitInfo="typeSubmitInfo"
+                :ifCover="ifCover"
+                :uploadParams="uploadParams"
+                @getRowData="getUploadParams(1)"
+                @initUploadTable="initCurrentUploadTable(1)" />
+<uploadRes ref="uploadRes1Ref" :uploadWidth="uploadWidth" />
+
+<uploadToolsBig :btnTxt="btnTxt"
+                :typeSubmitInfo="typeSubmitInfo"
+                :ifCover="ifCover"
+                :uploadParams="uploadParams"
+                @getRowData="getUploadParams(2)"
+                @initUploadTable="initCurrentUploadTable(2)" />
+<uploadRes ref="uploadRes2Ref" :uploadWidth="uploadWidth" />
+
+<uploadToolsBig :btnTxt="btnTxt"
+                :typeSubmitInfo="typeSubmitInfo"
+                :ifCover="ifCover"
+                :uploadParams="uploadParams"
+                @getRowData="getUploadParams(9)"
+                @initUploadTable="initCurrentUploadTable(4)" />
+<uploadRes ref="uploadRes4Ref" :uploadWidth="uploadWidth" />
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      uploadWidth: '88%',
+      btnTxt: '上传文件',
+      typeSubmitInfo: "支持扩展名：.rar .zip .doc .docx .pdf .jpg...",
+      ifCover: 1,
+      uploadParams: {
+        itemId: this.$route.query.id,  // 对象id
+        fileType: 2,  // 文件类型 - 资质审查资料
+        shopModel: 1,  // 默认品牌直营
+        fileModel: 1,  // 品牌直营1
+        // objectId: undefined
+      },
+    }
+  },
+
+  methods: {
+    // 获取ref
+    getCurrentRef(val) {
+      return this.$refs[`uploadRes${val}Ref`]
+    },
+    // 渲染所有文件列表
+    initUpload() {
+      console.log("渲染所有文件列表")
+      // this.uploadParams.fileModel = 2
+
+      const setObj =val=> {
+        return {
+          fileModel: val
+        }
+      }
+      const ifRef = (ref, params)=> {
+        if(ref) {
+          ref.initTable(params)
+          // next()
+        }
+      }
+      const parseObj = val=> {
+        return JSON.parse(JSON.stringify(Object.assign(this.uploadParams, setObj(val))))
+      }
+
+      let uploadParams1 = parseObj(1)
+      let uploadParams2 = parseObj(2)
+      let uploadParams4 = parseObj(9)
+
+      this.$nextTick(()=> {
+        this.getCurrentRef(1).initTable(uploadParams1)
+        this.getCurrentRef(2).initTable(uploadParams2)
+
+        ifRef(this.getCurrentRef(4), uploadParams4)
+      })
+    },
+    initCurrentUploadTable(val) {
+      // console.log("000", val, this.uploadParams)
+
+      this.$nextTick(()=> {
+        this.getCurrentRef(val).initTable(this.uploadParams)
+      })
+    },
+    // 父级传的方法
+    showUpload(val) {
+      // console.log(val)
+
+      /* this.uploadParams.objectId = val.brandMerchantNo
+
+      this.uploadDialogVisible = true */
+
+      this.initUpload()
+    },
+    // 父级传的方法
+    handleClick(tab) {
+      // console.log(this.$refs)
+
+      if(tab.name === 'ppzy') {
+        this.uploadParams.shopModel = 1
+      } else {
+        this.uploadParams.shopModel = 2
+      }
+
+      this.initUpload()
+    },
+
+    // 获取上传参数
+    getUploadParams(num) {
+      // console.log(num)
+
+      this.uploadParams.fileModel = num
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+$borderStyle: solid 1px #dbdbdb;
+
+.upload_dialog_wrap {
+  ::v-deep .el-dialog {
+    .el-dialog__header {
+      border-bottom: $borderStyle;
+
+      button {
+        display: none;
+      }
+    }
+
+    .el-dialog__body {
+      padding: 0;
+
+      .upload_dialog_cont {
+        width: 92%;
+        margin: 10px auto;
+
+        .digupload_left, .digupload_right {
+          dl {
+            &:not(:last-child) {
+              margin-bottom: 18px;
+            }
+            &:last-child {
+              margin-bottom: 13px;
+            }
+
+            dt {
+              position: relative;
+              margin-bottom: 10px;
+              left: 10px;
+
+              &::before {
+                content: '*';
+                position: absolute;
+                left: -10px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 7px;
+                height: 7px;
+                color: #f00;
+              }
+            }
+          }
+        }
+
+        .digupload_left, .digupload_right {
+          min-width: 49.9%;
+        }
+
+        .digupload_left {
+          dl.type4 {
+            // background: #f00;
+            ul {
+              li {
+                margin-bottom: 10px;
+
+                dl:first-child {
+                  margin-bottom: 0px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .upload_diagcont_btn {
+        border-top: $borderStyle;
+        text-align: right;
+        padding: 20px 30px;
+      }
+    }
+  }
+}
+</style>
 ```
 
-## 8. 柱状图定制
+## 5. input快捷限制
 ```js
-seriesType: 'bar',
-barWidth: 4,
-lendTextStyle: {
-  color: 'rgba(255,255,255,0.6)',
-  fontSize: 10,
-},
-legendIcon: 'rect',
-legendItem: 8,
-yAxisLine: false,
+<el-input
+  type="number"
+  oninput="if(value.length>5)value=value.slice(0,4)"
+  v-model="zytrtj.inputNum"
+  placeholder="请输入"
+  class="f-fl"
+/>
+```
 
-{
-  tooltip: {
-    trigger: 'axis',
-    textStyle: {
-      color: '#fff',
-      fontSize: 10,
-    },
-    axisPointer: {
-      type: 'cross',
-      crossStyle: {
-        color: '#fff'
-      }
-    }
-  },
-  grid: {
-    top: 30,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: '87%',
-    containLabel: true,
-  },
-  legend: [
-    {
-      data:[
-        {
-          name: '资产负债率',
-          icon: this.legendIcon
-        }
-      ],
-      color: '#f00',
-      itemWidth: this.legendItem,
-      itemHeight: this.legendItem,
-      left: 'left',
-      textStyle: this.lendTextStyle
-    }, 
-    {
-      data:[
-        {
-          name: '存活增长比率',
-          icon: this.legendIcon
-        }
-      ],   
-      itemWidth: this.legendItem,
-      itemHeight: this.legendItem,
-      left: 'left',
-      left:'15%' ,//调整位置
-      textStyle: this.lendTextStyle
-    }, 
-    {
-      data:[
-        {
-          name: '应收账款增长率',
-          icon: this.legendIcon
-        }
-      ],  
-      itemWidth: this.legendItem,
-      itemHeight: this.legendItem,
-      left: 'right',
-      textStyle: this.lendTextStyle
-    },
-  ],
-  xAxis: {
-    type: 'category',
-    offset: 18,
-    axisTick:{
-      show: false,  // 隐藏刻度线
-    },
-    axisLabel: {
-      padding: [0, 0, 0, -23],
-      interval: 0, // 横轴信息全部显示
-      rotate: 40,
-      textStyle: {
-        align:'left',
-        fontSize: 10,
-        color: '#fff'
-      },
-      formatter (val) {
-        var strs = val.split(""); //字符串数组
-        var str = "";
-        for (var i = 0, s; (s = strs[i++]);) {
-          //遍历字符串数组
-          str += s;
-          if (!(i % 4)) str += "\n"; //按需要求余
-        }
-        return str;
-      }
-    },
-    data: fieldData,
-  },
-  yAxis: [
-    {
-      type: 'value',
-      min: 0,
-      max: 100,
-      interval: 20,
-      splitLine: {
-        show: this.yAxisLine,
-      },
-      axisLabel: {
-        formatter: '{value}%'
-      }
-    },
-    {
-      type: 'value',
-      splitLine: {
-        show: this.yAxisLine,
-      },
-      min: 0,
-      max: 2.5,
-      interval: 0.5,
-    }
-  ],
-  series: [
-    {
-      name: '资产负债率',
-      type: this.seriesType,
-      barWidth: this.barWidth,
-      itemStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: 'rgba(72,143,255,100)',
-            },
-            {
-              offset: 1,
-              color: 'rgba(5,32,115,0)',
-            },
-          ], false),
-        }
-      },
-      data: yData1,
-    },
-    {
-      name: '存活增长比率',
-      type: this.seriesType,
-      barWidth: this.barWidth,
-      itemStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: 'rgba(175,143,255,100)',
-            },
-            {
-              offset: 1,
-              color: 'rgba(175,143,255,0)',
-            },
-          ], false),
-        }
-      },
-      data: yData2
-    },
-    {
-      name: '应收账款增长率',
-      type: this.seriesType,
-      barWidth: this.barWidth,
-      itemStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: 'rgba(26,175,135,100)',
-            },
-            {
-              offset: 1,
-              color: 'rgba(26,175,135,0)',
-            },
-          ], false),
-        }
-      },
-      data: yData3
-    }
-  ]
+## 6. vue项目添加水印
+- `utils/watermark.js`
+```js
+let watermark = {}
+  
+let setWatermark = (text, sourceBody) => {
+  let id = Math.random()*10000+'-'+Math.random()*10000+'/'+Math.random()*10000
+  
+  if (document.getElementById(id) !== null) {
+    document.body.removeChild(document.getElementById(id))
+  }
+  
+  let can = document.createElement('canvas')
+  can.width = 150
+  can.height = 120
+  
+  let cans = can.getContext('2d')
+  cans.rotate(-20 * Math.PI / 180)
+  cans.font = '15px Vedana'
+  cans.fillStyle = 'rgba(0, 0, 0, .5)'
+  cans.textAlign = 'left'
+  cans.textBaseline = 'Middle'
+  cans.fillText(text, can.width / 20, can.height )
+  
+  let water_div = document.createElement('div')
+  water_div.id = id
+  water_div.style.pointerEvents = 'none'
+  water_div.style.background = 'url(' + can.toDataURL('image/png') + ') left top repeat'
+  if(sourceBody){
+    water_div.style.width = '100%'
+    water_div.style.height = '100%'
+    sourceBody.appendChild(water_div)
+  }else{
+    water_div.style.top = '3px'
+    water_div.style.left = '0px'
+    water_div.style.position = 'fixed'
+    water_div.style.zIndex = '100000'
+    water_div.style.width = document.documentElement.clientWidth  + 'px'
+    water_div.style.height = document.documentElement.clientHeight  + 'px'
+    document.body.appendChild(water_div)
+  }
+  
+  return id
 }
+  
+/**
+ *  该方法只允许调用一次
+ *  @param:
+ *  @text == 水印内容
+ *  @sourceBody == 水印添加在哪里，不传就是body
+ * */
+watermark.set = (text, sourceBody) => {
+  let id = setWatermark(text, sourceBody)
+  setInterval(() => {
+    if (document.getElementById(id) === null) {
+      id = setWatermark(text, sourceBody)
+    }
+  }, 2000)
+  window.onresize = () => {
+    setWatermark(text, sourceBody)
+  }
+}
+  
+export default watermark
+```
+- `main.js`
+```js
+// 水印
+import watermark from './utils/watermark.js'
+Vue.prototype.$watermark = watermark
+```
+- vue文件使用
+```js
+this.$watermark.set("水印内容")
+```
+- `utils/watermark.js` 支持换行（根据两个空格）
+```js
+let watermark = {}
+  
+let setWatermark = (text, sourceBody) => {
+  let id = Math.random()*10000+'-'+Math.random()*10000+'/'+Math.random()*10000
+  
+  if (document.getElementById(id) !== null) {
+    document.body.removeChild(document.getElementById(id))
+  }
+
+  let textRes = text.split("  ")
+  
+  let can = document.createElement('canvas')
+  can.width = 200
+  can.height = 150
+
+  let cans=can.getContext("2d"); 
+  cans.rotate(-20 * Math.PI / 180)
+  cans.font = '13px Vedana'
+  cans.fillStyle = 'rgba(255, 255, 255, .3)'
+  cans.textAlign = 'left'
+  cans.textBaseline = 'Middle'
+  
+  let initHeight = 35;//绘制字体距离canvas顶部初始的高度
+
+  for(let i=0;i<textRes.length;i++){ 
+    cans.fillText(textRes[i],0,initHeight);//绘制截取部分
+    initHeight+=20;//20为字体的高度
+  }
+  
+  let water_div = document.createElement('div')
+  water_div.id = id
+  water_div.style.pointerEvents = 'none'
+  water_div.style.background = 'url(' + can.toDataURL('image/png') + ') left top repeat'
+  if(sourceBody){
+    water_div.style.width = '100%'
+    water_div.style.height = '100%'
+    sourceBody.appendChild(water_div)
+  }else{
+    water_div.style.top = '3px'
+    water_div.style.left = '0px'
+    water_div.style.position = 'fixed'
+    water_div.style.zIndex = '100000'
+    water_div.style.width = document.documentElement.clientWidth  + 'px'
+    water_div.style.height = document.documentElement.clientHeight  + 'px'
+    document.body.appendChild(water_div)
+  }
+  
+  return id
+}
+  
+/**
+ *  该方法只允许调用一次
+ *  @param:
+ *  @text == 水印内容
+ *  @sourceBody == 水印添加在哪里，不传就是body
+ * */
+watermark.set = (text, sourceBody) => {
+  let id = setWatermark(text, sourceBody)
+  setInterval(() => {
+    if (document.getElementById(id) === null) {
+      id = setWatermark(text, sourceBody)
+    }
+  }, 2000)
+  window.onresize = () => {
+    setWatermark(text, sourceBody)
+  }
+}
+  
+export default watermark
+```
+
+## 7. 全屏和取消全屏
+```html
+<button class="full_screen_wrap qp" @click="setFullScreen"></button>
+
+<script>
+  export default {
+    data() {
+      return {
+        fullscreen: false,  // 是否全屏
+      }
+    },
+
+    methods: {
+      // 全屏
+      setFullScreen() {
+        // console.log('全屏')
+
+        // document.documentElement.webkitRequestFullScreen();
+        let element = document.documentElement;
+          // 判断是否已经是全屏
+          // 如果是全屏，退出
+          if (this.fullscreen) {
+              if (document.exitFullscreen) {
+                  document.exitFullscreen();
+              } else if (document.webkitCancelFullScreen) {
+                  document.webkitCancelFullScreen();
+              } else if (document.mozCancelFullScreen) {
+                  document.mozCancelFullScreen();
+              } else if (document.msExitFullscreen) {
+                  document.msExitFullscreen();
+              }
+              
+              let fullDom = document.querySelector('.full_screen_wrap')
+              fullDom.classList.remove('qp0')
+              fullDom.classList.add('qp')
+
+              // console.log('已还原！');
+          } else {    // 否则，进入全屏
+              if (element.requestFullscreen) {
+                  element.requestFullscreen();
+              } else if (element.webkitRequestFullScreen) {
+                  element.webkitRequestFullScreen();
+              } else if (element.mozRequestFullScreen) {
+                  element.mozRequestFullScreen();
+              } else if (element.msRequestFullscreen) {
+                  // IE11
+                  element.msRequestFullscreen();
+              }
+              
+              let fullDom = document.querySelector('.full_screen_wrap')
+              fullDom.classList.remove('qp')
+              fullDom.classList.add('qp0')
+
+              // console.log('已全屏！');
+          }
+          // 改变当前全屏状态
+          this.fullscreen = !this.fullscreen;
+      },
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+.full_screen_wrap {
+  position: absolute;
+  top: 14px;
+  right: 31px;
+  width: 21px;
+  height: 21px;
+  border: none;
+
+  &.qp {
+    background: url('/qp.png') top no-repeat;
+    background-size: 100%;
+  }
+
+  &.qp0 {
+    background: url('/qp0.png') top no-repeat;
+    background-size: 100%;
+  }
+}
+</style>
+```
+
+## 水印纯css实现
+```html
+<div v-if="JSON.stringify(urlObj) !== '{}'" class="shuiyin">
+  <div class="itemWarp1"  v-for="(item1, i1) in 8" :key="i1" :style="`top:${140 * i1}px`">
+    <div class="item" v-for="(item, i) in 10" :key="i" :style="`left:${200 * i + 20}px`">
+      <p style="margin-bottom: 3px">{{ urlObj.userName }}&nbsp;&nbsp;{{ urlObj.suffixPhone }}</p>
+      <p>
+        {{ `${new Date().getFullYear()}`.slice(2) }}
+        {{ `${new Date().getMonth() + 1}`.padStart(2, "0") }}
+        {{ `${new Date().getDate()}`.padStart(2, "0") }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+.shuiyin {
+  position: fixed;
+  width: 100%;
+  height: 1080px;
+  top: 0;
+  left: 0;
+  .itemWarp1 {
+    position: absolute;
+    height: 50px;
+    width: 100%;
+    left: 0;
+    .item {
+      position: absolute;
+      top: 10px;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.2);
+      transform: rotateZ(-25deg);
+    }
+  }
+}
+</style>
+```
+
+## 大屏自适应示例
+```html
+<!-- app.vue -->
+<script>
+import lodash from "lodash";
+export default {
+  name: 'App',
+  data() {
+    return {
+      style: {
+        transform: "scale(1) translate(-50%, -50%)",
+        width: "1920px",
+        height: "1080px"
+      },
+    }
+  },
+  mounted () {
+    this.setScale()
+    window.addEventListener("resize", lodash.debounce(this.setScale, 1000));
+    this.$once("hook:beforeDestroy", () => {
+      window.removeEventListener("resize", this.setScale);
+    });
+  },
+  methods: {
+    setScale() {
+      const w = window.innerWidth / 1920
+      const h = window.innerHeight / 1080
+      this.style.transform = `scale(${w},${h}) translate(-50%, -50%)`
+    }
+  },
+}
+</script>
+
+<style lang="less" scope>
+  #app {
+    font-size: 12px;
+    transform-origin: 0 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transition: 0.1s;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+</style>
 ```

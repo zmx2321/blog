@@ -8,5 +8,6 @@ module.exports = {
         'js-note-4',
         'js-note-5',
         'js-note-6',
+        'js-note-7',
     ]
 };

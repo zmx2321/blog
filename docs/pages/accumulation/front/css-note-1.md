@@ -356,3 +356,11 @@ calc(100% - #{$a})
 }
 </style>
 ```
+
+## 12. p标签左右对齐
+```css
+p {
+    text-align:justify;
+    text-justify:inter-ideograph;
+}
+```

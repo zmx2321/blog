@@ -443,5 +443,82 @@ Vue.component("CountUp", CountUp);
 <count-up :count="123123" />
 ```
 
-# 在vue.config.js中获取文件名
+## 9. 在vue.config.js中获取文件名
 - outputDir: __dirname.split(/[\\/]/).pop(),
+
+## 10. 脚手架安装报错（sass）
+- 报错信息：node-sass@5.0.0 postinstall: `node scripts/build.js`
+  - npm uninstall node-sass
+  - npm i node-sass --sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+
+## 11. 前端一键自动部署工具
+>  deploy-cli-service
+- 全局安装
+  - `npm install deploy-cli-service -g`
+- 本地安装
+  - `npm install deploy-cli-service --save-dev`
+- 查看版本，表示安装成功
+  - deploy-cli-service -v
+  -  本地安装的在调用前需要加 npx
+    - npx deploy-cli-service -v
+- 查看帮助
+  - deploy-cli-service -h
+- 初始化配置文件(在项目目录下)
+  - deploy-cli-service init # 或者使用简写 deploy-cli-service i
+  - 根据提示填写内容，会在项目根目录下生成 deploy.config.js 文件，初始化配置只会生成 dev (开发环境)、test (测试环境)、prod (生产环境) 三个配置，再有其他配置可参考模板自行配置。
+  - 配置
+    ```js
+    module.exports = {
+      projectName: 'vue_samples', // 项目名称
+      privateKey: '/Users/fuchengwei/.ssh/id_rsa',
+      passphrase: '',
+      dev: {
+        // 环境对象
+        name: '开发环境', // 环境名称
+        script: 'npm run build', // 打包命令
+        host: '192.168.0.1', // 服务器地址
+        port: 22, // 服务器端口号
+        username: 'root', // 服务器登录用户名
+        password: '123456', // 服务器登录密码
+        distPath: 'dist', // 本地打包生成目录
+        webDir: '/usr/local/nginx/html', // 服务器部署路径（不可为空或'/'）
+        isRemoveRemoteFile: true // 是否删除远程文件（默认true）
+      },
+      test: {
+        // 环境对象
+        name: '测试环境', // 环境名称
+        script: 'npm run build:test', // 打包命令
+        host: '192.168.0.1', // 服务器地址
+        port: 22, // 服务器端口号
+        username: 'root', // 服务器登录用户名
+        password: '123456', // 服务器登录密码
+        distPath: 'dist', // 本地打包生成目录
+        webDir: '/usr/local/nginx/html', // 服务器部署路径（不可为空或'/'）
+        isRemoveRemoteFile: true // 是否删除远程文件（默认true）
+      },
+      prod: {
+        // 环境对象
+        name: '生产环境', // 环境名称
+        script: 'npm run build:prod', // 打包命令
+        host: '192.168.0.1', // 服务器地址
+        port: 22, // 服务器端口号
+        username: 'root', // 服务器登录用户名
+        password: '123456', // 服务器登录密码
+        distPath: 'dist', // 本地打包生成目录
+        webDir: '/usr/local/nginx/html', // 服务器部署路径（不可为空或'/'）
+        isRemoveRemoteFile: true // 是否删除远程文件（默认true）
+      }
+    }
+    ```
+- 部署
+  - 命令后面需要加 --mode 环境对象 
+  ```js
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    ......
+    "deploy:dev": "deploy-cli-service deploy --mode dev",
+    "deploy:test": "deploy-cli-service deploy --mode test",
+    "deploy:prod": "deploy-cli-service deploy --mode prod"
+  }
+  ```
