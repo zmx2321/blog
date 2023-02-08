@@ -29,6 +29,9 @@
     // 挂载到#app上
     Vue.createApp(App).mount("#app");
   </script>
+  <!-- 这里的scoped的实现方式是,在渲染dom的时候,添加上data-v-唯一标识(十六进制),来实现的,嵌套的div他会将父级div的data-v-带到子div上 -->
+  <style scoped>
+  </style>
 </body>
 ```
 - 在vscode中创建代码片段
