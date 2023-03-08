@@ -208,3 +208,32 @@ app.config.globalProperties.$emitter = emitter // 定义全局事件总线
     const handleCommand = (command, row) => {}
 </script>
 ```
+
+## el-tree中不能全选
+```css
+:deep(.el-tree) {
+  .el-icon.el-tree-node__expand-icon {
+    &.is-leaf {
+      display: none;
+    }
+
+    &:not(.is-leaf) {
+      & + .el-checkbox {
+        display: none;
+      }
+    }
+  }
+}
+```
+
+## vite跨域配置
+```js
+proxy: {
+  '/proxyApi1': {
+    target: loadEnv(mode, process.cwd()).VITE_APP_BASE_URL1,
+    ws: true, // 是否启用websockets
+    changeOrigin: true, // 运行跨域
+    rewrite: (path) => path.replace(/^\/proxyApi1/, '') // 重写路径
+  }
+}
+```
