@@ -237,3 +237,21 @@ proxy: {
   }
 }
 ```
+
+## vue3日期选择器截止昨天
+```html
+<el-date-picker
+          v-model="form.endTime"
+          style="width: 238px"
+          type="date"
+          placeholder="请选择时间"
+          :disabled-date="disabledDate"
+          format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD"></el-date-picker>
+
+<script setup>
+  const disabledDate = (time) => {
+    return time.getTime() < Date.now() - 8.64e7
+  }
+</script>
+```
