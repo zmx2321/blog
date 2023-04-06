@@ -162,3 +162,10 @@ let res = arr.map(function(item, index){
 });
 console.log(res);
 ```
+
+## 10. 使用filter判断对象数组中是否有某个值
+```js
+let result = group_obj.filter((item) => {
+	return item.userId === 20027796
+})
+```

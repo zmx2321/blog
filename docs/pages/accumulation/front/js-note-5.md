@@ -597,3 +597,8 @@ getUrlsub(urlStr) {
 
 this.getUrlsub(row.fileUrl)
 ```
+
+## 16. 判断纯数字
+```js
+!isNaN(parseFloat(value)) && isFinite(value);
+```

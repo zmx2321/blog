@@ -344,12 +344,13 @@ const _otherNoteConfig = require("../config/sidebarManage/accumulation/other/oth
 
 /**
  * 大杂烩
- * 1. food-menu 菜谱
- * 2. plan 计划
- *  2.1. 2021计划
+ * food-menu 菜谱
+ * other-info 其他
+ * 
  */
 const foodMenuConfig = require("../config/sidebarManage/hodgepodge/food-menu");
-const plan2021Config = require("../config/sidebarManage/hodgepodge/plan/plan2021");
+const otherInfoConfig = require("../config/sidebarManage/hodgepodge/other-info/other-info");
+// const plan2021Config = require("../config/sidebarManage/hodgepodge/plan/plan2021");
 
 module.exports = {
   /**
@@ -639,11 +640,17 @@ module.exports = {
   // 菜谱
   '/pages/hodgepodge/food-menu/': [
     '',
-    foodMenuConfig
+    foodMenuConfig,
+  ],
+  // 其他
+  '/pages/hodgepodge/other-info/': [
+    '',
+    otherInfoConfig
   ],
   // 计划
   '/pages/hodgepodge/plan/': [
     '',
     // plan2021Config
   ],
+  
 };
