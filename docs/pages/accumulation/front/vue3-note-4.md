@@ -255,3 +255,23 @@ proxy: {
   }
 </script>
 ```
+
+## el-tree以及checkbox单选
+```js
+// @check-change="handleSelectedTreeUser"
+const handleSelectedTreeUser = (val, selected) => {
+  if (val.type === 2 && selected) {
+    refMyTree.value.setCheckedKeys([])
+    refMyTree.value.setChecked(val, true)
+    selectedUsers.value = [val]
+    // console.log(selectedUsers.value)
+  }
+}
+
+// @change="getSingleUser(item)"
+const getSingleUser = (val) => {
+  console.log(val)
+
+  selectedUsers.value = selectedUsers.value.includes(val) ? [val] : []
+}
+```
