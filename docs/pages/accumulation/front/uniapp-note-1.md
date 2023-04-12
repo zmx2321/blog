@@ -173,6 +173,41 @@ export default {
     }
   },
 
+  computed: {
+    marker1() {
+      return [
+        {
+          id: 0,
+          latitude: this.mapConfig.latitude, //纬度
+          longitude: this.mapConfig.longitude, //经度
+          iconPath: '', //显示的图标
+          rotate: 0, // 旋转度数
+          width: 20, //宽
+          height: 30, //高
+          title: '我在这里', //标注点名
+          // alpha: 0.5, //透明度
+          callout: {
+            //自定义标记点上方的气泡窗口 点击有效
+            content: '天宝大厦', //文本
+            color: '#ffffff', //文字颜色
+            fontSize: 14, //文本大小
+            borderRadius: 15, //边框圆角
+            borderWidth: '10',
+            bgColor: '#e51860', //背景颜色
+            display: 'ALWAYS' //常显
+          },
+          label: {
+            content: '文本1',
+            color: '#F76350',
+            bgColor: '#fff',
+            padding: 5,
+            borderRadius: 4
+          }
+        }
+      ]
+    }
+  },
+
   onReady() {
     this.mapCtx = wx.createMapContext('myMap')
     // console.log('onReady', this.mapCtx)
