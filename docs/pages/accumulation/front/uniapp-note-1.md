@@ -250,3 +250,37 @@ methods: {
 }
 </script>
 ```
+
+## uniapp外链
+```vue
+<li @click="linkTo"><span>查看官网</span></li>
+
+<script>
+linkTo() {
+  let webUrl = 'https://xxxx/xx.html' // URL是要跳转的外部地址 作为参数
+  uni.navigateTo({
+    url: '/pages/components/webLink?url=' + webUrl
+  })
+},
+</script>
+```
+```vue
+<template>
+  <web-view :src="pageUrl"></web-view>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      pageUrl: ''
+    }
+  },
+  onLoad(item) {
+    // console.log(this.url)
+    // 传入需要跳转的链接 使用web-view标签进行跳转
+    this.pageUrl = decodeURIComponent(item.webUrl)
+  }
+}
+</script>
+```
