@@ -284,3 +284,8 @@ export default {
 }
 </script>
 ```
+
+## uniapp的安全区
+```css
+padding-bottom: calc(0 + env(safe-area-inset-bottom));
+```
