@@ -226,3 +226,27 @@ export default {
 }
 </script>
 ```
+
+## uniapp中转圈动画
+```vue
+<view class="pgmbask_bot">
+  <image src="/static/2.1/cust_ico_cng.png" style="transition: 1s all" :style="rotationStyle" />
+  <span @click="changeQues">换一换</span>
+</view>
+
+<script>
+this.rotate = 0
+data() {
+  rotationStyle: '',
+}
+
+methods: {
+  changeQues(e) {
+    this.rotate += 360
+    this.rotationStyle = `transform: rotate(${this.rotate}deg);`
+
+    // this.getData()
+  },
+}
+</script>
+```
