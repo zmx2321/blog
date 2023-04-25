@@ -287,5 +287,5 @@ export default {
 
 ## uniapp的安全区
 ```css
-padding-bottom: calc(0 + env(safe-area-inset-bottom));
+padding-bottom: env(safe-area-inset-bottom);
 ```
