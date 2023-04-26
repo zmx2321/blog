@@ -289,3 +289,97 @@ export default {
 ```css
 padding-bottom: env(safe-area-inset-bottom);
 ```
+
+## u-view 上传
+```js
+export default function chooseAndUploadFile(files, vm) {
+  let uploadArr = []
+  const len = files.length
+  let count = 0
+
+  return new Promise((resolve, reject) => {
+    if (!len) {
+      return resolve([])
+    }
+    next()
+
+    function next() {
+      let cur = count++
+      if (cur >= len) {
+        return resolve(uploadArr)
+      }
+      const fileItem = files[cur]
+
+      uni
+        .uploadFile({
+          url: baseURL + 'common/obsUpload',
+          filePath: fileItem.url,
+          formData: {
+            fileType: getFileTypeUpload(fileItem.url),
+            ident: 'ex-patrol'
+          },
+          name: 'file',
+          header: { token: token }
+        })
+        .then(res => {
+          let fileObject = JSON.parse(res[1].data).data
+          uploadArr.push(fileObject)
+          if (cur < len) {
+            next()
+          }
+        })
+        .catch(res => {
+          if (cur < len) {
+            next()
+          }
+        })
+    }
+  })
+}
+```
+```vue
+<u-upload :fileList="fileList" @afterRead="onListChange" @delete="deletePic" multiple :maxCount="4" width="154rpx" height="154rpx">
+  <u-image :fade="false" src="" width="154rpx" height="154rpx"></u-image>
+</u-upload>
+
+<script>
+data() {
+  return {
+    fileList: [],
+  }
+},
+methods: {
+  // 删除图片
+  deletePic(event) {
+    this[`fileList${event.name}`].splice(event.index, 1)
+  },
+
+  // 多
+  onListChange(data) {
+    uni.showLoading({ title: '文件上传中' })
+    chooseAndUploadFile(data.file, this)
+      .then(files => {
+        uni.hideLoading()
+        // this.fileList = [...this.fileList, ...files]  // 多
+        // this.form.pictureUrl = files[0].url  // 单
+        // console.log(this.fileList)
+      })
+      .catch(err => {
+        this.fileList = []
+        uni.hideLoading()
+        uni.showToast({ title: '图片上传失败,请重新上传', icon: 'none', duration: 2000 })
+      })
+  },
+
+  getImgStr() {
+    if (this.fileList > 0) {
+      this.fileList.forEach(item => {
+        this.form.pictureUrl += item.url + ','
+      })
+
+      this.form.pictureUrl = this.form.pictureUrl.replace(/,$/gi, '')
+    }
+  }
+}
+</script>
+```
