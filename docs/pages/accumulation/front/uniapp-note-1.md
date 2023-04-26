@@ -292,6 +292,26 @@ padding-bottom: env(safe-area-inset-bottom);
 
 ## u-view 上传
 ```js
+// 获取文件类型
+function getFileTypeUpload(fileName) {
+  const index = fileName.lastIndexOf('.')
+  const ext = fileName.substr(index + 1).toLowerCase()
+  const aImageType = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'psd']
+  const aVideoType = ['mp4', 'rmvb', 'flv']
+  const aExcel = ['xlsx', 'xls']
+  let fileType = -1 // -1-文件 0-表格 1-图片 2-视频
+  if (aExcel.includes(ext)) {
+    fileType = 0
+  }
+  if (aImageType.includes(ext)) {
+    fileType = 1
+  }
+  if (aVideoType.includes(ext)) {
+    fileType = 2
+  }
+  return fileType
+}
+
 export default function chooseAndUploadFile(files, vm) {
   let uploadArr = []
   const len = files.length
