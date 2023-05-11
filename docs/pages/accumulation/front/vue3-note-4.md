@@ -275,3 +275,23 @@ const getSingleUser = (val) => {
   selectedUsers.value = selectedUsers.value.includes(val) ? [val] : []
 }
 ```
+
+## form表单中自定义校验
+```js
+const validDataBank = (rule, value, callback) => {
+  // const pattern = /[`~!-\·\.@#$^&*()=|{}':;',\\\[\]\.<>\/\+?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g
+  const pattern1 = /([\u4e00-\u9fa5])/g // 中文
+  // const pattern2 = /[`~,.<>;':"\/\[\]\|{}()-=_+]/g // 特殊字符
+  const pattern2 = /[`@&<>~\+\-=_,.\/\[\]\|{}()]/g // 特殊字符
+  // const pattern2 = /[~,.<>;':"\/\[\]\|{}()-=_+]/g // 特殊字符
+  if (value) {
+    var newValue = value.replace(pattern1, '').replace(pattern2, '')
+    if (value !== newValue) {
+      callback(new Error('不可使用特殊字符'))
+    }
+    callback()
+  }
+}
+
+{ validator: validDataBank, trigger: 'blur' }
+```
