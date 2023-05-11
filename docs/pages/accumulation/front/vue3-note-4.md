@@ -295,3 +295,89 @@ const validDataBank = (rule, value, callback) => {
 
 { validator: validDataBank, trigger: 'blur' }
 ```
+
+## el-table动态合并单元格
+```vue
+<template>
+  <el-table
+    :data="tableData"
+    :border="true"
+    show-summary
+    height="800"
+    :summary-method="getSummaries"
+    style="width: 100%"
+    :span-method="arraySpanMethod"
+    :cell-style="cellStyleMethod">
+    <el-table-column type="index" width="82" label="序号" fixed min-width="200" />
+    ......
+  </el-table>
+</template>
+
+<script setup>
+import { ref, toRefs, toRef, reactive, computed, nextTick } from 'vue'
+
+let tableData = ref([])
+let tableColumn = ref([])
+let mergeDate = []
+let temData = {}
+let spanNameArr = []  // 处理要合并的数据
+
+const getSummaries = (param) => {
+  const { columns, data } = param
+  let temData = data.filter((item) => item.date === '汇总')
+  const sums = []
+  columns.forEach((column, index) => {
+    if (index === 0) {
+      sums[index] = '汇总计算'
+      return
+    }
+    const values = temData.map((item) => Number(item[column.property]))
+    if (!values.every((value) => isNaN(value))) {
+      sums[index] = values.reduce((prev, curr) => {
+        const value = Number(curr)
+        if (!isNaN(value)) {
+          let temValue1 = prev + curr
+          let temValue2 = temValue1.toString().match(/^\d+(?:\.\d{0,2})?/)
+          return Number(temValue2)
+        } else {
+          return prev
+        }
+      }, 0)
+      sums[index]
+    } else {
+      sums[index] = '-,--'
+    }
+  })
+  mergeDate = sums
+  return sums
+}
+
+function arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+  if (row.date === '汇总') {
+    if (columnIndex === 1) {
+      return [0, 0]
+    } else if (columnIndex === 2) {
+      return [1, 1]
+    }
+  } else {
+    if (columnIndex == 1) {
+      const _row = spanNameArr[rowIndex]
+      const _col = _row > 0 ? 1 : 0
+      return {
+        // [0,0] 表示这一行不显示， [2,1]表示行的合并数
+        rowspan: _row,
+        colspan: _col
+      }
+    }
+  }
+}
+
+function cellStyleMethod({ row, column, rowIndex, columnIndex }) {
+  if (row.date === '汇总' || row.name === '汇总计算') {
+    if (columnIndex !== 0) {
+      return { backgroundColor: 'var(--el-table-row-hover-bg-color)', fontWeight: 500 }
+    }
+  }
+}
+</script>
+```

@@ -602,3 +602,92 @@ this.getUrlsub(row.fileUrl)
 ```js
 !isNaN(parseFloat(value)) && isFinite(value);
 ```
+
+## 检查数组中所有元素是否都小于100的元素
+```js
+const isBelow = (currentValue) => currentValue < 100;  //数组中所有元素都小于100的元素
+const array1 = [10, 30, 39, 99, 10, 13];
+console.log(array1.every(isBelow));  // 最后输出的结果为：true eg2:检查数组中所有元素是否都大于100
+function isBigEnough(element, index, array) {
+  return element >= 100;
+}
+[12, 5, 8, 130, 44].every(isBigEnough);   // false
+[120, 540, 180, 130, 440].every(isBigEnough); // true eg3:基于eg2的实例，改写成使用箭头函数的写法
+[12, 5, 8, 130, 44].every(x => x >= 100); // false
+[120, 540, 180, 130, 440].every(x => x >= 100); // true
+```
+
+## 检查数组中的一个元素是否为偶数
+```js
+const array = [1, 2, 3, 4, 5];
+const even = (element) => element % 2 === 0;     // 检查一个元素是否为偶数
+console.log(array.some(even));      // 最后输出的结果为：true eg2:检查数组中的一个元素是否大于100
+function isBiggerThan10(element, index, array) {
+  return element > 100;
+}
+[20, 50, 80, 10, 40].some(isBiggerThan10);  // false
+[120, 500, 800, 10, 40].some(isBiggerThan10); // true eg3:检查判断数组中的元素是否存在某个值
+var vegetables = ['cabbage', 'cucumber', 'eggplant', 'potato'];
+function checkAvailability(arr, val) {
+  return arr.some(function(arrVal) {
+    return val === arrVal;
+  });
+}
+checkAvailability(vegetables, 'tomato');   // false
+checkAvailability(vegetables, 'eggplant'); // true eg4:箭头函数运用于some()中，以eg2为例子来改写
+[20, 50, 80, 10, 40].some(x => x > 100);  // false
+[120, 500, 800, 10, 40].some(x => x > 100); // true
+```
+
+## every()和some()的对比
+- 相同点
+  - every()和some()这两个函数都是在JS中对数组进行迭代操作的，主要用于检查数组中所有元素是否都符合指定函数的测试，而且要检测数组中的所有元素。
+- 不同点
+  - every()是检测数组中所有元素都满足某一个指定函数的测试，只有所有元素全部满足才会返回true，类似&&；some()是检测数组中所有元素只要有某个元素满足就返回true，如果全部不满足才返回false，类似||。
+  - some()是一直在数组中寻找符合条件的元素值，如果数组中包含符合条件的值并且被立马找到，就直接返回true，剩下的元素不会再去查找，也就是说不会继续迭代下去；every()是从开始在数组中查找符合条件的元素值，数组中只要有一个元素不符合条件的元素值，就直接返回false，剩下的元素也不会再去查找，不会继续迭代下去。
+
+## 数组求和
+```js
+var arr = [1,5,8,6,15,78,65,25,48,55]
+var sum = arr.reduce(function(total,currentValue){
+  return total+currentValue;
+});
+console.log(sum);//306
+```
+
+## 合并二维数组
+```js
+var twoArr = [['mu','zi'],['dig','big'],['lucky','jiji']];
+var oneArr = twoArr.reduce(function(total,currentValue){
+  // console.log(total)
+  return total.concat(currentValue);
+})
+console.log(oneArr);//["mu", "zi", "dig", "big", "lucky", "jiji"]
+```
+
+## 统计一个数组中有多少个不重复的单词
+```js
+// 不用reduce时：
+var arr = ["apple","orange","apple","orange","pear","orange"]; 
+function getWordCnt(){ 
+  var obj = {}; 
+  for(var i= 0, l = arr.length; i< l; i++){ 
+    var item = arr[i]; 
+    obj[item] = (obj[item] +1 ) || 1; 
+  } 
+  return obj; 
+}
+console.log(getWordCnt());//{apple: 2, orange: 3, pear: 1}
+// 用reduce时： 
+var arr = ["apple","orange","apple","orange","pear","orange"]; 
+function getWordCnt(){ 
+  return arr.reduce(function(prev,next){ 
+    prev[next] = (prev[next] + 1) || 1; 
+    return prev; 
+  },{}); 
+} 
+console.log(getWordCnt());//{apple: 2, orange: 3, pear: 1}
+```
+
+## 判断数组中所有内容都是数字
+- `if (!values.every((value) => isNaN(value)))`
