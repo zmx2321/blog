@@ -691,3 +691,19 @@ console.log(getWordCnt());//{apple: 2, orange: 3, pear: 1}
 
 ## 判断数组中所有内容都是数字
 - `if (!values.every((value) => isNaN(value)))`
+
+## js判断字符串中某字符出现次数
+```js
+isSingle(str){
+  return (str.match(/-/g) || []).length === 1
+},
+```
+
+## js判断中文
+```js
+isChinese(str){
+  let reg = new RegExp("[\\u4E00-\\u9FFF]+","g")
+
+  return reg.test(str)
+},
+```
