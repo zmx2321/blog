@@ -381,3 +381,18 @@ function cellStyleMethod({ row, column, rowIndex, columnIndex }) {
 }
 </script>
 ```
+
+## vue3数组应用
+- 过滤sizeOptions对象数组，判断val数组中是否包含id，将包含该id的对象数组返回
+- 改造对象数组，用map获取值，改造直接返回
+```js
+// val是一个[1,2,3]
+sizeTableData.value = sizeOptions.value
+    .filter((item) => val.includes(item.id))
+    .map((item) => ({
+      sizeTypeId: item.id,
+      sizeTypeName: item.name,
+      price: '',
+      sequence: ''
+    }))
+```
