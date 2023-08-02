@@ -396,3 +396,57 @@ sizeTableData.value = sizeOptions.value
       sequence: ''
     }))
 ```
+
+## vue3下拼音插件的使用
+- `"js-pinyin": "^0.2.4",`
+```js
+import pinyin from 'js-pinyin'
+pinyin.setOptions({ checkPolyphone: false, charCase: 0 })
+
+watch(ruleForm, (newValue) => {
+  if (newValue) {
+    ruleForm.value.janeSearch = pinyin.getCamelChars(newValue.name)
+  }
+})
+```
+
+## vue3富文本使用
+- 安装
+```json
+"@wangeditor/editor": "^5.1.23",
+"@wangeditor/editor-for-vue": "^5.1.12",
+```
+- 运行
+```js
+<div style="width: 1000px; border: 1px solid #ccc">
+  <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :default-config="toolbarConfig" />
+  <Editor
+    v-model="ruleForm.description"
+    style="height: 120px; overflow-y: hidden"
+    :default-config="editorConfig"
+    :mode="mode"
+    @onCreated="onCreated" />
+</div>
+
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+
+const editor = ref(null)
+const toolbarConfig = ref({})
+const goodUploadImg = ref('')
+const editorConfig = ref({
+  placeholder: '请输入内容...',
+  MENU_CONF: {
+    uploadImage: {
+      customUpload: goodUploadImg.value
+    }
+  }
+})
+const mode = ref('default') // or 'simple'
+
+const onCreated = (val) => {
+  editor.value = Object.seal(val) // 一定要用 Object.seal() ，否则会报错
+}
+
+
+<style src="@wangeditor/editor/dist/css/style.css"></style>
+```
