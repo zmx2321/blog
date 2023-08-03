@@ -457,7 +457,7 @@ const setSize = (val) => {
   // if (val.length !== 0) {
   //  表格数据增加判断
   if (val.length > sizeTableData.value.length) {
-    console.log('select选择数量大于表格数目，说明此时是新增操作')
+    // console.log('select选择数量大于表格数目，说明此时是新增操作')
 
     /**
      * 添加：
@@ -478,7 +478,7 @@ const setSize = (val) => {
 
   //  减少数据表格判断
   if (val.length < sizeTableData.value.length) {
-    console.log('select选择数量小于表格数目，说明此时是减少操作')
+    // console.log('select选择数量小于表格数目，说明此时是减少操作')
 
     /**
      * 删除：
@@ -489,7 +489,7 @@ const setSize = (val) => {
     /* let currentDelete = sizeTableData.value.filter((item) => !val.includes(item.sizeTypeId))
     console.log(currentDelete) */
     sizeTableData.value.forEach((item, index) => {
-      if (val.includes(item.sizeTypeId)) {
+      if (!val.includes(item.sizeTypeId)) {
         sizeTableData.value.splice(index, 1)
       }
     })
