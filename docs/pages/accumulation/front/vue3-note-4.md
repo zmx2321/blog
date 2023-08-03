@@ -450,3 +450,53 @@ const onCreated = (val) => {
 
 <style src="@wangeditor/editor/dist/css/style.css"></style>
 ```
+
+## vue3下拉框与表格联动
+```js
+const setSize = (val) => {
+  // if (val.length !== 0) {
+  //  表格数据增加判断
+  if (val.length > sizeTableData.value.length) {
+    console.log('select选择数量大于表格数目，说明此时是新增操作')
+
+    /**
+     * 添加：
+     * 当前的选项是val数组的最后一项，即获取最后一项的id
+     * 根据最后一项的id，匹配下拉列表，获取规格名称
+     * 将匹配的规格名称添加到表格中
+     */
+
+    // 获取当前添加项
+    let currentSelect = sizeOptions.value.filter((item) => item.id === val[val.length - 1])[0]
+    sizeTableData.value.push({
+      sizeTypeId: currentSelect.id,
+      sizeTypeName: currentSelect.name,
+      price: '',
+      sequence: ''
+    })
+  }
+
+  //  减少数据表格判断
+  if (val.length < sizeTableData.value.length) {
+    console.log('select选择数量小于表格数目，说明此时是减少操作')
+
+    /**
+     * 删除：
+     * 减少之后，val数组中数据会少一项，判断进入减少操作
+     * 遍历表格数据，与val数组做比较，找到减少的那一项
+     * 在表格中删除那一项
+     */
+    /* let currentDelete = sizeTableData.value.filter((item) => !val.includes(item.sizeTypeId))
+    console.log(currentDelete) */
+    sizeTableData.value.forEach((item, index) => {
+      if (val.includes(item.sizeTypeId)) {
+        sizeTableData.value.splice(index, 1)
+      }
+    })
+  }
+  // }
+
+  // 将表格数据赋值到表单数据
+  ruleForm.value.sizeList = sizeTableData.value
+}
+```
