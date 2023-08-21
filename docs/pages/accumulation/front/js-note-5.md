@@ -707,3 +707,10 @@ isChinese(str){
   return reg.test(str)
 },
 ```
+
+## js数组中的include方法
+```js
+if ([1, 2, 3].includes(type)) {
+  // code
+}
+```
