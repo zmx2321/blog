@@ -714,3 +714,24 @@ if ([1, 2, 3].includes(type)) {
   // code
 }
 ```
+
+## 删除对象数组中指定项
+```js
+ruleForm.value.storeBusinessList.splice(ruleForm.value.storeBusinessList.indexOf(item), 1)
+```
+
+## 对象数组去重
+```js
+// 数组去重
+const setArr = (arrObj) => {
+  let result = []
+  let obj = {}
+  for (let i = 0; i < arrObj.length; i++) {
+    if (!obj[arrObj[i].id]) {
+      result.push(arrObj[i])
+      obj[arrObj[i].id] = true
+    }
+  }
+  return result
+}
+```
