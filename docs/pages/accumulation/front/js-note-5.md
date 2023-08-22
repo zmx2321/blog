@@ -735,3 +735,8 @@ const setArr = (arrObj) => {
   return result
 }
 ```
+
+## map数组构造
+```js
+goodGroupParams.sizeList = goods.map((item) => ({ id: item.goodsId, price: item.price }))
+```
