@@ -740,3 +740,28 @@ const setArr = (arrObj) => {
 ```js
 goodGroupParams.sizeList = goods.map((item) => ({ id: item.goodsId, price: item.price }))
 ```
+
+## 判断数组对象中某个属性的值是否为空
+```js
+// 判断数组对象中某个属性的值是否为空
+const arrPropIsEmpty = (arr, prop) => {
+  if (arr) {
+    let _arr = []
+    arr.forEach((item) => {
+      console.log(item[prop])
+      _arr.push(item[prop])
+    })
+    console.log(arr, _arr)
+    if (_arr.some((val) => val === '' || !val)) {
+      console.log('有空值，不通过') // true
+      return true
+    }
+    console.log('无空值，通过') // false
+    return false
+  }
+}
+
+if (ruleForm.value.sizeList && arrPropIsEmpty(ruleForm.value.sizeList, 'price')) {
+    ElMessage.warning('规格价格不能为空')
+  }
+```

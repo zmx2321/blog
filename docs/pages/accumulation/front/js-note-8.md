@@ -25,3 +25,57 @@ arr.copyWithin(target, start, end) - copies its elements from position start til
 
 
 map
+
+  - Array:
+
+    1.push() // 向数组的末尾添加一个或多个元素，并返回新的长度
+    2.pop() // 删除并返回数组的最后一个元素。
+    3.unshift() // 向数组的开头添加一个或更多元素，并返回新的长度。
+    4.shift() // 把数组的第一个元素从其中删除，并返回第一个元素的值。
+    5.sort() // 数组排序，无参数时默认对String进行ASCLL码进行升序排序，可以传方法，对数组元素进行升序或者降序排序
+    6.reverse() // 反转数组，将数组倒序排列
+    7.concat() // 拼接数组，该方法会先创建当前数组的一个副本，无参数的情况下, 直接返回副本, 有参数的情况下, 将参数中的数组元素添加到数组的尾部
+    8.slice() // 数组截取，基于当前数组中的一项或多项返回一个新的数组
+    9.splice() // 数组增、删、改
+       删除: 2个参数, 从第几项开始删和删除几项  splice(0, 1)
+       插入: 起始位置, 要删除几项(填0), 要插入的项(可以写多个参数)  splice(1, 0, "black", "green",....)
+       替换: 起始位置、要删除的项、要插入的项  splice(1, 1, "yellow")
+    10.数组查找、过滤：
+       1.indexOf()      参数：值     返回某个指定的值在数组中首次出现的位置，必须给定元素  
+                        [1,2,2,3].indexOf(2) // 1
+       2.lastIndexOf()  参数：值     返回某个指定的值在数组中最后一次出现的位置，必须给定元素 
+                        [1,2,2,3].indexOf(2) // 2
+       3.findIndex()    参数：函数   返回满足传入函数判定条件且在数组首次出现的元素的位置 
+                        [1,2,2,3,4,5].findIndex( i => i === 2 ) // 1
+       4.includes()     参数：值     判断一个数组是否包含一个指定的值，如果是返回 true，否则false 
+                        [1,2,2,3].includes(2) // true
+       5.map()          参数：函数   返回一个新数组，数组中的元素为原始数组元素按顺序依次调用函数处理后的值 
+                        [4, 9, 16, 25].map(Math.sqrt) // 2,3,4,5
+       6.filter()       参数：函数   返回一个新数组，返回满足传入函数判定条件的所有值 
+                        [1,2,2,3,4,5].filter( i => i > 3 ) // 4,5
+       7.find()         参数：函数   返回满足传入函数判定条件的第一个元素的值 
+                        [1,2,2,3,4,5].find( i => i > 3 ) // 4
+       8.some()       检测数组中的元素是否满足指定条件（函数提供）
+       9.every()       检测数组所有元素是否都符合指定条件（函数提供）
+
+  - Set:
+        1.add() // 添加一个元素，支持链式操作 add('nihao') // 返回set
+        2.delete() // 删除 delete('nihao') // true
+        3.has() // 判断是否存在 has('nihao') // false
+        4.可以通过Set里的值不会重复的特性进行两个数组合并去重等操作 
+            let a = new Set([1,2,3]);
+            let b = new Set([4,3,2]);
+            Array.from(new Set([...a,...b])) // 1,2,3,4
+
+  - Map:
+        1. size()                   获取Map元素个数
+        1. isEmpty()                判断Map是否为空
+        1. clear()                  删除Map所有元素
+        1. put(key, value)          向Map中增加元素（key, value) 
+        1. remove(key)              删除指定key的元素，成功返回true，失败返回false
+        1. get(key)                 获取指定key的元素值value，失败返回null
+        1. element(index)           获取指定索引的元素（使用element.key，element.value获取key和value），失败返回null
+        1. containsKey(key)         判断Map中是否含有指定key的元素
+        1. containsValue(value)     判断Map中是否含有指定value的元素
+        1. keys()                   获取Map中所有key的数组（array）
+        1. values()                 获取Map中所有value的数组（array）
