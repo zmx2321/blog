@@ -79,3 +79,22 @@ map
         1. containsValue(value)     判断Map中是否含有指定value的元素
         1. keys()                   获取Map中所有key的数组（array）
         1. values()                 获取Map中所有value的数组（array）
+
+
+
+reactive与ref区别
+1、 从定义数据方面：
+
+ref通常用来定义基本类型数据
+reactive用来定义：对象（或者数组）类型数据
+ref也可以用来定义对象或者数组类型的数据，内部会通过reactive转为代理对象
+2、从原理方面：
+ref通过Object.defineProperty()的get和set实现数据代理。
+reactive使用Proxy实现数据代理，并且通过Reflect操作源对象内部的数据。
+3、从使用方面：
+ref操作数据需要.value，template模板中不需要。
+reactive都不需要,value
+
+
+
+vue数据的双向绑定是通过数据劫持结合发布者-订阅者模式的方式来实现的。其核心就是通过Object.defineProperty()方法设置set和get函数来实现数据的劫持，在数据变化时发布消息给订阅者，触发相应的监听回调。也就是说数据和视图同步，数据发生变化，视图跟着变化，视图变化，数据也随之发生改变； 作者：程序员Miko https://www.bilibili.com/read/cv24090060 出处：bilibili

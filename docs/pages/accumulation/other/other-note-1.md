@@ -158,3 +158,8 @@ git config user.email
     - git rm .env.development --cached
   - git commit提交代码
   - 此时随意修改.env.development文件，就不会受到git的跟踪了，这样每次提交都不会提交.env.development的修改到git上了
+
+## 21. git提交报错
+- cash-config@1.0.0 l
+- 只需要在commit 后面追加 --no-verify  就可以解决
+  - git commit -m 'fix: merge' --no-verifyint
