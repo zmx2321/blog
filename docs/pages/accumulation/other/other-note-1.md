@@ -163,3 +163,4 @@ git config user.email
 - cash-config@1.0.0 l
 - 只需要在commit 后面追加 --no-verify  就可以解决
   - git commit -m 'merge' --no-verify
+  - 不进行校验
