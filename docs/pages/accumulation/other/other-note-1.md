@@ -162,4 +162,4 @@ git config user.email
 ## 21. git提交报错
 - cash-config@1.0.0 l
 - 只需要在commit 后面追加 --no-verify  就可以解决
-  - git commit -m 'fix: merge' --no-verifyint
+  - git commit -m 'merge' --no-verify
