@@ -765,3 +765,17 @@ if (ruleForm.value.sizeList && arrPropIsEmpty(ruleForm.value.sizeList, 'price'))
     ElMessage.warning('规格价格不能为空')
   }
 ```
+
+## 原生控制选项卡样式
+```js
+const toggleClass = (prevNode, myClass, selectClass) => {
+  let prevNodeList = document.querySelectorAll(myClass)
+  prevNodeList.forEach((item) => {
+    item.classList.remove(selectClass)
+  })
+
+  prevNode.classList.add(selectClass)
+}
+
+toggleClass(prevNode, '.qr_list', 'is_select')
+```
