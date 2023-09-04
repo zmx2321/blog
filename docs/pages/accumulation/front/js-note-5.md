@@ -779,3 +779,10 @@ const toggleClass = (prevNode, myClass, selectClass) => {
 
 toggleClass(prevNode, '.qr_list', 'is_select')
 ```
+
+## 如果数组中不存在某数据，添加一个
+```js
+if (!ruleForm.value.businessIdList.includes(ruleForm.value.businessId)) {
+  ruleForm.value.businessIdList.push(ruleForm.value.businessId)
+}
+```
