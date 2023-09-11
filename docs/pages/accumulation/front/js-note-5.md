@@ -786,3 +786,18 @@ if (!ruleForm.value.businessIdList.includes(ruleForm.value.businessId)) {
   ruleForm.value.businessIdList.push(ruleForm.value.businessId)
 }
 ```
+
+## 循环嵌套筛选
+```js
+data.forEach((item) => {
+  item.propList0 = JSON.parse(JSON.stringify(item.propList))
+
+  item.attrId.forEach((jItem) => {
+    // console.log(jItem)
+
+    item.propList = item.propList0.filter((qItem) => qItem.id === jItem)
+  })
+
+  delete item.propList0
+})
+```
