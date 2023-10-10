@@ -500,3 +500,22 @@ const setSize = (val) => {
   ruleForm.value.sizeList = sizeTableData.value
 }
 ```
+
+## emit执行组件方法
+```js
+import { ref, getCurrentInstance} from 'vue'
+const instance = getCurrentInstance()
+
+// 定义
+instance?.proxy?.emitter.on('refreshReportTable', () => {
+  getTableData(setProxy(queryParams.value))
+})
+
+// 执行
+instance?.proxy?.emitter.emit('refreshReportTable')
+```
+
+## 判断对象数组中是否包含某个值
+```js
+let isHasId = businessOptions.value.some((item) => item.id === res.content.businessId)
+```
