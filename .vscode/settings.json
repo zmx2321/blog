@@ -1,37 +1,98 @@
 {
-    "editor.formatOnSave": true, // #每次保存的时候自动格式化*
-    "editor.formatOnPaste": true, // #每次粘贴的时候自动格式化*
-    "editor.codeActionsOnSave": {
-      // #每次保存的时候将代码按eslint格式进行修复*
-      "source.fixAll.eslint": true
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "[vue]": {
-      // "editor.defaultFormatter": "octref.vetur"
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "eslint.format.enable": true,
-    "eslint.validate": ["javascript", "javascriptreact", "html", "vue", "typescript", "typescriptreact"],
-    "prettier.jsxSingleQuote": true,
-    "prettier.semi": false, //  #去掉代码结尾的分号*
-    "prettier.singleQuote": true, //  #使用带引号替代双引号*
-    "prettier.requireConfig": true,
-    "javascript.preferences.quoteStyle": "single",
-    "javascript.format.insertSpaceBeforeFunctionParenthesis": true, //  #让函数(名)和后面的括号之间加个空格*
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "html.format.endWithNewline": true,
-    "html.format.enable": false
-  
-    // "vetur.format.defaultFormatterOptions": { "js-beautify-html": { "wrap_line_length": 120, "wrap_attributes": "auto", "end_with_newline": false } }
-    // "vetur.format.defaultFormatter.js": "vscode-typescript", // #让vue中的js按编辑器自带的ts格式进行格式化*
-    // "vetur.format.defaultFormatter.html": "js-beautify-html",
-    //   "vetur.format.defaultFormatterOptions": {
-    //     "js-beautify-html": {
-    //       "wrap_line_length": 120,
-    //       "wrap_attributes": "auto", // 第一个属性不折行，后续所有属性和第一个对齐折行*
-    //       "end_with_newline": false
-    //     }
-    //   }
-    // "cSpell.words": ["scrollbar", "vform", "wrapper"]
-  }
-  
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true
+  },
+  "stylelint.enable": true,
+  "stylelint.validate": ["css", "less", "postcss", "scss", "vue", "sass", "html"],
+  "files.eol": "\n",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[less]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.words": [
+    "AMAP",
+    "apng",
+    "arpa",
+    "axios",
+    "Biao",
+    "brotli",
+    "cascader",
+    "ciphertext",
+    "commitlint",
+    "contentleft",
+    "contentright",
+    "daterange",
+    "datetimerange",
+    "echarts",
+    "fangda",
+    "geeker",
+    "Gitee",
+    "goodsgroup",
+    "hexs",
+    "iconfont",
+    "juejin",
+    "liquidfill",
+    "longpress",
+    "monthrange",
+    "nprogress",
+    "officedocument",
+    "openxmlformats",
+    "Pageable",
+    "persistedstate",
+    "pinia",
+    "pjpeg",
+    "popconfirm",
+    "Prefixs",
+    "propclass",
+    "sortablejs",
+    "sousuo",
+    "spreadsheetml",
+    "statis",
+    "styl",
+    "stylelint",
+    "stylelintignore",
+    "stylelintrc",
+    "suoxiao",
+    "timeslot",
+    "truetype",
+    "unplugin",
+    "VITE",
+    "vuedraggable",
+    "vueuse",
+    "Vuex",
+    "wangeditor",
+    "xiaoxi",
+    "yingyongmokuaiguanli",
+    "zhongyingwen",
+    "zhuti"
+  ],
+  "livePreview.defaultPreviewPath": "/dist/index.html"
+}

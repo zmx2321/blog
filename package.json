@@ -11,7 +11,9 @@
     "docs:build": "vuepress build docs",
     "deploy": "bash deploy.sh",
     "main": "bash main.sh",
-    "build": "node ./builds/addComponents.js && vuepress build docs && node ./builds/delComponents.js"
+    "build": "node ./builds/addComponents.js && vuepress build docs && node ./builds/delComponents.js",
+    "vite:dev": "vitepress dev docs",
+    "vite:build": "vitepress build docs"
   },
   "repository": {
     "type": "git",
