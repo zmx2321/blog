@@ -519,3 +519,15 @@ instance?.proxy?.emitter.emit('refreshReportTable')
 ```js
 let isHasId = businessOptions.value.some((item) => item.id === res.content.businessId)
 ```
+
+## 校验正数，保留一位小数
+```js
+@input='checkInputData'
+const checkInputData = () => {
+  let reg = /^\d+(\.\d{1,1})?$/
+
+  if (!reg.test(formData.value.promotionY) || parseFloat(formData.value.promotionY) <= 0 || parseFloat(formData.value.promotionY) > 10) {
+    formData.value.promotionY = formData.value.promotionY.slice(0, formData.value.promotionY.length - 1)
+  }
+}
+```
