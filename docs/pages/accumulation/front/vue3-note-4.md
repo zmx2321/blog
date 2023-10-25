@@ -1,10 +1,13 @@
-# vue3工作积累
+# vue3 工作积累
+
 <ClientOnly>
   <Valine></Valine>
 </ClientOnly>
 
-## vue3模板
-### vue3模板1
+## vue3 模板
+
+### vue3 模板 1
+
 ```js
 <template>
   <section>
@@ -95,7 +98,9 @@ export default {
 <style lang="scss" scoped>
 </style>
 ```
-### vue3模板2
+
+### vue3 模板 2
+
 ```js
 <template>
   <section>
@@ -169,47 +174,51 @@ const changeName = () => {
 ```
 
 ## vue3 定义全局事件总线
+
 - main.js
+
 ```js
 // eventbus.js
-import mitt from 'mitt'
-const emitter = mitt()
-export default emitter
-
+import mitt from "mitt";
+const emitter = mitt();
+export default emitter;
 
 // 引入事件总线库
-import emitter from '@/utils/eventbus'
+import emitter from "@/utils/eventbus";
 
-app.config.globalProperties.$emitter = emitter // 定义全局事件总线
+app.config.globalProperties.$emitter = emitter; // 定义全局事件总线
 ```
 
-## vue3的elementPlus中el-dropdown传参
+## vue3 的 elementPlus 中 el-dropdown 传参
+
 ```html
 <el-dropdown
-@command="
+  @command="
     (command) => {
     handleCommand(command, slotProps.row)
     }
-">
-<span class="el-dropdown-link">
+"
+>
+  <span class="el-dropdown-link">
     更多
     <el-icon class="el-icon--right">
-    <arrow-down />
+      <arrow-down />
     </el-icon>
-</span>
-<template #dropdown>
+  </span>
+  <template #dropdown>
     <el-dropdown-menu>
-    <el-dropdown-item command="create">xxx</el-dropdown-item>
+      <el-dropdown-item command="create">xxx</el-dropdown-item>
     </el-dropdown-menu>
-</template>
+  </template>
 </el-dropdown>
 
 <script setup>
-    const handleCommand = (command, row) => {}
+  const handleCommand = (command, row) => {};
 </script>
 ```
 
-## el-tree中不能全选
+## el-tree 中不能全选
+
 ```css
 :deep(.el-tree) {
   .el-icon.el-tree-node__expand-icon {
@@ -226,7 +235,8 @@ app.config.globalProperties.$emitter = emitter // 定义全局事件总线
 }
 ```
 
-## vite跨域配置
+## vite 跨域配置
+
 ```js
 proxy: {
   '/proxyApi1': {
@@ -238,45 +248,49 @@ proxy: {
 }
 ```
 
-## vue3日期选择器截止昨天
+## vue3 日期选择器截止昨天
+
 ```html
 <el-date-picker
-          v-model="form.endTime"
-          style="width: 238px"
-          type="date"
-          placeholder="请选择时间"
-          :disabled-date="disabledDate"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD"></el-date-picker>
+  v-model="form.endTime"
+  style="width: 238px"
+  type="date"
+  placeholder="请选择时间"
+  :disabled-date="disabledDate"
+  format="YYYY-MM-DD"
+  value-format="YYYY-MM-DD"
+></el-date-picker>
 
 <script setup>
   const disabledDate = (time) => {
-    return time.getTime() < Date.now() - 8.64e7
-  }
+    return time.getTime() < Date.now() - 8.64e7;
+  };
 </script>
 ```
 
-## el-tree以及checkbox单选
+## el-tree 以及 checkbox 单选
+
 ```js
 // @check-change="handleSelectedTreeUser"
 const handleSelectedTreeUser = (val, selected) => {
   if (val.type === 2 && selected) {
-    refMyTree.value.setCheckedKeys([])
-    refMyTree.value.setChecked(val, true)
-    selectedUsers.value = [val]
+    refMyTree.value.setCheckedKeys([]);
+    refMyTree.value.setChecked(val, true);
+    selectedUsers.value = [val];
     // console.log(selectedUsers.value)
   }
-}
+};
 
 // @change="getSingleUser(item)"
 const getSingleUser = (val) => {
-  console.log(val)
+  console.log(val);
 
-  selectedUsers.value = selectedUsers.value.includes(val) ? [val] : []
-}
+  selectedUsers.value = selectedUsers.value.includes(val) ? [val] : [];
+};
 ```
 
-## form表单中自定义校验
+## form 表单中自定义校验
+
 ```js
 const validDataBank = (rule, value, callback) => {
   // const pattern = /[`~!-\·\.@#$^&*()=|{}':;',\\\[\]\.<>\/\+?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g
@@ -296,7 +310,8 @@ const validDataBank = (rule, value, callback) => {
 { validator: validDataBank, trigger: 'blur' }
 ```
 
-## el-table动态合并单元格
+## el-table 动态合并单元格
+
 ```vue
 <template>
   <el-table
@@ -307,116 +322,134 @@ const validDataBank = (rule, value, callback) => {
     :summary-method="getSummaries"
     style="width: 100%"
     :span-method="arraySpanMethod"
-    :cell-style="cellStyleMethod">
-    <el-table-column type="index" width="82" label="序号" fixed min-width="200" />
+    :cell-style="cellStyleMethod"
+  >
+    <el-table-column
+      type="index"
+      width="82"
+      label="序号"
+      fixed
+      min-width="200"
+    />
     ......
   </el-table>
 </template>
 
 <script setup>
-import { ref, toRefs, toRef, reactive, computed, nextTick } from 'vue'
+import { ref, toRefs, toRef, reactive, computed, nextTick } from "vue";
 
-let tableData = ref([])
-let tableColumn = ref([])
-let mergeDate = []
-let temData = {}
-let spanNameArr = []  // 处理要合并的数据
+let tableData = ref([]);
+let tableColumn = ref([]);
+let mergeDate = [];
+let temData = {};
+let spanNameArr = []; // 处理要合并的数据
 
 const getSummaries = (param) => {
-  const { columns, data } = param
-  let temData = data.filter((item) => item.date === '汇总')
-  const sums = []
+  const { columns, data } = param;
+  let temData = data.filter((item) => item.date === "汇总");
+  const sums = [];
   columns.forEach((column, index) => {
     if (index === 0) {
-      sums[index] = '汇总计算'
-      return
+      sums[index] = "汇总计算";
+      return;
     }
-    const values = temData.map((item) => Number(item[column.property]))
+    const values = temData.map((item) => Number(item[column.property]));
     if (!values.every((value) => isNaN(value))) {
       sums[index] = values.reduce((prev, curr) => {
-        const value = Number(curr)
+        const value = Number(curr);
         if (!isNaN(value)) {
-          let temValue1 = prev + curr
-          let temValue2 = temValue1.toString().match(/^\d+(?:\.\d{0,2})?/)
-          return Number(temValue2)
+          let temValue1 = prev + curr;
+          let temValue2 = temValue1.toString().match(/^\d+(?:\.\d{0,2})?/);
+          return Number(temValue2);
         } else {
-          return prev
+          return prev;
         }
-      }, 0)
-      sums[index]
+      }, 0);
+      sums[index];
     } else {
-      sums[index] = '-,--'
+      sums[index] = "-,--";
     }
-  })
-  mergeDate = sums
-  return sums
-}
+  });
+  mergeDate = sums;
+  return sums;
+};
 
 function arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-  if (row.date === '汇总') {
+  if (row.date === "汇总") {
     if (columnIndex === 1) {
-      return [0, 0]
+      return [0, 0];
     } else if (columnIndex === 2) {
-      return [1, 1]
+      return [1, 1];
     }
   } else {
     if (columnIndex == 1) {
-      const _row = spanNameArr[rowIndex]
-      const _col = _row > 0 ? 1 : 0
+      const _row = spanNameArr[rowIndex];
+      const _col = _row > 0 ? 1 : 0;
       return {
         // [0,0] 表示这一行不显示， [2,1]表示行的合并数
         rowspan: _row,
-        colspan: _col
-      }
+        colspan: _col,
+      };
     }
   }
 }
 
 function cellStyleMethod({ row, column, rowIndex, columnIndex }) {
-  if (row.date === '汇总' || row.name === '汇总计算') {
+  if (row.date === "汇总" || row.name === "汇总计算") {
     if (columnIndex !== 0) {
-      return { backgroundColor: 'var(--el-table-row-hover-bg-color)', fontWeight: 500 }
+      return {
+        backgroundColor: "var(--el-table-row-hover-bg-color)",
+        fontWeight: 500,
+      };
     }
   }
 }
 </script>
 ```
 
-## vue3数组应用
-- 过滤sizeOptions对象数组，判断val数组中是否包含id，将包含该id的对象数组返回
-- 改造对象数组，用map获取值，改造直接返回
+## vue3 数组应用
+
+- 过滤 sizeOptions 对象数组，判断 val 数组中是否包含 id，将包含该 id 的对象数组返回
+- 改造对象数组，用 map 获取值，改造直接返回
+
 ```js
 // val是一个[1,2,3]
 sizeTableData.value = sizeOptions.value
-    .filter((item) => val.includes(item.id))
-    .map((item) => ({
-      sizeTypeId: item.id,
-      sizeTypeName: item.name,
-      price: '',
-      sequence: ''
-    }))
+  .filter((item) => val.includes(item.id))
+  .map((item) => ({
+    sizeTypeId: item.id,
+    sizeTypeName: item.name,
+    price: "",
+    sequence: "",
+  }));
 ```
 
-## vue3下拼音插件的使用
+## vue3 下拼音插件的使用
+
 - `"js-pinyin": "^0.2.4",`
+
 ```js
-import pinyin from 'js-pinyin'
-pinyin.setOptions({ checkPolyphone: false, charCase: 0 })
+import pinyin from "js-pinyin";
+pinyin.setOptions({ checkPolyphone: false, charCase: 0 });
 
 watch(ruleForm, (newValue) => {
   if (newValue) {
-    ruleForm.value.janeSearch = pinyin.getCamelChars(newValue.name)
+    ruleForm.value.janeSearch = pinyin.getCamelChars(newValue.name);
   }
-})
+});
 ```
 
-## vue3富文本使用
+## vue3 富文本使用
+
 - 安装
+
 ```json
 "@wangeditor/editor": "^5.1.23",
 "@wangeditor/editor-for-vue": "^5.1.12",
 ```
+
 - 运行
+
 ```js
 <div style="width: 1000px; border: 1px solid #ccc">
   <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :default-config="toolbarConfig" />
@@ -451,7 +484,8 @@ const onCreated = (val) => {
 <style src="@wangeditor/editor/dist/css/style.css"></style>
 ```
 
-## vue3下拉框与表格联动
+## vue3 下拉框与表格联动
+
 ```js
 const setSize = (val) => {
   // if (val.length !== 0) {
@@ -467,13 +501,15 @@ const setSize = (val) => {
      */
 
     // 获取当前添加项
-    let currentSelect = sizeOptions.value.filter((item) => item.id === val[val.length - 1])[0]
+    let currentSelect = sizeOptions.value.filter(
+      (item) => item.id === val[val.length - 1]
+    )[0];
     sizeTableData.value.push({
       sizeTypeId: currentSelect.id,
       sizeTypeName: currentSelect.name,
-      price: '',
-      sequence: ''
-    })
+      price: "",
+      sequence: "",
+    });
   }
 
   //  减少数据表格判断
@@ -490,37 +526,42 @@ const setSize = (val) => {
     console.log(currentDelete) */
     sizeTableData.value.forEach((item, index) => {
       if (!val.includes(item.sizeTypeId)) {
-        sizeTableData.value.splice(index, 1)
+        sizeTableData.value.splice(index, 1);
       }
-    })
+    });
   }
   // }
 
   // 将表格数据赋值到表单数据
-  ruleForm.value.sizeList = sizeTableData.value
-}
+  ruleForm.value.sizeList = sizeTableData.value;
+};
 ```
 
-## emit执行组件方法
+## emit 执行组件方法
+
 ```js
-import { ref, getCurrentInstance} from 'vue'
-const instance = getCurrentInstance()
+import { ref, getCurrentInstance } from "vue";
+const instance = getCurrentInstance();
 
 // 定义
-instance?.proxy?.emitter.on('refreshReportTable', () => {
-  getTableData(setProxy(queryParams.value))
-})
+instance?.proxy?.emitter.on("refreshReportTable", () => {
+  getTableData(setProxy(queryParams.value));
+});
 
 // 执行
-instance?.proxy?.emitter.emit('refreshReportTable')
+instance?.proxy?.emitter.emit("refreshReportTable");
 ```
 
 ## 判断对象数组中是否包含某个值
+
 ```js
-let isHasId = businessOptions.value.some((item) => item.id === res.content.businessId)
+let isHasId = businessOptions.value.some(
+  (item) => item.id === res.content.businessId
+);
 ```
 
 ## 校验正数，保留一位小数
+
 ```js
 @input='checkInputData'
 const checkInputData = () => {
@@ -530,4 +571,10 @@ const checkInputData = () => {
     formData.value.promotionY = formData.value.promotionY.slice(0, formData.value.promotionY.length - 1)
   }
 }
+```
+
+## 获取对象数组中某个字段，转换成字符串
+
+```js
+data.userRoles = data.roleDTOS.map((item) => item.name).join(",");
 ```
