@@ -578,3 +578,9 @@ const checkInputData = () => {
 ```js
 data.userRoles = data.roleDTOS.map((item) => item.name).join(",");
 ```
+
+## js 如何判断小数点后有几位
+
+```js
+<script>var n=3.143423423; alert(n.toString().split(".")[1].length);</script>
+```
