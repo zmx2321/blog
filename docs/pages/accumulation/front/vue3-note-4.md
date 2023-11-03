@@ -584,3 +584,9 @@ data.userRoles = data.roleDTOS.map((item) => item.name).join(",");
 ```js
 <script>var n=3.143423423; alert(n.toString().split(".")[1].length);</script>
 ```
+
+## cascader 获取 name 值
+
+```js
+industryRef.value.getCheckedNodes()[0].pathLabels.join("-");
+```
