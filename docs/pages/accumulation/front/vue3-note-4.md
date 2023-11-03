@@ -590,3 +590,11 @@ data.userRoles = data.roleDTOS.map((item) => item.name).join(",");
 ```js
 industryRef.value.getCheckedNodes()[0].pathLabels.join("-");
 ```
+
+## vue3 中跳转不刷新
+
+```js
+import { useRoute } from 'vue-router'
+const route = useRoute()
+ <router-view :key="route.fullPath"></router-view>
+```
