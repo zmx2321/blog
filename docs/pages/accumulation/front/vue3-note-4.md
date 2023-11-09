@@ -598,3 +598,67 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
  <router-view :key="route.fullPath"></router-view>
 ```
+
+## pina 的使用
+
+```js
+// store/index.js
+import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+
+// pinia persist
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+
+export default pinia;
+
+// store/modules/demo-store-data.js
+import { defineStore } from "pinia";
+
+export const demoStoreData = defineStore({
+  id: "demo-store-data",
+
+  state: () => ({
+    currentBunkList: [], // 过滤后的店铺数据
+  }),
+
+  actions: {
+    setCurrentBunkList(currentBunkList) {
+      this.currentBunkList = currentBunkList;
+    },
+  },
+});
+
+// 使用 - 设置值
+// store
+import { demoStoreData } from "@/store/modules/demo-store-data.js";
+let { setCurrentBunkList } = demoStoreData();
+setCurrentBunkList(bunkData.content.filter((item) => item.type === 1));
+
+// 使用 - 获取值
+import { demoStoreData } from "@/store/modules/demo-store-data.js";
+const demoDataStore = demoStoreData();
+const currentBunkList = demoDataStore.currentBunkList;
+```
+
+## mitt 事件总线的使用
+
+```js
+// util/mittBus
+import mitt from "mitt";
+const mittBus = mitt();
+export default mittBus;
+
+// 使用 - 定义事件
+import mittBus from "@/util/mitt-bus.js"; // mitt
+mittBus.emit("clickArea", tipNum);
+
+// 使用 - 执行事件
+import mittBus from "@/util/mitt-bus.js"; // mitt
+mittBus.on("clickArea", (tipNum) => {
+  // console.log(tipNum)
+
+  showDetailDialog(tipNum);
+  // xxxxxx
+});
+```
