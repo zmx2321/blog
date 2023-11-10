@@ -662,3 +662,21 @@ mittBus.on("clickArea", (tipNum) => {
   // xxxxxx
 });
 ```
+
+## 星期选择
+
+```js
+<el-select style="width: 240px" v-model="ruleForm.week" multiple placeholder="请选择">
+  <el-option :label="item" :value="item" v-for="item in 7" :key="item" :disabled="isHasWeek(item)">
+    {{ item }}
+  </el-option>
+</el-select>
+
+const isHasWeek = (item) => {
+  if (ruleForm.value) {
+    if (ruleForm.value.week.length !== 0) {
+      return ruleForm.value.week.map((jItem) => parseInt(jItem, 10)).includes(item)
+    }
+  }
+}
+```
